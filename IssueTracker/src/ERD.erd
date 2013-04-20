@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<erd version="1.0">
+    <datasource>
+        <connection value="jdbc:derby://localhost:1527/IssueTracker"/>
+    </datasource>
+    <default_layout/>
+</erd>
