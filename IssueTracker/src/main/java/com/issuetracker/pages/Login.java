@@ -24,14 +24,12 @@ public class Login extends WebPage {
 
     @Inject
     private UserDao userDao;
-
     private Form<User> insertForm;
-    
     private String email;
     private String password;
     private User user;
+    private int linkClickCount = 0;
 
-    
     public Login() {
         add(new FeedbackPanel("feedback"));
 
@@ -40,7 +38,7 @@ public class Login extends WebPage {
             protected void onSubmit() {
                 user = userDao.getUserByEmail(email);
                 if (user != null && user.getPassword().equals(password)) {
-                    setResponsePage(Register.class); 
+                    setResponsePage(Register.class);
                 }
 
             }
@@ -50,11 +48,23 @@ public class Login extends WebPage {
         insertForm.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")));
         add(insertForm);
 
-        add(new Link<Void>("linkForgot") {
+//        add(new Link("linkForgot") {
+//            @Override
+//            public void onClick() {
+//                setResponsePage(ForgotPassword.class);
+//            }
+//        });
+
+        final Link actionLink = new Link("actionLink") {
             @Override
             public void onClick() {
                 setResponsePage(ForgotPassword.class);
             }
-        });
+        };
+
+        add(actionLink);
+
+
+
     }
 }

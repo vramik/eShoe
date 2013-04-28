@@ -6,6 +6,8 @@ package com.issuetracker.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,11 +25,11 @@ public class Issue implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long issueId;
+    @Column(unique=true)
     private String name;
     private String description;
     @ManyToOne
     private IssueType type;
-    @ManyToOne
     private Priority priority;
     @ManyToOne
     private Status status;
@@ -37,7 +39,7 @@ public class Issue implements Serializable {
     private User creator;
     @ManyToOne
     private User owner;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Project project;
     
     @ManyToMany
@@ -155,6 +157,7 @@ public class Issue implements Serializable {
         this.components = components;
     }
     //</editor-fold>
+
 
     public enum Priority {
         HIGH,

@@ -3,12 +3,16 @@ To change this template, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns:wicket="http://wicket.sourceforge.net/">
+<html>
     <head>
-        <title>IShoe</title>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
-
     <body>
+    <wicket:extend>
+
+        <span wicket:id="homeLink">Home</span>
+        
         <span wicket:id="feedback"></span>
         <form method="post" action="#" wicket:id="insertForm">
             <table border="0" cellpadding="5">
@@ -25,6 +29,10 @@ and open the template in the editor.
                     <td><input type="text" wicket:id="email" size="30"/></td>
                 </tr>
                 <tr>
+                    <td width="200">Username</td>
+                    <td><input type="text" wicket:id="username" size="30"/></td>
+                </tr>
+                <tr>
                     <td width="200">Password</td>
                     <td><input type="password" wicket:id="password" size="30"/></td>
                 </tr>
@@ -35,6 +43,8 @@ and open the template in the editor.
                 </tr>
             </table>
         </form>
-         
-    </body>
+
+    </wicket:extend>
+
+</body>
 </html>

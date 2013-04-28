@@ -9,8 +9,73 @@ and open the template in the editor.
         <title>Login Home Page</title>
     </head>
     <body>
-        <div wicket:id="login">
-            [Label's message goes here]
-        </div>
-    </body>
+    <wicket:extend>
+
+
+
+
+        <table border="0" cellpadding="5">
+            <tr>
+                <td><span wicket:id="searchIssueLink">Search for issue</span></td>
+                <td><span wicket:id="createIssueLink">Create Issue</span></td>
+                <td><span wicket:id="createProjectLink">Create Project</span></td>
+                <td>  <form id="loginForm" method="get" wicket:id="loginForm">
+                        <fieldset>
+                            <legend style="color: #F90">Login</legend>
+                            <p wicket:id="loginStatus"></p>
+                            <span >Username: </span><input wicket:id="username" type="text" id="username" /><br/>
+                            <span >Password: </span><input wicket:id="password" type="password" id="password" />
+                            <p>
+                                <input type="submit" name="Login" value="Login"/>
+                            </p>
+                        </fieldset>
+                    </form></td>
+                <td><span wicket:id="forgotPasswdLink">Forgot Password?</span></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td><span wicket:id="registerLink">Register</span></td>
+            </tr>
+
+        </table>
+
+        List of persons <select wicket:id="persons"></select> <br/>
+        <br/>
+        <form wicket:id="form">
+            <div style="display: table;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Name: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="name"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Surname: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="lastname"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Username </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="username"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Email: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="email"/>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Save"/>
+        </form>
+
+
+
+    </wicket:extend>
+</body>
 </html>

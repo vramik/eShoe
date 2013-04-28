@@ -24,6 +24,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
+    private String username;
     private String name;
     private String lastName;
     private String email;
@@ -109,12 +110,30 @@ public class User implements Serializable {
     public List<Issue> getOwned() {
         return owned;
     }
+
+    public String getNick() {
+        return username;
+    }
+
+    public void setNick(String username) {
+        this.username = username;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    
+    
     
     public void setOwned(List<Issue> owned) {
         this.owned = owned;
     }
     //</editor-fold>
-    
+        
     
     @Override
     public int hashCode() {

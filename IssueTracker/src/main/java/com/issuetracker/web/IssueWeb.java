@@ -5,6 +5,8 @@
 package com.issuetracker.web;
 
 import com.issuetracker.pages.ForgotPassword;
+import com.issuetracker.pages.HomePage;
+import com.issuetracker.pages.ListIssues;
 import com.issuetracker.pages.Login;
 import com.issuetracker.pages.Register;
 import javax.enterprise.inject.spi.BeanManager;
@@ -23,7 +25,7 @@ public class IssueWeb extends WebApplication{
 
     @Override
     public Class<? extends Page> getHomePage() {
-        return Register.class;
+        return HomePage.class;
     }
     
     @Override
@@ -40,6 +42,10 @@ public class IssueWeb extends WebApplication{
 
         // Configure CDI, disabling Conversations as we aren't using them
         new CdiConfiguration(bm).setPropagation(NONE).configure(this);
+        
+        mountPage("/login", Login.class);
+        mountPage("/issues", ListIssues.class);
+        mountPage("/homepage", HomePage.class);
 //        mountPage("/register", Register.class);
 //        mountPage("/forgotPassword", ForgotPassword.class);
     }

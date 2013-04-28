@@ -16,7 +16,7 @@
     </properties>
 
     <dependencies>
-       <dependency>
+        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <scope>provided</scope>
@@ -103,16 +103,32 @@
                 <filtering>false</filtering>
             </resource>
             <resource>
-                <filtering>false</filtering>
                 <directory>src/main/java</directory>
+                <filtering>false</filtering>
                 <includes>
-                    <include>*</include>
+                    <include>**</include>
                 </includes>
                 <excludes>
                     <exclude>**/*.java</exclude>
                 </excludes>
             </resource>
         </resources>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>false</filtering>
+            </testResource>
+            <testResource>
+                <directory>src/test/java</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

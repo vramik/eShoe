@@ -10,24 +10,19 @@ and open the template in the editor.
     </head>
     <body>
     <wicket:extend>
-        
-        <form method="post" action="#" wicket:id="getIssuesByProjectForm">
+        <form method="post" action="#" wicket:id="insertProjectForm">
             <table border="0" cellpadding="5">
                 <tr>
-                    <td width="200">Peoject Name</td>
-                    <td><input type="text" wicket:id="projectName" size="30"/></td>
+                    <td width="200">Name</td>
+                    <td><input type="text" wicket:id="name" size="30"/></td>
                 </tr>
 
                 <tr>
                     <td width="200">&nbsp;</td>
-                    <td><input type="submit" value="Search for issues"/></td>
+                    <td><input type="submit" value="Add Project"/></td>
                 </tr>
             </table>
         </form>
-        
-        <span wicket:id="listview">
-            Issue Name Is: <span wicket:id="issue"></span><br/>
-        </span>
     </wicket:extend>
-</body>
+    </body>
 </html>

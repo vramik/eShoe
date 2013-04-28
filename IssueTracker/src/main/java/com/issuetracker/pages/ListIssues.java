@@ -12,56 +12,61 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import com.issuetracker.model.Issue;
+import com.issuetracker.model.Project;
+import com.issuetracker.model.User;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  *
  * @author mgottval
  */
-public class ListIssues extends WebPage {
+public class ListIssues extends PageLayout {
 
     @Inject
     private IssueDao issueDao;
+    private Form<Project> getIssuesByProjectForm;
+    
+    private String projectName;
+    
+    private List<Issue> issues;
 
-//    public ListIssues() {
-//        add(new Label("welcomeMessage", "IShoe"));
-//        //add(new ListView<Issue>("contacts", contactDao.getIssuesBy...()) {
-//
-//            // Populate the table of issues
-//            @Override
-//            protected void populateItem(final ListItem<Issue> item) {
-//                Issue issue = item.getModelObject();
-//                item.add(new Label("name", issue.getName()));
-//                item.add(new Label("email", issue.getEmail()));
-//                item.add(new Label("lastName", issue.getLastName()));
-//                item.add(new Link<Issue>("delete", item.getModel()) {
-//
-//                    @Override
-//                    public void onClick() {
-//                        contactDao.remove(item.getModelObject());
-//                        setResponsePage(ListContacts.class);
-//                    }
-//                });
-//            }
-//        };
     public ListIssues() {
-
-        // Add the dynamic welcome message, specified in web.xml
-    //    add(new Label("welcomeMessage", welcome));
-        add(new ListView<Issue>("contacts", issueDao.getIssues()) {
-            // Populate the table of contacts
+        issues = new ArrayList<Issue>();
+        getIssuesByProjectForm = new Form<Project>("getIssuesByProjectForm") {
             @Override
-            protected void populateItem(final ListItem<Issue> item) {
-//                Issue issue = item.getModelObject();
-//                item.add(new Label("name", issue.getName()));
-//                item.add(new Label("email", issue.getDescription()));
-//                item.add(new Link<Issue>("delete", item.getModel()) {
-//                    @Override
-//                    public void onClick() {
-//                        issueDao.removeIssue(item.getModelObject());
-//                        setResponsePage(ListIssues.class);
-//                    }
-//                });
+            protected void onSubmit() {
+                issues = issueDao.getIssuesByProject(projectName);
             }
-        });
+        };
+
+        getIssuesByProjectForm.add(new RequiredTextField<String>("projectName", new PropertyModel<String>(this, "projectName")));
+        add(getIssuesByProjectForm);
+
+        
+        List<String> issueNames = new ArrayList<String>();
+        for (Issue issue :issues) {
+            issueNames.add(issue.getName());
+        }
+        ListView listview = new ListView("listview", issueNames) {
+            @Override
+            protected void populateItem(ListItem item) {
+                item.add(new Label("issue", item.getModel()));
+            }
+        };
+        add(listview);
     }
+
+    //<editor-fold defaultstate="collapsed" desc="getter/setter">
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+    //</editor-fold>
 }

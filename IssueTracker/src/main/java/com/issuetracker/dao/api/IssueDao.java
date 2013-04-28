@@ -5,6 +5,7 @@
 package com.issuetracker.dao.api;
 
 import com.issuetracker.model.Issue;
+import com.issuetracker.model.Project;
 import java.util.List;
 
 /**
@@ -17,10 +18,14 @@ public interface IssueDao {
     
     Issue getIssueById(Long id);
     
+    Issue getIssueByName(String name);
+    
     void addIssue(Issue issue);
     
-    void updateIssue(Issue issue);
+    Issue updateIssue(Issue issue);
     
     void removeIssue(Issue issue);
+    
+    List<Issue> getIssuesByProject(String projectName);
     
 }
