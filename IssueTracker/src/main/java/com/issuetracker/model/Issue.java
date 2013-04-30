@@ -39,7 +39,7 @@ public class Issue implements Serializable {
     private User creator;
     @ManyToOne
     private User owner;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Project project;
     
     @ManyToMany

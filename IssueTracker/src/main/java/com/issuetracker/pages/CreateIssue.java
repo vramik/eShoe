@@ -11,6 +11,7 @@ import com.issuetracker.model.Project;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -28,38 +29,39 @@ public class CreateIssue extends PageLayout {
     private IssueDao issueDao;
     @Inject
     private ProjectDao projectDao;
-    
     private Form<Issue> insertIssueForm;
+    private DropDownChoice<Project> projectList;
     private Issue issue;
-    private String projectName;
-    
-    private Project project;
 
     public CreateIssue() {
         issue = new Issue();
-        setDefaultModel(new CompoundPropertyModel(issue));
         insertIssueForm = new Form<Issue>("insertIssueForm") {
             @Override
             protected void onSubmit() {
-                project = new Project();
-                project.setName(projectName);
-                issue.setProject(project);               
                 issueDao.addIssue(issue);
+                setResponsePage(ListIssues.class);
+            }            
+        };
+        
+        insertIssueForm.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "issue.name")));
+        insertIssueForm.add(new RequiredTextField<String>("description", new PropertyModel<String>(this, "issue.description")));
+        
+
+    //    Model<Project> listProjectModel = new Model<Project>();
+        ChoiceRenderer<Project> projectRender = new ChoiceRenderer<Project>("name");
+
+        projectList = new DropDownChoice<Project>("projects", new PropertyModel<Project>(this, "issue.project"), projectDao.getProjects(),
+                projectRender) {
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
             }
         };
-
-        insertIssueForm.add(new RequiredTextField<String>("name"));
-        insertIssueForm.add(new RequiredTextField<String>("description"));
-
-        List<Project> projects = projectDao.getProjects();
-        List<String> projectNames = new ArrayList<String>();
-        for (Project p:projects) {
-            projectNames.add(p.getName());
-        }
-        insertIssueForm.add(new DropDownChoice<String>("projectName", new PropertyModel(this, "projectName"), projectNames));
-
-
+        insertIssueForm.add(projectList);
+        
         add(insertIssueForm);
+
+
     }
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
@@ -71,12 +73,6 @@ public class CreateIssue extends PageLayout {
         this.issue = issue;
     }
 
-    public String getProjectName() {
-        return projectName;
-    }
 
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
     //</editor-fold>
 }

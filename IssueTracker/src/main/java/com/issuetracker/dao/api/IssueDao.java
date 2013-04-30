@@ -26,6 +26,8 @@ public interface IssueDao {
     
     void removeIssue(Issue issue);
     
-    List<Issue> getIssuesByProject(String projectName);
+    List<Issue> getIssuesByProject(Project project);
+    
+    List<Issue> getIssuesByProjectName(String projectName);
     
 }

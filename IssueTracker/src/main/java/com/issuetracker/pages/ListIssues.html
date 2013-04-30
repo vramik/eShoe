@@ -14,8 +14,8 @@ and open the template in the editor.
         <form method="post" action="#" wicket:id="getIssuesByProjectForm">
             <table border="0" cellpadding="5">
                 <tr>
-                    <td width="200">Peoject Name</td>
-                    <td><input type="text" wicket:id="projectName" size="30"/></td>
+                    <td width="200">Project</td>
+                    <td><select wicket:id="projects"></select></td>
                 </tr>
 
                 <tr>
@@ -23,11 +23,55 @@ and open the template in the editor.
                     <td><input type="submit" value="Search for issues"/></td>
                 </tr>
             </table>
-        </form>
         
-        <span wicket:id="listview">
-            Issue Name Is: <span wicket:id="issue"></span><br/>
-        </span>
+        
+        
+        <table border="1" cellpadding="8">
+            <tr>
+                <td width="200">Name</td>
+                <td width="200">Description</td>
+                <td width="200">Project</td>
+                <td width="200">&nbsp;</td>
+            </tr>
+            <tr wicket:id="issues">
+                <td><span wicket:id="name">[name]</span></td>
+                <td><span wicket:id="description">[lastname]</span></td>
+                <td><span wicket:id="projectName">[email]</span></td>
+                <td><a href="#" wicket:id="delete">[delete]</a></td>
+            </tr>
+        </table>
+        
+        </form>
+         List of persons <select wicket:id="issuesDrop"></select> <br/>
+        <br/>
+        <form wicket:id="form">
+            <div style="display: table;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Name: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="name"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Surname: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="description"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Username </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="project.name"/>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Save"/>
+        </form>
+
+
+        
+        
+        
     </wicket:extend>
 </body>
 </html>

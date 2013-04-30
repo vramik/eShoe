@@ -27,7 +27,7 @@ public class CreateProject extends PageLayout{
     
     public CreateProject() {
         project = new Project();
-         setDefaultModel(new CompoundPropertyModel(project));
+//         setDefaultModel(new CompoundPropertyModel(project));
          insertProjectForm = new Form<Project>("insertProjectForm") {
             @Override
             protected void onSubmit() {
@@ -37,7 +37,7 @@ public class CreateProject extends PageLayout{
             }
         };
 
-        insertProjectForm.add(new RequiredTextField<String>("name"));
+        insertProjectForm.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "project.name")));
         add(insertProjectForm);
         
     }
