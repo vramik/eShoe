@@ -53,6 +53,7 @@
     <class>com.issuetracker.model.User</class>
     <class>com.issuetracker.model.UserGroup</class>
     <class>com.issuetracker.model.Credentials</class>
+    <class>com.issuetracker.model.ProjectVersion</class>
     <properties>
       <!-- Properties for Hibernate -->
       <property name="hibernate.hbm2ddl.auto" value="create-drop"/>

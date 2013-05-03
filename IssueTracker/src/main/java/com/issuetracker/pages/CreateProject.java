@@ -9,7 +9,6 @@ import com.issuetracker.model.Project;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
 
 /**

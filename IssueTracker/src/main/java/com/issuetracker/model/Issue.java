@@ -4,6 +4,8 @@
  */
 package com.issuetracker.model;
 
+
+import com.issuetracker.TEST.Status;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -28,11 +30,12 @@ public class Issue implements Serializable {
     @Column(unique=true)
     private String name;
     private String description;
-    @ManyToOne
-    private IssueType type;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private IssueType issueType;
     private Priority priority;
-    @ManyToOne
-    private Status status;
+//    @ManyToOne
+//    private Status status;
+    private Status status; 
     @ManyToOne
     private Resolution resolution;
     @ManyToOne
@@ -77,12 +80,12 @@ public class Issue implements Serializable {
         this.description = description;
     }
     
-    public IssueType getType() {
-        return type;
+    public IssueType getissueType() {
+        return issueType;
     }
     
-    public void setType(IssueType type) {
-        this.type = type;
+    public void setissueType(IssueType issueType) {
+        this.issueType = issueType;
     }
     
     public Priority getPriority() {

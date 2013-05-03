@@ -7,14 +7,12 @@ package com.issuetracker.pages;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
 import javax.inject.Inject;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.Project;
-import com.issuetracker.model.User;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -22,13 +20,11 @@ import java.util.logging.Logger;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  *
@@ -53,87 +49,46 @@ public class ListIssues extends PageLayout {
     public ListIssues() {
     
 
-//    private class InputForm extends Form {
-//        // holds NameWrapper elements
-//
-//        public InputForm(String name) {
-//            super(name);
-//            ChoiceRenderer<Project> projectRender = new ChoiceRenderer<Project>("name");
-//
-//            projectList = new DropDownChoice<Project>("projects", new PropertyModel<Project>(this, "project"), projectDao.getProjects(),
-//                    projectRender) {
-//                @Override
-//                protected boolean wantOnSelectionChangedNotifications() {
-//                    return true;
-//                }
-//            };
-//
-//            add(projectList);
-//
-//
-//            // add a nested list view; as the list is nested in the form, the form will
-//            // update all FormComponent childs automatically.
-//            ListView listView = new ListView<Issue>("issues", issues) {
-//                @Override
-//                protected void populateItem(final ListItem<Issue> item) {
-//                    Issue issue = item.getModelObject();
-//                    item.add(new Label("name", issue.getName()));
-//                    item.add(new Label("description", issue.getDescription()));
-//                    item.add(new Label("projectName", issue.getProject().getName()));
-//                    item.add(new Link<Issue>("delete", item.getModel()) {
-//                        @Override
-//                        public void onClick() {
-//                            issueDao.removeIssue(item.getModelObject());
-//                            setResponsePage(ListIssues.class);
-//                        }
-//                    });
-//
-//                }
-//            };
-//            listView.setReuseItems(true);
-//            add(listView);
-//        }
-//
-//        public void onSubmit() {
-//            issues = issueDao.getIssuesByProject(project);
-//            info("data: " + data); // print current contents
-//        }
-//    }
         
         issues = new ArrayList<Issue>();
-        issues = issueDao.getIssuesByProjectName("JBoss");
         
         getIssuesByProjectForm = new Form<Issue>("getIssuesByProjectForm") {       
             @Override
             protected void onSubmit() {
-                issues = new ArrayList<Issue>();
                 issues = issueDao.getIssuesByProjectName(project.getName());
                 if (issues.isEmpty()) {
                     Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, "empty");
                 } else{
                     String s = null;
                     for (Issue issue : issues) {
-                        s = issue.getName();
+                        s = s + issue.getName();
                     }
                     Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, s);
                     }
               Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, project.getName());
                 //issues = issueDao.getIssuesByProject(projectName);
-                issues = issueDao.getIssuesByProjectName(project.getName());
-                String s = "";
-                for (Issue issue : issues) {
-                    s = s+" "+issue.getName();
-                }
-                 Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, s+" string s");
             }   
         };
         
+      
         
-         ListView listview = new ListView<Issue>("issues", issues) {
+            ListView listview = new ListView<Issue>("issues", new PropertyModel<List<Issue>>(this, "issues")) {
+
+               
             @Override
             protected void populateItem(final ListItem<Issue> item) {
                 Issue issue = item.getModelObject();
-               item.add(new Label("name", issue.getName()));
+                Link nameLink = new Link<Issue>("showIssue", item.getModel()) {
+                     @Override
+                    public void onClick() {
+                         PageParameters pageParameters = new PageParameters();
+			pageParameters.add("issue", ((Issue)item.getModelObject()).getIssueId());
+                        setResponsePage(ShowIssue.class, pageParameters);
+                    }                     
+                };
+                nameLink.add(new Label("name", issue.getName()));
+                item.add(nameLink);
+              // item.add(new Label("name", issue.getName()));
                 item.add(new Label("description", issue.getDescription()));
                 item.add(new Label("projectName", issue.getProject().getName()));
                 item.add(new Link<Issue>("delete", item.getModel()) {
@@ -144,8 +99,8 @@ public class ListIssues extends PageLayout {
                 });
                 }
         };
-         listview.setReuseItems(true);
-         getIssuesByProjectForm.add(listview);
+       //  listview.setReuseItems(true);
+         
          ChoiceRenderer<Project> projectRender = new ChoiceRenderer<Project>("name");
 
         projectList = new DropDownChoice<Project>("projects", new PropertyModel<Project>(this, "project"), projectDao.getProjects(),
@@ -157,7 +112,8 @@ public class ListIssues extends PageLayout {
         };
       getIssuesByProjectForm.add(projectList);
         add(getIssuesByProjectForm);
-       // add(listview);
+//        add(listview);
+        getIssuesByProjectForm.add(listview);
 
        
         
@@ -202,5 +158,16 @@ public class ListIssues extends PageLayout {
     public void setProject(Project project) {
         this.project = project;
     }
+    
+    
+    
     //</editor-fold>
+
+    public List<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<Issue> issues) {
+        this.issues = issues;
+    }
 }

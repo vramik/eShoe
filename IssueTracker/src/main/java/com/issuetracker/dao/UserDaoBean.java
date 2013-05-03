@@ -29,15 +29,6 @@ public class UserDaoBean implements UserDao {
     private EntityManager em;
     private CriteriaBuilder qb;
 
-    @Override
-    public List<User> getUsers() {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<User> c = qb.createQuery(User.class);
-        Root<User> u = c.from(User.class);
-        TypedQuery<User> q = em.createQuery(c);
-        return q.getResultList();
-
-    }
 
     @Override
     public User getUserById(Long id) {

@@ -16,8 +16,6 @@ import javax.ejb.Local;
 @Local
 public interface UserDao {
     
-     List<User> getUsers();
-    
     User getUserById(Long id);
     
     User getUserByEmail(String email);

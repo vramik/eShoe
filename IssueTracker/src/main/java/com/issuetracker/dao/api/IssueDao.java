@@ -5,6 +5,7 @@
 package com.issuetracker.dao.api;
 
 import com.issuetracker.model.Issue;
+import com.issuetracker.model.Issue.Priority;
 import com.issuetracker.model.Project;
 import java.util.List;
 
@@ -29,5 +30,7 @@ public interface IssueDao {
     List<Issue> getIssuesByProject(Project project);
     
     List<Issue> getIssuesByProjectName(String projectName);
+    
+    List<Priority> getPriorities();
     
 }

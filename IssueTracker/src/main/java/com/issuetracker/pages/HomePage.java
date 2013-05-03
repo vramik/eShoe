@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -63,6 +64,15 @@ public class HomePage extends PageLayout {
         };
 
         add(createProjectLink);
+        
+        final Link createIssuetypeLink = new Link("createIssueTypeLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(CreateComponent.class);
+            }
+        };
+
+        add(createIssuetypeLink);
 
         add(new LoginForm("loginForm"));
 
@@ -89,22 +99,22 @@ public class HomePage extends PageLayout {
 
 
 
-        Model<User> listModel = new Model<User>();
-        ChoiceRenderer<User> personRender = new ChoiceRenderer<User>("name");
-        personsList = new DropDownChoice<User>("persons", listModel, userDao.getUsers(),
-                personRender) {
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-        };
-        add(personsList);
-        form = new Form("form", new CompoundPropertyModel<User>(listModel));
-        form.add(new TextField("name"));
-        form.add(new TextField("lastname"));
-        form.add(new TextField("username"));
-        form.add(new TextField("email"));
-        add(form);
+//        Model<User> listModel = new Model<User>();
+//        ChoiceRenderer<User> personRender = new ChoiceRenderer<User>("name");
+//        personsList = new DropDownChoice<User>("persons", listModel, userDao.getUsers(),
+//                personRender) {
+//            @Override
+//            protected boolean wantOnSelectionChangedNotifications() {
+//                return true;
+//            }
+//        };
+//        add(personsList);
+//        form = new Form("form", new CompoundPropertyModel<User>(listModel));
+//        form.add(new RequiredTextField("name"));
+//        form.add(new RequiredTextField("lastname"));
+//        form.add(new RequiredTextField("username"));
+//        form.add(new RequiredTextField("email"));
+//        add(form);
 
 
     }

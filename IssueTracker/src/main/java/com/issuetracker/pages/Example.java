@@ -17,16 +17,16 @@ import javax.inject.Inject;
 public class Example {
     
     private static User user = new User();
-    
-    public static void main(String[] args) throws Exception {
-        user.setName("alojz");
-        UserDao dao = new UserDaoBean();
-        dao.addUser(user);
-        List<User> users  = dao.getUsers();
-        for (User user1 : users) {
-            System.out.println(user1);
-        }
-        
-    }
+//    
+//    public static void main(String[] args) throws Exception {
+//        user.setName("alojz");
+//        UserDao dao = new UserDaoBean();
+//        dao.addUser(user);
+//        List<User> users  = dao.getUsers();
+//        for (User user1 : users) {
+//            System.out.println(user1);
+//        }
+//        
+//    }
     
 }

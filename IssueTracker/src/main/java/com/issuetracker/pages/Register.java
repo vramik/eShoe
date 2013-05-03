@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 /**
  *
@@ -39,7 +40,7 @@ public class Register extends PageLayout {
     public Register() {
         user = new User();
         add(new FeedbackPanel("feedback"));
-        setDefaultModel(new CompoundPropertyModel(user));
+      //  setDefaultModel(new CompoundPropertyModel(user));
 
         insertForm = new Form<User>("insertForm") {
             @Override
@@ -55,11 +56,17 @@ public class Register extends PageLayout {
 //        insertForm.add(new RequiredTextField<String>("email", new PropertyModel<String>(this, "user.email")));
 //        insertForm.add(new PasswordTextField("password", new PropertyModel<String>(this, "user.password")));
 
+        
+        
         insertForm.add(new RequiredTextField<String>("name"));
         insertForm.add(new RequiredTextField<String>("lastName"));
-        insertForm.add(new RequiredTextField<String>("email"));
+        
+        RequiredTextField<String> email = new RequiredTextField<String>("email");
+        email.add(EmailAddressValidator.getInstance());
+        insertForm.add(email);
         insertForm.add(new RequiredTextField<String>("username"));
         insertForm.add(new PasswordTextField("password"));
+        insertForm.setDefaultModel(new CompoundPropertyModel(user));
         add(insertForm);
 
         getMenuPanel().setVisible(true);

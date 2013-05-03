@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
@@ -33,8 +34,8 @@ public class LoginForm extends Form {
     public LoginForm(String id) {
         super(id);
         setDefaultModel(new CompoundPropertyModel(this));
-
-        add(new TextField("username"));
+        
+        add(new RequiredTextField("username"));
         add(new PasswordTextField("password"));
         add(new Label("loginStatus"));
 

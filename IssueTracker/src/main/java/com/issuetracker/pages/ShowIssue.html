@@ -9,6 +9,22 @@ and open the template in the editor.
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <div>TODO write content</div>
+    <wicket:extend>
+        <h3><span wicket:id="name"></span></h3>
+         <div style="display: table;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Surname: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="description"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Username </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="project.name"/>
+                    </div>
+                </div>
+            </div>
+    </wicket:extend>
     </body>
 </html>

@@ -15,7 +15,7 @@ import javax.persistence.Id;
  * @author mgottval
  */
 @Entity
-public class IssueType implements Serializable {
+public class ProjectVersion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,13 +30,15 @@ public class IssueType implements Serializable {
         this.id = id;
     }
 
-    public String getname() {
+    public String getName() {
         return name;
     }
 
-    public void setname(String name) {
+    public void setName(String name) {
         this.name = name;
     }
+    
+    
 
     @Override
     public int hashCode() {
@@ -48,10 +50,10 @@ public class IssueType implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof IssueType)) {
+        if (!(object instanceof ProjectVersion)) {
             return false;
         }
-        IssueType other = (IssueType) object;
+        ProjectVersion other = (ProjectVersion) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -60,7 +62,7 @@ public class IssueType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.issuetracker.IssueType[ id=" + id + " ]";
+        return "com.issuetracker.model.ProjectVersion[ id=" + id + " ]";
     }
     
 }

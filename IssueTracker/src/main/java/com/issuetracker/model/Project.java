@@ -5,12 +5,13 @@
 package com.issuetracker.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -25,6 +26,8 @@ public class Project implements Serializable {
     private String name;
     @ManyToOne
     private Component component;
+    @ManyToMany
+    private List<ProjectVersion> versions;
 
     public Long getId() {
         return id;
@@ -50,6 +53,18 @@ public class Project implements Serializable {
         this.component = component;
     }
 
+    public List<ProjectVersion> getVersions() {
+        return versions;
+    }
+
+    public void setVersions(List<ProjectVersion> versions) {
+        this.versions = versions;
+    }
+
+   
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 0;

@@ -20,8 +20,9 @@
     <datasource jndi-name="java:jboss/datasources/IssueTrackerDS"
         pool-name="wicket-quickstart" enabled="true"
         use-java-context="true">
-        <connection-url>jdbc:h2:file:/home/mgottval/GateIn/GateIn-master-daily-jbossas7/standalone/data/wicket-app;DB_CLOSE_ON_EXIT=FALSE;DB_CLOSE_DELAY=-1</connection-url>
+        <connection-url>jdbc:h2:file:/home/mgottval/GateIn/GateIn-master-daily-jbossas7/standalone/data/wicket-app</connection-url>
         <driver>h2</driver>
+        
         <security>
             <user-name>sa</user-name>
             <password>sa</password>
