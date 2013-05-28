@@ -13,14 +13,39 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         
+        <!-- Local vs. OpenShift vs. production. Controlled in profiles. -->
+        <essc.dataSource>esscDS</essc.dataSource>
+        <wicket.mode>development</wicket.mode>
+        <jboss-as.deploy.hostname>localhost</jboss-as.deploy.hostname>  <!-- Where to deploy. -->
+        <jboss-as.deploy.user>jboss-as.deploy.user is not defined (try settings.xml).</jboss-as.deploy.user>
+        <jboss-as.deploy.pass>jboss-as.deploy.pass is not defined (try settings.xml).</jboss-as.deploy.pass>
+        <plugin.war.warName>${project.build.finalName}</plugin.war.warName>  <!-- To change to ROOT for "prod", to go to / context. -->
+        
+        <!-- Define the version of JBoss' Java EE 6 APIs we want to import. -->
+        <jboss.spec.version>3.0.2.Final</jboss.spec.version>
+        <version.wicket>1.5.10</version.wicket>
+        <version.wicket.cdi>1.2</version.wicket.cdi>
+
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+        <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
+
     </properties>
 
     <build>
+
+        <!-- Resources -->
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>false</filtering>
             </resource>
+            <!-- For persistence.xml, and to keep src/main/java non-filtered. -->
+            <resource> 
+                <directory>src/main/java/META-INF</directory>
+                <targetPath>META-INF</targetPath>
+                <filtering>true</filtering>
+            </resource>
+            <!-- Allow packaging the html files alongside the java sources. -->
             <resource>
                 <directory>src/main/java</directory>
                 <filtering>false</filtering>
@@ -40,6 +65,7 @@
                 <excludes> <exclude>**/*.java</exclude> </excludes>
             </testResource>
         </testResources>
+        
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -51,14 +77,41 @@
                     </compilerArguments>
                 </configuration>
             </plugin>
+            
+            <!-- Enable filtering of web.xml -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>2.3</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
+                    <warName>${plugin.war.warName}</warName>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                            <targetPath>WEB-INF</targetPath>
+                            <includes><include>**/*</include></includes>
+                            <filtering>true</filtering>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
+            
+            <!-- JBoss AS plugin to deploy the war. -->
+            <plugin>
+                <groupId>org.jboss.as.plugins</groupId>
+                <artifactId>jboss-as-maven-plugin</artifactId>
+                <version>7.4.Final</version>
+                <configuration>
+                    <hostname>${jboss-as.deploy.hostname}</hostname>
+                    <fileNames>
+                        <fileName>target/${plugin.war.warName}.war</fileName>
+                    </fileNames>
+                </configuration>
+            </plugin>
+
+            <!-- Endorsed API. Do we need that? -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
