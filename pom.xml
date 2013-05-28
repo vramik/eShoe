@@ -10,62 +10,10 @@
     <name>IssueTracker</name>
 
     <properties>
-        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+        <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+        
     </properties>
-
-    <dependencies>
-        <!-- Java EE -->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-web-api</artifactId>
-            <version>6.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <version>1.1</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>4.2.1.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.2.1.Final</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>ejb3-persistence</artifactId>
-            <version>1.0.1.GA</version>
-        </dependency>
-
-        <!-- Wicket -->
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-core</artifactId>
-            <version>6.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.ftlines.wicket-cdi</groupId>
-            <artifactId>wicket-cdi</artifactId>
-            <version>6.0</version>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.6</version>
-        </dependency>
-        
-    </dependencies>
 
     <build>
         <resources>
@@ -154,6 +102,58 @@
 		</profile>
 	</profiles>
     
+    
+    <dependencies>
+        <!-- Java EE -->
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-web-api</artifactId>
+            <version>6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>ejb3-persistence</artifactId>
+            <version>1.0.1.GA</version>
+        </dependency>
+
+        <!-- Wicket -->
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-core</artifactId>
+            <version>6.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.ftlines.wicket-cdi</groupId>
+            <artifactId>wicket-cdi</artifactId>
+            <version>6.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.6</version>
+        </dependency>
+        
+    </dependencies>
     
     <repositories>
         <repository>
