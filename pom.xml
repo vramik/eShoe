@@ -16,11 +16,14 @@
     </properties>
 
     <dependencies>
+        <!-- Java EE -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.1.Final</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Wicket -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
@@ -31,47 +34,28 @@
             <artifactId>wicket-cdi</artifactId>
             <version>6.0</version>
         </dependency>
+        
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.6.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>eclipselink</artifactId>
-            <version>2.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>javax.persistence</artifactId>
-            <version>2.0.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.persistence</groupId>
-            <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
-            <version>2.3.2</version>
-            <scope>provided</scope>
+            <version>1.6.6</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
-            <artifactId>hibernate</artifactId>
-            <version>3.2.5.ga</version>
+            <artifactId>hibernate-core</artifactId>
+            <version>4.2.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.2.1.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>ejb3-persistence</artifactId>
             <version>1.0.1.GA</version>
         </dependency>
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>3.5.0-Final</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.sql</groupId>
-            <artifactId>jdbc-stdext</artifactId>
-            <version>2.0</version>
-        </dependency>
+        
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
@@ -84,14 +68,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
-        </dependency>
-        <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -105,12 +84,8 @@
             <resource>
                 <directory>src/main/java</directory>
                 <filtering>false</filtering>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
+                <includes> <include>**</include> </includes>
+                <excludes> <exclude>**/*.java</exclude> </excludes>
             </resource>
         </resources>
         <testResources>
@@ -121,12 +96,8 @@
             <testResource>
                 <directory>src/test/java</directory>
                 <filtering>false</filtering>
-                <includes>
-                    <include>**</include>
-                </includes>
-                <excludes>
-                    <exclude>**/*.java</exclude>
-                </excludes>
+                <includes> <include>**</include> </includes>
+                <excludes> <exclude>**/*.java</exclude> </excludes>
             </testResource>
         </testResources>
         <plugins>
@@ -134,9 +105,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
+                <configuration> <source>1.6</source> <target>1.6</target>
                     <compilerArguments>
                         <endorseddirs>${endorsed.dir}</endorseddirs>
                     </compilerArguments>
@@ -157,19 +126,12 @@
                 <executions>
                     <execution>
                         <phase>validate</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
+                        <goals> <goal>copy</goal> </goals>
                         <configuration>
                             <outputDirectory>${endorsed.dir}</outputDirectory>
                             <silent>true</silent>
                             <artifactItems>
-                                <artifactItem>
-                                    <groupId>javax</groupId>
-                                    <artifactId>javaee-endorsed-api</artifactId>
-                                    <version>6.0</version>
-                                    <type>jar</type>
-                                </artifactItem>
+                                <artifactItem> <groupId>javax</groupId> <artifactId>javaee-endorsed-api</artifactId> <version>6.0</version> <type>jar</type> </artifactItem>
                             </artifactItems>
                         </configuration>
                     </execution>
@@ -208,28 +170,16 @@
             <layout>default</layout>
             <name>Repository for library EclipseLink (JPA 2.0)</name>
         </repository>
-		<repository>
-			<id>eap</id>
+		<repository> <id>eap</id>
 			<url>http://maven.repository.redhat.com/techpreview/all</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<snapshots> <enabled>true</enabled> </snapshots>
 		</repository>
     </repositories>
     
 	<pluginRepositories>
-		<pluginRepository>
-			<id>eap</id>
+		<pluginRepository> <id>eap</id>
 			<url>http://maven.repository.redhat.com/techpreview/all</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
+			<snapshots> <enabled>true</enabled> </snapshots>
 		</pluginRepository>
 	</pluginRepositories>
 
