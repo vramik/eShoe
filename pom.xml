@@ -67,17 +67,6 @@
         </testResources>
         
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration> <source>1.6</source> <target>1.6</target>
-                    <compilerArguments>
-                        <endorseddirs>${endorsed.dir}</endorseddirs>
-                    </compilerArguments>
-                </configuration>
-            </plugin>
-            
             <!-- Enable filtering of web.xml -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -111,6 +100,18 @@
                 </configuration>
             </plugin>
 
+            <!-- Compiler plugin enforces Java 1.6 compatibility and activates annotation processors. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration> <source>1.7</source> <target>1.7</target>
+                    <compilerArguments>
+                        <endorseddirs>${endorsed.dir}</endorseddirs>
+                    </compilerArguments>
+                </configuration>
+            </plugin>
+            
             <!-- Endorsed API. Do we need that? -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -153,6 +154,52 @@
 				</plugins>
 			</build>
 		</profile>
+        
+        <!-- Production. -->
+        <profile>
+            <id>prod</id>
+            <activation> <property><name>prod</name></property> </activation>
+            <properties>
+                <wicket.mode>development</wicket.mode> <!-- development | deployment -->
+                <jboss-as.deploy.hostname>products.app.eng.bos.redhat.com</jboss-as.deploy.hostname>
+                <plugin.war.warName>ROOT</plugin.war.warName>
+            </properties>
+            <!-- JBoss AS plugin - deploy automatically. -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jboss.as.plugins</groupId>
+                        <artifactId>jboss-as-maven-plugin</artifactId>
+                        <configuration>
+                            <force>true</force>
+                            <username>admin</username>
+                            <password>${essc.deploy.pass.prod}</password>
+                            <filename>ROOT.war</filename>
+                        </configuration>
+                    </plugin>
+                </plugins>
+                <!--
+                        <executions><execution><id>deploy-prod</id>
+                            <goals><goal>deploy</goal></goals><phase>install</phase>
+                            <configuration>
+                                <force>true</force>
+                                <username>admin</username>
+                                <password>${essc.deploy.pass.prod}</password>
+                            </configuration>
+                        </execution></executions>
+                -->
+            </build>
+        </profile>
+
+        <!-- Debug. -->
+        <profile>
+            <id>debug</id>
+            <activation><property><name>debug</name></property></activation>
+            <properties>
+                <jvm.args.debug>-Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=y</jvm.args.debug>
+            </properties>
+        </profile>
+
 	</profiles>
     
     
