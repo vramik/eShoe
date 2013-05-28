@@ -23,7 +23,7 @@
         
         <!-- Define the version of JBoss' Java EE 6 APIs we want to import. -->
         <jboss.spec.version>3.0.2.Final</jboss.spec.version>
-        <version.wicket>1.5.10</version.wicket>
+        <version.wicket>6.6.0</version.wicket>
         <version.wicket.cdi>1.2</version.wicket.cdi>
 
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -203,6 +203,53 @@
 	</profiles>
     
     
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-6.0</artifactId>
+                <version>${jboss.spec.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Wicket -->
+            <dependency>
+                <groupId>org.apache.wicket</groupId>
+                <artifactId>wicket-core</artifactId>
+                <version>${version.wicket}</version>
+            </dependency>
+
+            <!-- Wicket Java EE integration. -->
+            <dependency>
+                <groupId>net.ftlines.wicket-cdi</groupId>
+                <artifactId>wicket-cdi</artifactId>
+                <version>${version.wicket.cdi}</version>
+            </dependency>
+
+            <!-- Arquillian bill of materials, used to configure Arquillian versions -->
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.0.3.Final</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            
+            <!-- Force version needed by RestEasy. -->
+            <dependency>
+                <groupId>commons-httpclient</groupId>
+                <artifactId>commons-httpclient</artifactId>
+                <version>3.1</version>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
+
+
+
+    <!-- Dependencies. -->
     <dependencies>
         <!-- Java EE -->
         <dependency>
@@ -211,12 +258,28 @@
             <version>6.0</version>
             <scope>provided</scope>
         </dependency>
+        
+        <!-- Import the CDI API. -->
         <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
-            <version>1.1</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Import the Common Annotations API (JSR-250). -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.annotation</groupId>
+            <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Import the EJB API. -->
+        <dependency>
+            <groupId>org.jboss.spec.javax.ejb</groupId>
+            <artifactId>jboss-ejb-api_3.1_spec</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
 
         <!-- Hibernate -->
         <dependency>
@@ -224,6 +287,7 @@
             <artifactId>hibernate-core</artifactId>
             <version>4.2.1.Final</version>
         </dependency>
+        <!--
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -234,19 +298,61 @@
             <artifactId>ejb3-persistence</artifactId>
             <version>1.0.1.GA</version>
         </dependency>
+        -->
 
         <!-- Wicket -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
-            <version>6.6.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+            <version>${version.wicket}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-datetime</artifactId>
+            <version>${version.wicket}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-devutils</artifactId>
+            <version>${version.wicket}</version>
+        </dependency>
+        <!-- Visural components
+        <dependency>
+            <groupId>com.visural</groupId>
+            <artifactId>visural-common</artifactId>
+            <version>0.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.visural</groupId>
+            <artifactId>visural-wicket-w15</artifactId>
+            <version>0.7.0</version>
+        </dependency>
+        -->
+        <!-- Security - instead of PicketBox. -->
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+            <version>${version.wicket}</version>
+        </dependency>
+        <!-- Wicket CDI integration. -->
         <dependency>
             <groupId>net.ftlines.wicket-cdi</groupId>
             <artifactId>wicket-cdi</artifactId>
             <version>6.0</version>
         </dependency>
-        
+
+                
+        <!-- Java Mail API -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+
+        <!-- Logging -->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -256,12 +362,6 @@
     </dependencies>
     
     <repositories>
-        <repository>
-            <url>http://download.eclipse.org/rt/eclipselink/maven.repo/</url>
-            <id>eclipselink</id>
-            <layout>default</layout>
-            <name>Repository for library EclipseLink (JPA 2.0)</name>
-        </repository>
 		<repository> <id>eap</id>
 			<url>http://maven.repository.redhat.com/techpreview/all</url>
 			<snapshots> <enabled>true</enabled> </snapshots>
