@@ -173,7 +173,7 @@
                         <configuration>
                             <force>true</force>
                             <username>admin</username>
-                            <password>${essc.deploy.pass.prod}</password>
+                            <password>${eshoe.deploy.pass.prod}</password>
                             <filename>ROOT.war</filename>
                         </configuration>
                     </plugin>
