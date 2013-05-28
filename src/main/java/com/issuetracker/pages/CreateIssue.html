@@ -1,0 +1,51 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+    <wicket:extend>
+        <form method="post" action="#" wicket:id="insertIssueForm">
+            <table border="0" cellpadding="5">
+                <tr>
+                    <td width="200">Issue Name</td>
+                    <td><input type="text" wicket:id="name" size="30"/></td>
+                </tr>
+                
+                <tr>
+                    <td width="200">Description</td>
+                    <td><input type="text" wicket:id="description" size="30"/></td>
+                </tr>
+                
+                <tr>
+                    <td width="200"> Select a project: </td>
+                    <td><select wicket:id="projects"></select></td>
+
+                </tr>
+                
+                <tr>
+                    <td width="200"> Select project type: </td>
+                    <td><select wicket:id="issueTypes"></select></td>
+
+                </tr>
+                
+                <tr>
+                    <td width="200"> Select components </td>
+                    <td><select wicket:id="components"></select></td>
+
+                </tr>
+
+                <tr>
+                    <td width="200">&nbsp;</td>
+                    <td><input type="submit" value="Create Issue"/></td>
+                </tr>
+            </table>
+        </form>
+    </wicket:extend>
+    </body>
+</html>
