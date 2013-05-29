@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="defaultPU" transaction-type="JTA">
+        <jta-data-source>java:jboss/datasources/IssueTrackerDS</jta-data-source>
+        <class>com.issuetracker.model.Component</class>
+        <class>com.issuetracker.model.Issue</class>
+        <class>com.issuetracker.model.IssueType</class>
+        <class>com.issuetracker.model.IssueUserRelation</class>
+        <class>com.issuetracker.model.Permission</class>
+        <class>com.issuetracker.model.Project</class>
+        <class>com.issuetracker.model.RelationType</class>
+        <class>com.issuetracker.model.Resolution</class>
+        <class>com.issuetracker.model.Role</class>
+        <class>com.issuetracker.model.Status</class>
+        <class>com.issuetracker.model.User</class>
+        <class>com.issuetracker.model.UserGroup</class>
+        <class>com.issuetracker.model.Credentials</class>
+        <class>com.issuetracker.model.ProjectVersion</class>
+        <properties>
+            <!-- Properties for Hibernate -->
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="false"/>
+        </properties>
+    </persistence-unit>
+</persistence>

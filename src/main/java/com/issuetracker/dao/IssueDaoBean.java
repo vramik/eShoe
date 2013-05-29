@@ -1,35 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Issue;
-import com.issuetracker.model.Issue.Priority;
 import com.issuetracker.model.Project;
-import com.issuetracker.pages.ListIssues;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.criteria.Subquery;
-import javax.persistence.metamodel.Attribute;
-import javax.persistence.metamodel.ListAttribute;
-import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.Metamodel;
 
 /**
  *
@@ -38,7 +22,7 @@ import javax.persistence.metamodel.Metamodel;
 @Stateless
 public class IssueDaoBean implements IssueDao {
 
-    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
+    @PersistenceContext(unitName = "defaultPU")
     private EntityManager em;
     private CriteriaBuilder qb;
     @Inject
