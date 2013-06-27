@@ -13,14 +13,15 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
+        <picketbox.version>5.0.0.Final</picketbox.version>
     </properties>
 
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>
@@ -78,6 +79,12 @@
             <version>1.0.1B</version>
         </dependency>
         <dependency>
+            <groupId>com.opensymphony</groupId>
+            <artifactId>xwork</artifactId>
+            <version>2.1.1</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
             <version>6.0</version>
@@ -93,6 +100,11 @@
             <artifactId>cdi-api</artifactId>
             <version>1.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.picketbox</groupId>
+            <artifactId>picketbox-core</artifactId>
+            <version>${picketbox.version}</version>
         </dependency>
     </dependencies>
 
