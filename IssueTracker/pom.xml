@@ -13,11 +13,11 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <netbeans.hint.deploy.server>Tomcat</netbeans.hint.deploy.server>
-        <picketbox.version>5.0.0.Final</picketbox.version>
+        <picketbox.version>5.0.0-2013Jan04</picketbox.version>
     </properties>
 
     <dependencies>
-<!--        <dependency>
+        <!--        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.0-api</artifactId>
             <scope>provided</scope>
@@ -79,9 +79,9 @@
             <version>1.0.1B</version>
         </dependency>
         <dependency>
-            <groupId>com.opensymphony</groupId>
-            <artifactId>xwork</artifactId>
-            <version>2.1.1</version>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-idm-api</artifactId>
+            <version>3.0-2013Jan04</version>
             <type>jar</type>
         </dependency>
         <dependency>
@@ -105,6 +105,17 @@
             <groupId>org.picketbox</groupId>
             <artifactId>picketbox-core</artifactId>
             <version>${picketbox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.1.0.CR1</version>
         </dependency>
     </dependencies>
 
