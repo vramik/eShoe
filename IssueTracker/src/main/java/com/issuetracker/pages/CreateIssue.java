@@ -105,7 +105,9 @@ public class CreateIssue extends PageLayout {
 
        ChoiceRenderer<Component> componentRender = new ChoiceRenderer<Component>("name");
        
-        listComponents = new ListMultipleChoice<Component>("components", new PropertyModel<List<Component>>(this, "issue.components"), componentDao.getComponents(), componentRender);
+        final PropertyModel<List<Component>> propertyModel = new PropertyModel(this, "issue.components");
+       
+        listComponents = new ListMultipleChoice<Component>("components", propertyModel, componentDao.getComponents(), componentRender);
 //        ListMultipleChoice<Component> list = new ListMultipleChoice<Component>
         
         insertIssueForm.add(listComponents);
