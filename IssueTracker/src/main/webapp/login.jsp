@@ -19,60 +19,51 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
-<%@page import="org.picketbox.core.UserContext"%>
-<%@page import="org.picketbox.http.wrappers.RequestWrapper"%>
-<%@page import="org.picketlink.idm.model.Role"%>
-<%
-    RequestWrapper requestWrapper = (RequestWrapper) request;
-    UserContext userContext = requestWrapper.getUserContext();
-%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title>PicketBox Quickstarts: PicketBox Http Form Example</title>
 <link rel="StyleSheet" href="resources/css/theme.css" type="text/css">
 </head>
-<body>
-	<div class="defaultBoxContainer">
-		<h2>
-			<p>
-				Welcome <span style="color: green"><%=request.getUserPrincipal().getName()%></span> !
-			</p>
-		</h2>
-		<h2>
-			<p>Check your information:</p>
-		</h2>
-		<div style="">
-			<p>
-				<b>First Name:</b>
-				<%=userContext.getUser().getFirstName()%>
-			</p>
-			<p>
-				<b>Last Name:</b>
-				<%=userContext.getUser().getLastName()%>
-			</p>
-			<p>
-				<b>E-mail:</b>
-				<%=userContext.getUser().getEmail()%>
-			</p>
-			<p>
-				<b>Roles:</b>
-				<% 
-					for (Role role: userContext.getRoles()) {
-    			%>
-				<%= role.getName() %>
-				<% 
-					} 
-				%>
-			</p>
-		</div>
-		<h2>
-			<p>
+<body id="loginBody">
+	<div id="introDiv" class="loginBox">
+		<div id="loginBoxContent">
 			<center>
-				Click here to <a href="picketbox_logout">Logout</a>.
+				<h2 style="margin-top: -25px;">PicketBox Quickstart</h2>
 			</center>
+			<p>
+				To get started, first create an user account by clicking on the <b>Register</b>
+				button bellow. After that try to <b>Sign In</b> using your credentials.
 			</p>
-		</h2>
+			<center>
+				<input id="siginBtn" class="loginBtn2" type="button" value="Sign In"
+					onclick="document.getElementById('loginDiv').style.display = '';document.getElementById('introDiv').style.display = 'none'" />&nbsp;&nbsp;&nbsp;&nbsp;<input
+					class="loginBtn2" type="button" value="Register"
+					onclick="window.location='signup.jsp'" />
+			</center>
+		</div>
+	</div>
+	<div id="loginDiv" class="loginBox" style="display: none;">
+		<div id="loginBoxContent">
+			<form id="login_form" name="login_form" method="post"
+				action="j_security_check"
+				enctype="application/x-www-form-urlencoded">
+				<% if (request.getParameter("error") != null) { %>
+				<p style="color: red;margin-top: -25px;padding-right: 15px;float:right;">Authentication failed.</p>
+				<% } %>
+				<p>
+					<input id="username" title="Provide your User ID or Username."
+						type="text" name="j_username" placeholder="User ID" required />
+				</p>
+				<p>
+					<input id="password" title="Provide your password." type="password"
+						name="j_password" value="" placeholder="Password" required />
+				<div id="loginBtnContainer">
+					<input class="loginBtn" type="submit" name="submit" value="Login" />
+				</div>
+				</p>
+			</form>
+		</div>
 	</div>
 	<div id="footerContainer">
 		<div id="footerContent">
@@ -86,3 +77,11 @@
 	</div>
 </body>
 </html>
+<% 
+	if (request.getParameter("error") != null || request.getParameter("signin") != null) {
+%>
+	<script>document.getElementById('siginBtn').click();</script>
+<%
+    
+	}
+%>

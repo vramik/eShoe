@@ -29,6 +29,7 @@ public class User implements Serializable {
     private String lastName;
     private String email;
     private String password;
+    private String confirmPassword;
     
     @ManyToMany
     private List<UserGroup> userGroup;
@@ -132,6 +133,25 @@ public class User implements Serializable {
     public void setOwned(List<Issue> owned) {
         this.owned = owned;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+    
+    
+    
     //</editor-fold>
         
     
