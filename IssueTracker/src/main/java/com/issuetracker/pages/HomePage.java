@@ -101,7 +101,7 @@ public class HomePage extends PageLayout {
 
 //        Model<User> listModel = new Model<User>();
 //        ChoiceRenderer<User> personRender = new ChoiceRenderer<User>("name");
-//        personsList = new DropDownChoice<User>("persons", listModel, userDao.getUsers(),
+//        personsList = new DropDownChoice<User>("persons", listModel, userDao.getUsers),
 //                personRender) {
 //            @Override
 //            protected boolean wantOnSelectionChangedNotifications() {

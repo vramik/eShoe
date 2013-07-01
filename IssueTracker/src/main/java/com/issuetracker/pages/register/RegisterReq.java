@@ -2,14 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.issuetracker.pages;
+package com.issuetracker.pages.register;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.dao.api.UserDao;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.User;
+import com.issuetracker.authentication.RegistrationEndpoint;
+import com.issuetracker.authentication.RegistrationRequest;
+import com.issuetracker.pages.HomePage;
+import com.issuetracker.pages.PageLayout;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -24,30 +22,25 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
  * @author mgottval
  */
 @SuppressWarnings("serial")
-public class Register extends PageLayout {
+public class RegisterReq extends PageLayout {
 
-    private User user;
+    private RegistrationRequest request;
     
     @Inject
-    private UserDao userDao;
-    @Inject
-    private ProjectDao projectDao;
-    @Inject
-    private IssueDao issueDao;
+    private RegistrationEndpoint endpoint;
     
-    private Form<User> insertForm;
+    private Form<RegistrationRequest> insertForm;
 
-    public Register() {
-        user = new User();
+    public RegisterReq() {
+        request = new RegistrationRequest();
         add(new FeedbackPanel("feedback"));
       //  setDefaultModel(new CompoundPropertyModel(user));
 
-        insertForm = new Form<User>("insertForm") {
+        insertForm = new Form<RegistrationRequest>("insertForm") {
             @Override
             protected void onSubmit() {
-              //  user = new User();
-                userDao.addUser(user);
-                setResponsePage(HomePage.class);
+                endpoint.register(request);
+                setResponsePage(LoginReq.class);
             }
         };
 
@@ -58,16 +51,16 @@ public class Register extends PageLayout {
 
         
         
-        insertForm.add(new RequiredTextField<String>("name"));
+        insertForm.add(new RequiredTextField<String>("firstName"));
         insertForm.add(new RequiredTextField<String>("lastName"));
         
         RequiredTextField<String> email = new RequiredTextField<String>("email");
         email.add(EmailAddressValidator.getInstance());
         insertForm.add(email);
-        insertForm.add(new RequiredTextField<String>("username"));
+        insertForm.add(new RequiredTextField<String>("userName"));
         insertForm.add(new PasswordTextField("password"));
-        insertForm.add(new PasswordTextField("confirmPsassword"));
-        insertForm.setDefaultModel(new CompoundPropertyModel(user));
+        insertForm.add(new PasswordTextField("confirmPassword"));
+        insertForm.setDefaultModel(new CompoundPropertyModel(request));
         add(insertForm);
 
         getMenuPanel().setVisible(true);
@@ -85,15 +78,16 @@ public class Register extends PageLayout {
       
     }
 
-    //<editor-fold defaultstate="collapsed" desc="get/set">
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
+    
     
      //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="get/set">
+    public RegistrationRequest getRegRequest() {
+        return request;
+    }
+
+    public void setRegRequest(RegistrationRequest request) {
+        this.request = request;
+    }
 }

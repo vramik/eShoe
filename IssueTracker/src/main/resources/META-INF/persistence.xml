@@ -1,42 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <!--  <persistence-unit name="com_IssueTracker_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
-    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>com.issuetracker.Issue</class>
-    <class>com.issuetracker.IssueType</class>
-    <class>com.issuetracker.User</class>
-    <class>com.issuetracker.Priority</class>
-    <class>com.issuetracker.Resolution</class>
-    <class>com.issuetracker.Status</class>
-    <class>com.issuetracker.UserGroup</class>
-    <class>com.issuetracker.IssueUserRelation</class>
-    <class>com.issuetracker.RelationType</class>
-    <class>com.issuetracker.Project</class>
-    <class>com.issuetracker.Component</class>
-    <class>com.issuetracker.Permission</class>
-    <class>com.issuetracker.Role</class>
-    <class>com.issuetracker.model.Component</class>
-    <class>com.issuetracker.model.Issue</class>
-    <class>com.issuetracker.model.IssueType</class>
-    <class>com.issuetracker.model.IssueUserRelation</class>
-    <class>com.issuetracker.model.Permission</class>
-    <class>com.issuetracker.model.Priority</class>
-    <class>com.issuetracker.model.Project</class>
-    <class>com.issuetracker.model.RelationType</class>
-    <class>com.issuetracker.model.Resolution</class>
-    <class>com.issuetracker.model.Role</class>
-    <class>com.issuetracker.model.Status</class>
-    <class>com.issuetracker.model.User</class>
-    <class>com.issuetracker.model.UserGroup</class>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527/IssueTracker"/>
-      <property name="javax.persistence.jdbc.password" value=""/>
-      <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
-      <property name="javax.persistence.jdbc.user" value="sa"/>
-      <property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
-    </properties>
-  </persistence-unit>-->
   <persistence-unit name="com_IssueTracker_war_1.0-SNAPSHOTPU2" transaction-type="JTA">
     <!--<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>-->
     <jta-data-source>java:jboss/datasources/IssueTrackerDS</jta-data-source>
@@ -54,6 +17,15 @@
     <class>com.issuetracker.model.UserGroup</class>
     <class>com.issuetracker.model.Credentials</class>
     <class>com.issuetracker.model.ProjectVersion</class>
+<!--    <class>org.picketlink.idm.jpa.schema.CredentialObject</class>
+    <class>org.picketlink.idm.jpa.schema.CredentialObjectAttribute</class>
+    <class>org.picketlink.idm.jpa.schema.IdentityObject</class>
+    <class>org.picketlink.idm.jpa.schema.IdentityObjectAttribute</class>
+    <class>org.picketlink.idm.jpa.schema.PartitionObject</class>
+    <class>org.picketlink.idm.jpa.schema.RelationshipIdentityObject</class>
+    <class>org.picketlink.idm.jpa.schema.RelationshipObject</class>
+    <class>org.picketlink.idm.jpa.schema.RelationshipObjectAttribute</class>-->
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
     <properties>
       <!-- Properties for Hibernate -->
       <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
