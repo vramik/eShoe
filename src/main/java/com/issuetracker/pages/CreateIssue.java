@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
 import com.issuetracker.TEST.Status;
@@ -14,8 +10,6 @@ import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -52,12 +46,12 @@ public class CreateIssue extends PageLayout {
             @Override
             protected void onSubmit() {
                 issue.setStatus(Status.NEW);//TODO ??
-                List<Component> comps = issue.getComponents();
+                Component comp = issue.getComponent();
                 String s = "";
-                for (Component component : comps) {
-                    s = s+component.getName();
-                }
-                 Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, s);
+//                for (Component component : comps) {
+//                    s = s+component.getName();
+//                }
+//                 Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, s);
                 issueDao.addIssue(issue);
                 setResponsePage(ListIssues.class);
             }            
@@ -100,7 +94,9 @@ public class CreateIssue extends PageLayout {
 
        ChoiceRenderer<Component> componentRender = new ChoiceRenderer<Component>("name");
        
-        listComponents = new ListMultipleChoice<Component>("components", new PropertyModel<List<Component>>(this, "issue.components"), componentDao.getComponents(), componentRender);
+        final PropertyModel<List<Component>> propertyModel = new PropertyModel(this, "issue.components");
+       
+        listComponents = new ListMultipleChoice<Component>("components", propertyModel, componentDao.getComponents(), componentRender);
 //        ListMultipleChoice<Component> list = new ListMultipleChoice<Component>
         
         insertIssueForm.add(listComponents);

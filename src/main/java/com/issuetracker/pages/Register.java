@@ -47,7 +47,7 @@ public class Register extends PageLayout {
             protected void onSubmit() {
               //  user = new User();
                 userDao.addUser(user);
-                setResponsePage(HomePage.class);
+                setResponsePage(Login.class);
             }
         };
 
@@ -66,6 +66,7 @@ public class Register extends PageLayout {
         insertForm.add(email);
         insertForm.add(new RequiredTextField<String>("username"));
         insertForm.add(new PasswordTextField("password"));
+        insertForm.add(new PasswordTextField("confirmPassword"));
         insertForm.setDefaultModel(new CompoundPropertyModel(user));
         add(insertForm);
 

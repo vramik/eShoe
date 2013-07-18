@@ -25,6 +25,8 @@
         <jboss.spec.version>3.0.2.Final</jboss.spec.version>
         <version.wicket>6.6.0</version.wicket>
         <version.wicket.cdi>1.2</version.wicket.cdi>
+        <version.picketbox>5.0.0-2013Jan04</version.picketbox>
+
 
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
@@ -310,6 +312,24 @@
             <version>1.0.1.GA</version>
         </dependency>
         -->
+        
+        <!-- PicketBox, PicketLink - for login attempts -->
+        <dependency>
+            <groupId>org.picketbox</groupId>
+            <artifactId>picketbox-core</artifactId>
+            <version>${version.picketbox}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picketbox</groupId>
+            <artifactId>picketbox-http</artifactId>
+            <version>${version.picketbox}</version>
+        </dependency>        
+        <dependency>
+            <groupId>org.picketlink</groupId>
+            <artifactId>picketlink-idm-api</artifactId>
+            <version>3.0-2013Jan04</version>
+            <type>jar</type>
+        </dependency>
 
         <!-- Wicket -->
         <dependency>

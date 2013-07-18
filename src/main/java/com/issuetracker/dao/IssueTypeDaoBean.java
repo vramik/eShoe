@@ -1,3 +1,7 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueTypeDao;
@@ -18,7 +22,7 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class IssueTypeDaoBean implements IssueTypeDao {
 
-    @PersistenceContext(unitName = "defaultPU")
+    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
     private EntityManager em;
      private CriteriaBuilder qb;
 

@@ -1,0 +1,41 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.sourceforge.net/">
+    <head>
+        <title>IShoe</title>
+    </head>
+
+    <body>
+
+        <a wicket:id = "actionLink">Forgot Password?</a> 
+
+        <form method="post" wicket:id="insertForm" action="j_security_check"
+              enctype="application/x-www-form-urlencoded">
+            <% if (request.getParameter("error") != null) { %>
+            <p style="color: red;margin-top: -25px;padding-right: 15px;float:right;">Authentication failed.</p>
+            <% } %>
+            <table border="0" cellpadding="5">
+                <tr>
+                    <td width="200">Username</td>
+                    <td><input type="text" wicket:id="userName" size="30" name="j_username" placeholder="Username"/></td>
+                </tr>
+                <tr>
+                    <td width="200">Password</td>
+                    <td><input type="password" wicket:id="password" size="30" name="j_password" value="" placeholder="Password"/></td>
+                </tr>
+
+                <tr>
+                    <td width="200">&nbsp;</td>
+                    <td><input type="submit" value="Login"/></td>
+                </tr>
+            </table>
+        </form>
+        <span wicket:id="feedback"></span>
+
+
+
+    </body>
+</html>

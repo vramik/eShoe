@@ -51,8 +51,11 @@ public class Issue implements Serializable {
     @ManyToMany
     List<User> votes;
     
-    @ManyToMany
-    List<Component> components;
+    @ManyToOne
+    Component component;
+    
+    @ManyToOne
+    ProjectVersion projectVersion;
     
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
@@ -151,14 +154,36 @@ public class Issue implements Serializable {
     public void setVotes(List<User> votes) {
         this.votes = votes;
     }
-    
-    public List<Component> getComponents() {
-        return components;
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public void setComponent(Component component) {
+        this.component = component;
     }
     
-    public void setComponents(List<Component> components) {
-        this.components = components;
+    
+    public IssueType getIssueType() {
+        return issueType;
     }
+
+    public void setIssueType(IssueType issueType) {
+        this.issueType = issueType;
+    }
+
+    public ProjectVersion getProjectVersion() {
+        return projectVersion;
+    }
+
+    public void setProjectVersion(ProjectVersion projectVersion) {
+        this.projectVersion = projectVersion;
+    }
+
+    
+    
+    
+    
     //</editor-fold>
 
 

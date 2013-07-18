@@ -1,0 +1,80 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+    <wicket:extend>
+
+        <form method="post" action="#" wicket:id="getIssuesByProjectForm">
+            <table border="0" cellpadding="5">
+                <tr>
+                    <td width="200">Project</td>
+                    <td><select wicket:id="projects"></select></td>
+                </tr>
+
+                <tr>
+                    <td width="200">&nbsp;</td>
+                    <td><input type="submit" value="Search for issues"/></td>
+                </tr>
+            </table>
+
+
+
+            <table border="1" cellpadding="8">
+                <tr>
+                    <td width="200">Name</td>
+                    <td width="200">Description</td>
+                    <td width="200">Project</td>
+                    <td width="200">&nbsp;</td>
+                </tr>
+                <tr wicket:id="issues">
+                    <td>
+                        <a href="#" wicket:id="showIssue"><span wicket:id="name">[name]</span>
+                        </a>
+                    </td>
+                    <td><span wicket:id="description"></span></td>
+                    <td><span wicket:id="projectName"></span></td>
+                    <td><a href="#" wicket:id="delete">[delete]</a></td>
+                </tr>
+            </table>
+
+        </form>
+        List of persons <select wicket:id="issuesDrop"></select> <br/>
+        <br/>
+        <form wicket:id="form">
+            <div style="display: table;">
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Name: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="name"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Surname: </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="description"/>
+                    </div>
+                </div>
+                <div style="display: table-row;">
+                    <div style="display: table-cell;">Username </div>
+                    <div style="display: table-cell;">
+                        <input type="text" wicket:id="project.name"/>
+                    </div>
+                </div>
+            </div>
+            <input type="submit" value="Save"/>
+        </form>
+
+
+
+
+
+    </wicket:extend>
+</body>
+</html>

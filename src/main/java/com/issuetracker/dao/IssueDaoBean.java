@@ -2,8 +2,12 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
+import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
+import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
+import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Status;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -22,7 +26,7 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class IssueDaoBean implements IssueDao {
 
-    @PersistenceContext(unitName = "defaultPU")
+    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
     private EntityManager em;
     private CriteriaBuilder qb;
     @Inject
@@ -131,4 +135,34 @@ public class IssueDaoBean implements IssueDao {
 //        }
         return null;
     }
+    
+    @Override
+    public List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion, 
+    List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
+        Root<Issue> i = c.from(Issue.class);
+        c.select(i);
+        c.where(qb.equal(i.get("project"), project));
+        c.where(qb.equal(i.get("projectVersion"), projectVersion));
+        c.where(i.get("comopnent").in(projectComponents));
+        c.where(i.get("issueType").in(issueTypes));
+        c.where(i.get("status").in(statusList));
+        
+        List<Issue> results = em.createQuery(c).getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        }
+        return null;
+    }
+
+//    public void test() {
+//        qb = em.getCriteriaBuilder();
+//        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
+//        Root<Issue> i = c.from(Issue.class);
+//        c.select(i);
+//       
+//        System.out.println(i.get("name"));
+//   
+//    }
 }
