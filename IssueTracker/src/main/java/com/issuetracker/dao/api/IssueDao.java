@@ -4,9 +4,13 @@
  */
 package com.issuetracker.dao.api;
 
+import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.Issue.Priority;
+import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
+import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Status;
 import java.util.List;
 
 /**
@@ -32,5 +36,8 @@ public interface IssueDao {
     List<Issue> getIssuesByProjectName(String projectName);
     
     List<Priority> getPriorities();
+    
+    List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion, 
+    List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList);
     
 }

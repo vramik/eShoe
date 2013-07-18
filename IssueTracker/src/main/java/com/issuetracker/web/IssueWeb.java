@@ -4,12 +4,16 @@
  */
 package com.issuetracker.web;
 
+import com.issuetracker.pages.CreateIssue;
+import com.issuetracker.pages.CreateProject;
 import com.issuetracker.pages.ForgotPassword;
 import com.issuetracker.pages.HomePage;
 import com.issuetracker.pages.ListIssues;
-import com.issuetracker.pages.LoginReq;
+import com.issuetracker.pages.ListProjects;
+import com.issuetracker.pages.Login;
 import com.issuetracker.pages.Register;
-import com.issuetracker.pages.register.RegisterReq;
+import com.issuetracker.pages.SearchIssues;
+import com.issuetracker.pages.ShowIssue;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -44,11 +48,21 @@ public class IssueWeb extends WebApplication{
         // Configure CDI, disabling Conversations as we aren't using them
         new CdiConfiguration(bm).setPropagation(NONE).configure(this);
         
-        mountPage("/login", LoginReq.class);
+//        mountPage("/login", LoginReq.class);
+        mountPage("/login", Login.class);
+        mountPage("/register", Register.class);
+        mountPage("/forgotPassword", ForgotPassword.class);        
+        mountPage("/home", HomePage.class);
+//        mountPage("/register", RegisterReq.class);
+        mountPage("/newProject", CreateProject.class);
+        mountPage("/projects", ListProjects.class);
         mountPage("/issues", ListIssues.class);
-        mountPage("/homepage", HomePage.class);
-        mountPage("/register", RegisterReq.class);
-//        mountPage("/forgotPassword", ForgotPassword.class);
+        mountPage("/newIssue", CreateIssue.class);
+        mountPage("/issueDetail", ShowIssue.class);
+        mountPage("/searchIssues", SearchIssues.class);
+        
+        
+        
     }
     
 }

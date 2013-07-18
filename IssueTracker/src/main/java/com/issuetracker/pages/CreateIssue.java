@@ -57,12 +57,12 @@ public class CreateIssue extends PageLayout {
             @Override
             protected void onSubmit() {
                 issue.setStatus(Status.NEW);//TODO ??
-                List<Component> comps = issue.getComponents();
+                Component comp = issue.getComponent();
                 String s = "";
-                for (Component component : comps) {
-                    s = s+component.getName();
-                }
-                 Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, s);
+//                for (Component component : comps) {
+//                    s = s+component.getName();
+//                }
+//                 Logger.getLogger(ListIssues.class.getName()).log(Level.SEVERE, s);
                 issueDao.addIssue(issue);
                 setResponsePage(ListIssues.class);
             }            

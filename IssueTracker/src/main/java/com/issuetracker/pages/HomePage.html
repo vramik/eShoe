@@ -6,7 +6,8 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Login Home Page</title>
+        <title>Home Page</title>
+        <link rel="stylesheet" href="css/style.css" type="text/css" />
     </head>
     <body>
     <wicket:extend>
@@ -17,21 +18,28 @@ and open the template in the editor.
         <table border="0" cellpadding="5">
             <tr>
                 <td><span wicket:id="searchIssueLink">Search for issue</span></td>
-                <td><span wicket:id="createIssueLink">Create Issue</span></td>
-                <td><span wicket:id="createProjectLink">Create Project</span></td>
+                <!--                <td><span wicket:id="createIssueLink">Create Issue</span></td>
+                                <td><span wicket:id="createProjectLink">Create Project</span></td>-->
                 <td><span wicket:id="createIssueTypeLink">Create Project</span></td>
-                <td>  <form id="loginForm" method="get" wicket:id="loginForm">
-                        <fieldset>
-                            <legend style="color: #F90">Login</legend>
-                            <p wicket:id="loginStatus"></p>
-                            <span >Username: </span><input wicket:id="username" type="text" id="username" /><br/>
-                            <span >Password: </span><input wicket:id="password" type="password" id="password" />
-                            <p>
-                                <input type="submit" name="Login" value="Login"/>
-                            </p>
-                        </fieldset>
-                    </form></td>
-                <td><span wicket:id="forgotPasswdLink">Forgot Password?</span></td>
+                <!--                <td>  <form id="loginForm" method="get" wicket:id="loginForm">
+                                        <fieldset>
+                                            <legend style="color: #F90">Login</legend>
+                                            <p wicket:id="loginStatus"></p>
+                                            <span >Username: </span><input wicket:id="username" type="text" id="username" /><br/>
+                                            <span >Password: </span><input wicket:id="password" type="password" id="password" />
+                                            <p>
+                                                <input type="submit" name="Login" value="Login"/>
+                                            </p>
+                                        </fieldset>
+                                    </form></td>-->
+                <!--<td><span wicket:id="forgotPasswdLink">Forgot Password?</span></td>-->
+                <!--                <td><select onChange="popUp(this.value);">
+                                        <option value="0">New Element</option>
+                                        <option value="1">Element 1</option>
+                                        <option value="2">Element 2</option>
+                                        <option value="3">Element 3</option>
+                                    </select></td>-->
+
             </tr>
             <tr>
                 <td></td>
@@ -43,40 +51,60 @@ and open the template in the editor.
 
         </table>
 
+        <!--<span wicket:id="projectTasks">-->
+            <ul wicket:id="projectTasks" id='nav'>
+                <li><a href="#">Projects</a>
+                    <ul>
+                        <li><a href="#" wicket:id="showIssue"><span wicket:id="name">[name]</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+        <!--</span>-->
+
+        <!--<select wicket:id="projectLinks"></select>-->
+        <!--        <select wicket:id="projectLinks">
+                    <optgroup label="links">
+                        <option wicket:id="createProjectLink">Create Project</option>
+                        <option wicket:id="createIssueLink">Create Issue</option>
+                    </optgroup>
+                </select>-->
         <!--List of persons <select wicket:id="persons"></select> <br/>-->
-<!--        <br/>
-        <form wicket:id="form">
-            <div style="display: table;">
-                <div style="display: table-row;">
-                    <div style="display: table-cell;">Name: </div>
-                    <div style="display: table-cell;">
-                        <input type="text" wicket:id="name"/>
+        <!--        <br/>
+                <form wicket:id="form">
+                    <div style="display: table;">
+                        <div style="display: table-row;">
+                            <div style="display: table-cell;">Name: </div>
+                            <div style="display: table-cell;">
+                                <input type="text" wicket:id="name"/>
+                            </div>
+                        </div>
+                        <div style="display: table-row;">
+                            <div style="display: table-cell;">Surname: </div>
+                            <div style="display: table-cell;">
+                                <input type="text" wicket:id="lastname"/>
+                            </div>
+                        </div>
+                        <div style="display: table-row;">
+                            <div style="display: table-cell;">Username </div>
+                            <div style="display: table-cell;">
+                                <input type="text" wicket:id="username"/>
+                            </div>
+                        </div>
+                        <div style="display: table-row;">
+                            <div style="display: table-cell;">Email: </div>
+                            <div style="display: table-cell;">
+                                <input type="text" wicket:id="email"/>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div style="display: table-row;">
-                    <div style="display: table-cell;">Surname: </div>
-                    <div style="display: table-cell;">
-                        <input type="text" wicket:id="lastname"/>
-                    </div>
-                </div>
-                <div style="display: table-row;">
-                    <div style="display: table-cell;">Username </div>
-                    <div style="display: table-cell;">
-                        <input type="text" wicket:id="username"/>
-                    </div>
-                </div>
-                <div style="display: table-row;">
-                    <div style="display: table-cell;">Email: </div>
-                    <div style="display: table-cell;">
-                        <input type="text" wicket:id="email"/>
-                    </div>
-                </div>
-            </div>
-            <input type="submit" value="Save"/>
-        </form>-->
+                    <input type="submit" value="Save"/>
+                </form>-->
 
 
 
     </wicket:extend>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>	
+    <script src="http://jquery-ui.googlecode.com/svn/tags/latest/ui/jquery.effects.core.js" type="text/javascript"></script>
+    <script type="text/javascript" src="js/scripts.js"></script>
 </body>
 </html>

@@ -6,10 +6,15 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
+import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.Issue.Priority;
+import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
+import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Status;
 import com.issuetracker.pages.ListIssues;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +26,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
@@ -30,6 +36,8 @@ import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
+import org.eclipse.persistence.internal.jpa.querydef.ExpressionImpl;
+import org.hibernate.ejb.criteria.expression.EntityTypeExpression;
 
 /**
  *
@@ -147,4 +155,34 @@ public class IssueDaoBean implements IssueDao {
 //        }
         return null;
     }
+    
+    @Override
+    public List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion, 
+    List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
+        Root<Issue> i = c.from(Issue.class);
+        c.select(i);
+        c.where(qb.equal(i.get("project"), project));
+        c.where(qb.equal(i.get("projectVersion"), projectVersion));
+        c.where(i.get("comopnent").in(projectComponents));
+        c.where(i.get("issueType").in(issueTypes));
+        c.where(i.get("status").in(statusList));
+        
+        List<Issue> results = em.createQuery(c).getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        }
+        return null;
+    }
+
+//    public void test() {
+//        qb = em.getCriteriaBuilder();
+//        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
+//        Root<Issue> i = c.from(Issue.class);
+//        c.select(i);
+//       
+//        System.out.println(i.get("name"));
+//   
+//    }
 }

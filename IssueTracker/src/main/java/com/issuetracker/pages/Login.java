@@ -20,7 +20,7 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author mgottval
  */
-public class LoginReq extends WebPage {
+public class Login extends WebPage {
 
     @Inject
     private UserDao userDao;
@@ -28,9 +28,8 @@ public class LoginReq extends WebPage {
     private String email;
     private String password;
     private User user;
-    private int linkClickCount = 0;
 
-    public LoginReq() {
+    public Login() {
         add(new FeedbackPanel("feedback"));
 
         insertForm = new Form<User>("insertForm") {
@@ -38,9 +37,8 @@ public class LoginReq extends WebPage {
             protected void onSubmit() {
                 user = userDao.getUserByEmail(email);
                 if (user != null && user.getPassword().equals(password)) {
-                    setResponsePage(Register.class);
+                    setResponsePage(HomePage.class);
                 }
-
             }
         };
 
@@ -48,21 +46,23 @@ public class LoginReq extends WebPage {
         insertForm.add(new PasswordTextField("password", new PropertyModel<String>(this, "password")));
         add(insertForm);
 
-//        add(new Link("linkForgot") {
-//            @Override
-//            public void onClick() {
-//                setResponsePage(ForgotPassword.class);
-//            }
-//        });
-
-        final Link actionLink = new Link("actionLink") {
+        final Link forgotPasswordLink = new Link("forgotPasswordLink") {
             @Override
             public void onClick() {
                 setResponsePage(ForgotPassword.class);
             }
         };
 
-        add(actionLink);
+        add(forgotPasswordLink);
+        
+        final Link signUpLink = new Link("signUpLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(Register.class);
+            }
+        };
+
+        add(signUpLink);
 
 
 
