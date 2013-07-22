@@ -5,10 +5,10 @@
 package com.issuetracker.web;
 
 import com.issuetracker.pages.CreateIssue;
+import com.issuetracker.pages.CreateIssueType;
 import com.issuetracker.pages.CreateProject;
 import com.issuetracker.pages.ForgotPassword;
 import com.issuetracker.pages.HomePage;
-import com.issuetracker.pages.ListIssues;
 import com.issuetracker.pages.ListProjects;
 import com.issuetracker.pages.Login;
 import com.issuetracker.pages.Register;
@@ -56,10 +56,10 @@ public class IssueWeb extends WebApplication{
 //        mountPage("/register", RegisterReq.class);
         mountPage("/newProject", CreateProject.class);
         mountPage("/projects", ListProjects.class);
-        mountPage("/issues", ListIssues.class);
         mountPage("/newIssue", CreateIssue.class);
         mountPage("/issueDetail", ShowIssue.class);
         mountPage("/searchIssues", SearchIssues.class);
+        mountPage("/newIssueType", CreateIssueType.class);
         
         
         

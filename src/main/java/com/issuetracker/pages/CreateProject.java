@@ -4,27 +4,29 @@
  */
 package com.issuetracker.pages;
 
+import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.ProjectVersionDao;
+import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.extensions.markup.html.tabs.TabbedPanel;
-import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.list.PropertyListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  *
@@ -32,76 +34,173 @@ import org.apache.wicket.model.util.ListModel;
  */
 public class CreateProject extends PageLayout {
 
-    private Form<Project> insertProjectForm;
-    private Form<ProjectVersion> versionsForm;
-    private Project project;
-    private List<ProjectVersion> projectVersionList;
-    private ProjectVersion projectVersion;
     @Inject
     private ProjectDao projectDao;
     @Inject
     private ProjectVersionDao projectVersionDao;
+    @Inject
+    private ComponentDao componentDao;
+    
+    private Form<Project> insertProjectForm;
+    private TextField<String> textField;
+    private TextField<String> componentTextField;
+    private final IndicatingAjaxButton insertProjectVersionButton;
+    private final IndicatingAjaxButton insertComponentButton;
+    private final ListView<ProjectVersion> versionsListView;
+    private final ListView<Component> componentsListView;
+    private final WebMarkupContainer wmc;
+    private final WebMarkupContainer wmcComponent;
+    
+    private List<Project> projects;
+    private List<ProjectVersion> projectVersionList;
+    private List<Component> componentList;
+    private Project project;        
+    private ProjectVersion projectVersion;
+    private Component component;
+    private String string;
+    private String stringComponent;
+    
+    
 
     public CreateProject() {
         project = new Project();
-        projectVersionList = new ArrayList<ProjectVersion>();
+        projects = new ArrayList<Project>();
+        projects = projectDao.getProjects();
         projectVersion = new ProjectVersion();
+        projectVersionList = new ArrayList<ProjectVersion>(); 
+        componentList = new ArrayList<Component>();
 
-        final Form<ArrayList<ProjectVersion>> multiTextForm = new Form<ArrayList<ProjectVersion>>("multiTextForm");
-        add(multiTextForm);
+        insertProjectForm = new Form<Project>("insertProjectForm") {
+            @Override
+            protected void onSubmit() {
+                project.setVersions(projectVersionList);
+                project.setComponents(componentList);
+                projectDao.insertProject(project);
+                project = new Project();
+                projects = projectDao.getProjects();
+                projectVersionList.clear();
+                componentList.clear();                               
+                
+                //test
+                List<Component> versionsTest = componentDao.getComponents();
+                String s = "";
+                for (Component projectVersion1 : versionsTest) {
+                    s = s + projectVersion1.getName();
+                }
+                Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, s);
+            }
+        };
+        add(insertProjectForm);
 
-//        final ListView<String> listView = new ListView<String>("listView", new PropertyListView<String>("projectTasks", projectVersionList) {
-//            @Override
-//            protected void populateItem(final ListItem<String> item) {
-//                // TODO Auto-generated method stub
-//                TextField<String> textField = new TextField<String>("textField", item.getModel());
-//                add(textField);
-//                AjaxSubmitLink removeButton = new AjaxSubmitLink("removeButton", multiTextForm) {
-//                    @Override
-//                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-//                        multiTextForm.getModelObject().remove(item.getModelObject());
-//                        target.add(multiTextForm);
-//                    }
-//                    @Override
-//                    protected void onError(AjaxRequestTarget target, Form<?> form) {
-//                        //errors should be ignored, we shoudlnt validate in our form, so this shouldnt happen anyway
-//                        multiTextForm.getModelObject().remove(item.getModelObject());
-//                        target.add(multiTextForm);
-//                    }
-//                };
-//                add(removeButton);
-//            }
-//        });
-//        add(listView);
+        insertProjectForm.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "project.name")));
+        textField = new RequiredTextField<String>("version", new PropertyModel<String>(this, "string"));
+        componentTextField = new RequiredTextField<String>("componentName", new PropertyModel<String>(this, "stringComponent"));
+        insertProjectForm.add(componentTextField);
+        insertProjectForm.add(textField);
+                
+        versionsListView = new ListView<ProjectVersion>("versionsList",  new PropertyModel<List<ProjectVersion>>(this, "projectVersionList")) {
+            @Override
+            protected void populateItem(ListItem<ProjectVersion> item) {
+                final ProjectVersion projectVersion = item.getModelObject();
+                item.add(new Link<ProjectVersion>("remove", item.getModel()) {
+                    @Override
+                    public void onClick() {
+                        projectVersionList.remove(projectVersion);                       
+                        projectVersionDao.remove(projectVersion);
+                    }
+                });
+                item.add(new Label("name", projectVersion.getName()));
+            }
+        };
+        add(versionsListView);
+        wmc = new WebMarkupContainer("wmc");
+        add(wmc);
+        wmcComponent = new WebMarkupContainer("wmcComponent");
+        add(wmcComponent);
+        wmc.add(versionsListView);
+        wmc.setOutputMarkupId(true);
+
+        insertProjectVersionButton = new IndicatingAjaxButton("evalButton", insertProjectForm) {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.add(wmc);
+                projectVersion = new ProjectVersion();
+                projectVersion.setName(textField.getInput());
+                Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, textField.getValue());
+                projectVersionDao.insertProjectVersion(projectVersion);
+                projectVersionList.add(projectVersion);
+            }
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            }
+        };
+        
+        insertProjectVersionButton.setDefaultFormProcessing(false);
+        insertProjectForm.add(insertProjectVersionButton);
+
+
+        componentsListView = new ListView<Component>("componentsList",  new PropertyModel<List<Component>>(this, "componentList")) {
+            @Override
+            protected void populateItem(ListItem<Component> item) {
+                final Component component = item.getModelObject();
+                item.add(new Link<Component>("remove", item.getModel()) {
+                    @Override
+                    public void onClick() {
+                        componentList.remove(component);                       
+                        componentDao.remove(component);
+                    }
+                });
+                item.add(new Label("name", component.getName()));
+            }
+        };
+        add(componentsListView);
+        wmcComponent.add(componentsListView);
+        wmcComponent.setOutputMarkupId(true);
+        
+        insertComponentButton = new IndicatingAjaxButton("addComponentButton", insertProjectForm) {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.add(wmcComponent);
+                component = new Component();
+                component.setName(componentTextField.getInput());
+                Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, componentTextField.getValue());
+                componentDao.insertComponent(component);
+                componentList.add(component);
+            }
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+            }
+        };
+        
+        insertComponentButton.setDefaultFormProcessing(false);
+        insertProjectForm.add(insertComponentButton);
+
+
+        
 
 
 
-//         setDefaultModel(new CompoundPropertyModel(project));
-//        insertProjectForm = new Form<Project>("insertProjectForm") {
-//            @Override
-//            protected void onSubmit() {
-//                projectVersionDao.insertProjectVersion(projectVersion);
-//                projectVersionList.add(projectVersion);
-//                project.setVersions(projectVersionList);
-//                projectDao.insertProject(project);
-//                project = new Project();
-//                projectVersion = new ProjectVersion();
-//            }
-//        };
-//
-//        insertProjectForm.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "project.name")));
-//        insertProjectForm.add(new RequiredTextField<String>("projectVersion", new PropertyModel<String>(this, "projectVersion.name")));
-////        insertProjectForm.add(button);
-//        insertProjectForm.add(new Button("button") {
-//            @Override
-//            public void onSubmit() {
-//                projectVersionList.add(projectVersion);
-//                projectVersion = new ProjectVersion();
-//                insertProjectForm.add(new RequiredTextField<String>("projectVersion", new PropertyModel<String>(this, "projectVersion.name")));
-//            }
-//        });
-//        add(insertProjectForm);
 
+
+        ListView listViewProjects = new ListView<Project>("projectList", new PropertyModel<List<Project>>(this, "projects")) {
+            @Override
+            protected void populateItem(final ListItem<Project> item) {
+                final Project project = item.getModelObject();               
+                item.add(new Label("name", project.getName()));
+                // item.add(new Label("owner", )); //owner
+
+                item.add(new Link<Project>("delete", item.getModel()) {
+                    @Override
+                    public void onClick() {
+                        projectDao.remove(project);
+                        projects = projectDao.getProjects();
+                    }
+                });
+            }
+        };
+        add(listViewProjects);
+    
+        
     }
 
     public Project getProject() {
@@ -112,18 +211,48 @@ public class CreateProject extends PageLayout {
         this.project = project;
     }
 
-//    public List<ProjectVersion> getProjectVersionList() {
-//        return projectVersionList;
-//    }
-//
-//    public void setProjectVersionList(List<ProjectVersion> projectVersionList) {
-//        this.projectVersionList = projectVersionList;
-//    }
-    public ProjectVersion getProjectVersion() {
-        return projectVersion;
+        public List<ProjectVersion> getProjectVersionList() {
+            return projectVersionList;
+        }
+    
+        public void setProjectVersionList(List<ProjectVersion> projectVersionList) {
+            this.projectVersionList = projectVersionList;
+        }
+    
+    
+
+    public String getString() {
+        return string;
     }
 
-    public void setProjectVersion(ProjectVersion projectVersion) {
-        this.projectVersion = projectVersion;
+    public void setString(String string) {
+        this.string = string;
     }
+
+    public String getStringComponent() {
+        return stringComponent;
+    }
+
+    public void setStringComponent(String stringComponent) {
+        this.stringComponent = stringComponent;
+    }
+  
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public List<Component> getComponentList() {
+        return componentList;
+    }
+
+    public void setComponentList(List<Component> componentList) {
+        this.componentList = componentList;
+    }
+    
+    
 }

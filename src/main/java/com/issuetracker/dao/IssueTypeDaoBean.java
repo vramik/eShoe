@@ -33,6 +33,15 @@ public class IssueTypeDaoBean implements IssueTypeDao {
 
     @Override
     public List<IssueType> getIssueTypes() {
+        //EXAMPLE DATA
+//        IssueType it = new IssueType();
+//        it.setname("bug");
+//        IssueType it2 = new IssueType();
+//        it2.setname("task");
+//        em.persist(it2);
+//        em.persist(it);
+        
+        
         qb = em.getCriteriaBuilder();
         CriteriaQuery<IssueType> c = qb.createQuery(IssueType.class);
         Root<IssueType> i = c.from(IssueType.class);

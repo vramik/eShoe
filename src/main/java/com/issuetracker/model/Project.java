@@ -6,12 +6,17 @@ package com.issuetracker.model;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  *
@@ -20,26 +25,28 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Project implements Serializable {
     private static final long serialVersionUID = 1L;
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO)
-//    private Long id;
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+//    @Column(unique = true)
     private String name;
     @ManyToOne
-    private Component component;
-    @ManyToMany
+    private User owner;
+    @ManyToMany(fetch= FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<ProjectVersion> versions;
     
-    @ManyToMany
+    @ManyToMany(fetch= FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<Component> components;
 
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }        
 
     public String getName() {
         return name;
@@ -49,12 +56,12 @@ public class Project implements Serializable {
         this.name = name;
     }
 
-    public Component getComponent() {
-        return component;
+    public User getOwner() {
+        return owner;
     }
 
-    public void setComponent(Component component) {
-        this.component = component;
+    public void setOwner(User owner) {
+        this.owner = owner;
     }
 
     public List<ProjectVersion> getVersions() {

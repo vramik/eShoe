@@ -5,16 +5,14 @@
 package com.issutracker.form;
 
 import com.issuetracker.dao.api.UserDao;
-import com.issuetracker.model.Credentials;
+//import com.issuetracker.model.Credentials;
 import com.issuetracker.model.User;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 
 /**
  *
@@ -26,7 +24,7 @@ public class LoginForm extends Form {
     private String password;
     private String loginStatus;
     
-    private Credentials credentials;
+//    private Credentials credentials;
     
     @Inject
     private UserDao userDao;
@@ -46,19 +44,19 @@ public class LoginForm extends Form {
         User user = userDao.getUserByUsername(username);
         if (user != null && user.getPassword().equals(password)) {
             loginStatus = "Congratulations!";
-            credentials = new Credentials();
-            credentials.setPassword(password);
-            credentials.setUserName(username);
+//            credentials = new Credentials();
+//            credentials.setPassword(password);
+//            credentials.setUserName(username);
         } else {
             loginStatus = "Wrong username or password!";
         }
     }
 
-    public Credentials getCredentials() {
-        return credentials;
-    }
-
-    public void setCredentials(Credentials credentials) {
-        this.credentials = credentials;
-    }
+//    public Credentials getCredentials() {
+//        return credentials;
+//    }
+//
+//    public void setCredentials(Credentials credentials) {
+//        this.credentials = credentials;
+//    }
 }

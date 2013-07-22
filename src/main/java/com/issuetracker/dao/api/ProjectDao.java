@@ -17,6 +17,8 @@ public interface ProjectDao {
     
     void insertProject(Project project);
     
+    void update(Project project);
+    
     Project getProjectByName(String name);
     
     List<Project> getProjects();
@@ -24,4 +26,8 @@ public interface ProjectDao {
     List<ProjectVersion> getProjectVersions(Project project);
     
     List<Component> getProjectComponents(Project project);
+    
+    void remove(Project project);
+    
+    Project getFirstProject();
 }

@@ -16,4 +16,6 @@ public interface ComponentDao {
     void insertComponent(Component component);
     
     List<Component> getComponents();
+    
+    void remove(Component component);
 }

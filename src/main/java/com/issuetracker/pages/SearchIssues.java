@@ -14,13 +14,26 @@ import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  *
@@ -34,7 +47,6 @@ public class SearchIssues extends PageLayout {
     private ProjectDao projectDao;
     @Inject
     private IssueTypeDao issueTypeDao;
-    
     private Form<List<Issue>> listIssuesForm;
     private DropDownChoice<Project> projectDropDown;
     private DropDownChoice<ProjectVersion> projectVersionDropDown;
@@ -42,58 +54,133 @@ public class SearchIssues extends PageLayout {
     private ListMultipleChoice<Component> listMultipleComponents;
     private ListMultipleChoice<IssueType> listMultipleIssueTypes;
     private String containsText;
-    
     private Project project;
     private List<Issue> issues;
     private ProjectVersion version;
     private IssueType issueType;
+    private List<Component> components;
+    private List<IssueType> issueTypes;
+    private final Map<Project, List<Component>> modelsProjectComponentsMap = new HashMap<Project, List<Component>>();
+    private final Map<Project, List<ProjectVersion>> modelsProjectVersionsMap = new HashMap<Project, List<ProjectVersion>>();
 
     public SearchIssues() {
         issues = new ArrayList<Issue>();
 
-        listIssuesForm = new Form<List<Issue>>("getIssuesBySearch") {
+        List<Project> projects = projectDao.getProjects();
+        for (Project p : projects) {
+            modelsProjectComponentsMap.put(p, p.getComponents());
+        }
+        for (Project p : projects) {
+            modelsProjectVersionsMap.put(p, p.getVersions());
+        }
+        IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
+            @Override
+            public List<Project> getObject() {
+                List<Project> list = new ArrayList<Project>(modelsProjectComponentsMap.keySet());
+                return list;
+            }
+        };
+        IModel<List<Component>> modelProjectComponentsChoices = new AbstractReadOnlyModel<List<Component>>() {
+            @Override
+            public List<Component> getObject() {
+                List<Component> models = modelsProjectComponentsMap.get(project);
+                if (models == null) {
+                    models = Collections.emptyList();
+                }
+                return models;
+            }
+        };
+        IModel<List<ProjectVersion>> modelProjectVersionsCoices = new AbstractReadOnlyModel<List<ProjectVersion>>() {
+            @Override
+            public List<ProjectVersion> getObject() {
+                List<ProjectVersion> models = modelsProjectVersionsMap.get(project);
+                if (models == null) {
+                    models = Collections.emptyList();
+                }
+                return models;
+            }
+        };
+        Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-                issues = issueDao.getIssuesBySearch(project, version, null, null, null);
+                issues = issueDao.getIssuesBySearch(project, version, components, issueTypes, null); //TODO
             }
         };
-    
-        ChoiceRenderer<Project> projectRender = new ChoiceRenderer<Project>("name");
-        projectDropDown = new DropDownChoice<Project>("projects", new PropertyModel<Project>(this, "project"), projectDao.getProjects(),
-                projectRender) {
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-        };
-        listIssuesForm.add(projectDropDown);
-        
-        ChoiceRenderer<ProjectVersion> projectVersionRender = new ChoiceRenderer<ProjectVersion>("name");
-        projectVersionDropDown = new DropDownChoice<ProjectVersion>("projectVersions", new PropertyModel<ProjectVersion>(this, "version"), projectDao.getProjectVersions(project),
-                projectVersionRender) {
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-        };
-        listIssuesForm.add(projectVersionDropDown);
-        
-        
-        ChoiceRenderer<Component> componentRender = new ChoiceRenderer<Component>("name");       
-        final PropertyModel<List<Component>> propertyModel = new PropertyModel(this, "components");
-        listMultipleComponents = new ListMultipleChoice<Component>("components", propertyModel, projectDao.getProjectComponents(project), componentRender); 
-        listIssuesForm.add(listMultipleComponents);
-      
-        ChoiceRenderer<IssueType> issueTypeRender = new ChoiceRenderer<IssueType>("name");
+        form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
+        DropDownChoice<Project> projectDropDownChoice = new DropDownChoice<Project>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
+        form.add(projectDropDownChoice);
+        DropDownChoice<ProjectVersion> versionDropDownChoice = new DropDownChoice<ProjectVersion>("versionDropDownChoice", new PropertyModel<ProjectVersion>(this, "version"), modelProjectVersionsCoices, new ChoiceRenderer<ProjectVersion>("name"));
+        form.add(versionDropDownChoice);
+        ListMultipleChoice<Component> componentsListMultiple = new ListMultipleChoice<Component>("componentsListMultiple", new PropertyModel<List<Component>>(this, "components"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
+        form.add(componentsListMultiple);
+        listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
+        form.add(listMultipleIssueTypes);
 
-        listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeDao.getIssueTypes(),
-                issueTypeRender);
-        listIssuesForm.add(listMultipleIssueTypes);
+
+        add(form);
+
+
+//        IModel<List<Issue>> modelIssues = new AbstractReadOnlyModel<List<Issue>>() {
+//            @Override
+//            public List<Issue> getObject() {
+//                List<Issue> models = issueDao.getIssuesBySearch(project, version, components, issueTypes, null);
+//                if (models == null) {
+//                    models = Collections.emptyList();
+//                }
+//                return models;
+//            }
+//        };
+
+
+        ListView listview = new ListView<Issue>("issues", new PropertyModel<List<Issue>>(this, "issues")) {
+            @Override
+            protected void populateItem(final ListItem<Issue> item) {
+                Issue issue = item.getModelObject();
+                Link nameLink = new Link<Issue>("showIssue", item.getModel()) {
+                    @Override
+                    public void onClick() {
+                        PageParameters pageParameters = new PageParameters();
+                        pageParameters.add("issue", ((Issue) item.getModelObject()).getIssueId());
+                        setResponsePage(ShowIssue.class, pageParameters);
+                    }
+                };
+                nameLink.add(new Label("name", issue.getName()));
+                item.add(nameLink);                
+                item.add(new Label("description", issue.getDescription()));
+//                item.add(new Link<Issue>("delete", item.getModel()) {
+//                    @Override
+//                    public void onClick() {
+//                        issueDao.removeIssue(item.getModelObject());
+//                    }
+//                });
+            }
+        };
+        add(listview);
         
-        add(listIssuesForm);
+        
+        
+        
+        //TEST just view of added issues
+
+        Model<Issue> listModel = new Model<Issue>();
+        ChoiceRenderer<Issue> issueRender = new ChoiceRenderer<Issue>("name");
+        DropDownChoice<Issue> issuesList = new DropDownChoice<Issue>("issuesDrop", listModel, issueDao.getIssues(),
+                issueRender) {
+            @Override
+            protected boolean wantOnSelectionChangedNotifications() {
+                return true;
+            }
+        };
+        add(issuesList);
+        form = new Form("form", new CompoundPropertyModel<Issue>(listModel));
+        form.add(new TextField("name"));
+        form.add(new TextField("description"));
+        form.add(new TextField("project.name"));
+        add(form);
+
+
     }
 
-    
     public Project getProject() {
         return project;
     }
@@ -117,6 +204,36 @@ public class SearchIssues extends PageLayout {
     public void setIssueType(IssueType issueType) {
         this.issueType = issueType;
     }
-    
-    
+
+    public List<Component> getComponents() {
+        return components;
+    }
+
+    public void setComponents(List<Component> components) {
+        this.components = components;
+    }
+
+    public List<IssueType> getIssueTypes() {
+        return issueTypes;
+    }
+
+    public void setIssueTypes(List<IssueType> issueTypes) {
+        this.issueTypes = issueTypes;
+    }
+
+    public String getContainsText() {
+        return containsText;
+    }
+
+    public void setContainsText(String containsText) {
+        this.containsText = containsText;
+    }
+
+    public List<Issue> getIssues() {
+        return issues;
+    }
+
+    public void setIssues(List<Issue> issues) {
+        this.issues = issues;
+    }
 }

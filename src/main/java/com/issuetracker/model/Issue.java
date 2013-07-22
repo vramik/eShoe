@@ -5,7 +5,6 @@
 package com.issuetracker.model;
 
 
-import com.issuetracker.TEST.Status;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -82,15 +81,6 @@ public class Issue implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-    public IssueType getissueType() {
-        return issueType;
-    }
-    
-    public void setissueType(IssueType issueType) {
-        this.issueType = issueType;
-    }
-    
     public Priority getPriority() {
         return priority;
     }
@@ -185,6 +175,10 @@ public class Issue implements Serializable {
     
     
     //</editor-fold>
+
+    public enum Status {
+    NEW, MODIFIED, VERIFIED
+}
 
 
     public enum Priority {

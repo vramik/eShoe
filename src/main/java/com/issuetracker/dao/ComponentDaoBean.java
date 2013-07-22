@@ -45,5 +45,10 @@ public class ComponentDaoBean implements ComponentDao{
         }
         return null;
     }
+
+    @Override
+    public void remove(Component component) {
+        em.remove(em.merge(component));
+    }
     
 }

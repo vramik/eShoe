@@ -10,42 +10,37 @@ and open the template in the editor.
     </head>
     <body>
     <wicket:extend>
-        <form method="post" action="#" wicket:id="insertIssueForm">
-            <table border="0" cellpadding="5">
-                <tr>
-                    <td width="200">Issue Name</td>
-                    <td><input type="text" wicket:id="name" size="30"/></td>
-                </tr>
-                
-                <tr>
-                    <td width="200">Description</td>
-                    <td><input type="text" wicket:id="description" size="30"/></td>
-                </tr>
-                
-                <tr>
-                    <td width="200"> Select a project: </td>
-                    <td><select wicket:id="projects"></select></td>
 
-                </tr>
-                
-                <tr>
-                    <td width="200"> Select project type: </td>
-                    <td><select wicket:id="issueTypes"></select></td>
+        <form wicket:id="form">
+            <input type="text" wicket:id="issueName" />
+            <input type="text" wicket:id="issueDescription" />
+            <select wicket:id="issueTypes"></select>
+            <select wicket:id="makes"></select>
+            <select wicket:id="models"></select>
+            <select wicket:id="versionModels"></select>
 
-                </tr>
-                
-                <tr>
-                    <td width="200"> Select components </td>
-                    <td><select wicket:id="components"></select></td>
-
-                </tr>
-
-                <tr>
-                    <td width="200">&nbsp;</td>
-                    <td><input type="submit" value="Create Issue"/></td>
-                </tr>
-            </table>
+            <input type="submit" value="Create Issue"/>
         </form>
+
+ <table border="1" cellpadding="8">
+            <tr>
+                <td width="200">Name</td>
+                <td width="200">&nbsp;</td>
+                <td width="200">&nbsp;</td>
+                <td width="200">&nbsp;</td>
+                <td width="200">&nbsp;</td>
+                <td width="200">&nbsp;</td>               
+            </tr>
+            <tr wicket:id="issueList">
+                <td><span wicket:id="name"></span></td>
+                <td><span wicket:id="issueType"></span></td>
+                <td><span wicket:id="description"></span></td>
+                <td><span wicket:id="component"></span></td>
+                <td><span wicket:id="version"></span></td>
+                <td><span wicket:id="project"></span></td>
+                
+            </tr>
+        </table>
     </wicket:extend>
-    </body>
+</body>
 </html>

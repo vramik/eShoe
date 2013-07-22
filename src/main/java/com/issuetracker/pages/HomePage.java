@@ -5,37 +5,17 @@
 package com.issuetracker.pages;
 
 import com.issuetracker.dao.api.UserDao;
-import com.issuetracker.model.User;
-import com.issutracker.form.LoginForm;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.inject.Inject;
-import org.apache.wicket.Page;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.extensions.markup.html.form.select.IOptionRenderer;
-import org.apache.wicket.extensions.markup.html.form.select.Select;
-import org.apache.wicket.extensions.markup.html.form.select.SelectOption;
-import org.apache.wicket.extensions.markup.html.form.select.SelectOptions;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PropertyListView;
-import org.apache.wicket.model.AbstractPropertyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 /**
  *
@@ -61,7 +41,7 @@ public class HomePage extends PageLayout {
         final Link searchIssueLink = new Link("searchIssueLink") {
             @Override
             public void onClick() {
-                setResponsePage(ListIssues.class);
+                setResponsePage(SearchIssues.class);
             }
         };
 
@@ -109,6 +89,8 @@ public class HomePage extends PageLayout {
         List<String> opts = new ArrayList<String>();
         opts.add("Create Project");
         opts.add("Create Issue");
+        opts.add("Search Issue");
+        opts.add("Insert Types of Project");
 //        opts.addAll(pagesMap.keySet());
 //new PropertyModel<String>(this, selected)
 //
@@ -142,6 +124,12 @@ public class HomePage extends PageLayout {
                         if (selected.equals("Create Issue")) {
                             setResponsePage(CreateIssue.class);
                         }
+                        if (selected.equals("Search Issue")) {
+                            setResponsePage(SearchIssues.class);
+                        }
+                        if (selected.equals("Insert Types of Project")) {
+                            setResponsePage(CreateIssueType.class);
+                        }
                     }
                 };
                 nameLink.add(new Label("name", stringLink));
@@ -157,7 +145,7 @@ public class HomePage extends PageLayout {
 //                Issue issue = item.getModelObject();
 //                Link nameLink = new Link<Issue>("showIssue", item.getModel()) {
 //                    @Override
-//                    public void onClick() {
+//                    public void onClick() 
 //                        PageParameters pageParameters = new PageParameters();
 //                        pageParameters.add("issue", ((Issue) item.getModelObject()).getIssueId());
 //                        setResponsePage(ShowIssue.class, pageParameters);
