@@ -69,9 +69,6 @@ public class Register extends PageLayout {
         insertForm.add(new PasswordTextField("confirmPassword"));
         insertForm.setDefaultModel(new CompoundPropertyModel(user));
         add(insertForm);
-
-        getMenuPanel().setVisible(true);
-
         
         final Link homeLink = new Link("homeLink") {
             @Override

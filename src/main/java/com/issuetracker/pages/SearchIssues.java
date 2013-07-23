@@ -18,7 +18,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -47,12 +51,15 @@ public class SearchIssues extends PageLayout {
     private ProjectDao projectDao;
     @Inject
     private IssueTypeDao issueTypeDao;
+    
     private Form<List<Issue>> listIssuesForm;
-    private DropDownChoice<Project> projectDropDown;
-    private DropDownChoice<ProjectVersion> projectVersionDropDown;
+    private final DropDownChoice<ProjectVersion> versionDropDownChoice;
     private DropDownChoice<Status> statusList;
-    private ListMultipleChoice<Component> listMultipleComponents;
+    private final ListMultipleChoice<Component> componentsListMultiple;
     private ListMultipleChoice<IssueType> listMultipleIssueTypes;
+    private DropDownChoice<Project> projectDropDownChoice;
+    private ListView issuesListview;
+    
     private String containsText;
     private Project project;
     private List<Issue> issues;
@@ -103,36 +110,34 @@ public class SearchIssues extends PageLayout {
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-                issues = issueDao.getIssuesBySearch(project, version, components, issueTypes, null); //TODO
+                issues = issueDao.getIssuesBySearch(project, version, components, issueTypes, null, containsText); //TODO
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
-        DropDownChoice<Project> projectDropDownChoice = new DropDownChoice<Project>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
+        projectDropDownChoice  = new DropDownChoice<Project>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
         form.add(projectDropDownChoice);
-        DropDownChoice<ProjectVersion> versionDropDownChoice = new DropDownChoice<ProjectVersion>("versionDropDownChoice", new PropertyModel<ProjectVersion>(this, "version"), modelProjectVersionsCoices, new ChoiceRenderer<ProjectVersion>("name"));
-        form.add(versionDropDownChoice);
-        ListMultipleChoice<Component> componentsListMultiple = new ListMultipleChoice<Component>("componentsListMultiple", new PropertyModel<List<Component>>(this, "components"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
+        versionDropDownChoice = new DropDownChoice<ProjectVersion>("versionDropDownChoice", new PropertyModel<ProjectVersion>(this, "version"), modelProjectVersionsCoices, new ChoiceRenderer<ProjectVersion>("name"));
+         versionDropDownChoice.setOutputMarkupId(true);
+        form.add(versionDropDownChoice);       
+        componentsListMultiple = new ListMultipleChoice<Component>("componentsListMultiple", new PropertyModel<List<Component>>(this, "components"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
+        componentsListMultiple.setOutputMarkupId(true);
         form.add(componentsListMultiple);
         listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         form.add(listMultipleIssueTypes);
 
 
+        projectDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(componentsListMultiple);
+                target.add(versionDropDownChoice);
+            }
+        });
+
         add(form);
 
 
-//        IModel<List<Issue>> modelIssues = new AbstractReadOnlyModel<List<Issue>>() {
-//            @Override
-//            public List<Issue> getObject() {
-//                List<Issue> models = issueDao.getIssuesBySearch(project, version, components, issueTypes, null);
-//                if (models == null) {
-//                    models = Collections.emptyList();
-//                }
-//                return models;
-//            }
-//        };
-
-
-        ListView listview = new ListView<Issue>("issues", new PropertyModel<List<Issue>>(this, "issues")) {
+        issuesListview = new ListView<Issue>("issues", new PropertyModel<List<Issue>>(this, "issues")) {
             @Override
             protected void populateItem(final ListItem<Issue> item) {
                 Issue issue = item.getModelObject();
@@ -155,7 +160,7 @@ public class SearchIssues extends PageLayout {
 //                });
             }
         };
-        add(listview);
+        add(issuesListview);
         
         
         

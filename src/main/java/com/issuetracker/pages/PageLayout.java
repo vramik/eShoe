@@ -19,12 +19,12 @@ public class PageLayout extends WebPage {
 
     public static final String CONTENT_ID = "contentComponent";
     private Component headerPanel;
-    private Component menuPanel;
+//    private Component menuPanel;
     private Component footerPanel;
 
     public PageLayout() {
         add(headerPanel = new HeaderPanel("headerPanel"));
-        add(menuPanel = new MenuPanel("menuPanel"));
+//        add(menuPanel = new MenuPanel("menuPanel"));
         add(footerPanel = new FooterPanel("footerPanel"));
     }
     
@@ -38,13 +38,13 @@ public class PageLayout extends WebPage {
         this.headerPanel = headerPanel;
     }
     
-    public Component getMenuPanel() {
-        return menuPanel;
-    }
-    
-    public void setMenuPanel(Component menuPanel) {
-        this.menuPanel = menuPanel;
-    }
+//    public Component getMenuPanel() {
+//        return menuPanel;
+//    }
+//    
+//    public void setMenuPanel(Component menuPanel) {
+//        this.menuPanel = menuPanel;
+//    }
     
     public Component getFooterPanel() {
         return footerPanel;

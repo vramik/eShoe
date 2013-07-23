@@ -16,6 +16,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -138,16 +139,18 @@ public class IssueDaoBean implements IssueDao {
     
     @Override
     public List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion, 
-    List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList) {
+    List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
         qb = em.getCriteriaBuilder();
         CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
         Root<Issue> i = c.from(Issue.class);
         c.select(i);
+        Expression<String> name = i.get("name");
+        c.where(qb.like(qb.lower(name), "%"+nameContainsText.toLowerCase()+"%"));
         c.where(qb.equal(i.get("project"), project));
         c.where(qb.equal(i.get("projectVersion"), projectVersion));
-        c.where(i.get("comopnent").in(projectComponents));
+        c.where(i.get("component").in(projectComponents));
         c.where(i.get("issueType").in(issueTypes));
-        c.where(i.get("status").in(statusList));
+       // c.where(i.get("status").in(statusList));
         
         List<Issue> results = em.createQuery(c).getResultList();
         if (results != null && !results.isEmpty()) {

@@ -63,8 +63,6 @@ public class RegisterReq extends PageLayout {
         insertForm.setDefaultModel(new CompoundPropertyModel(request));
         add(insertForm);
 
-        getMenuPanel().setVisible(true);
-
         
         final Link homeLink = new Link("homeLink") {
             @Override

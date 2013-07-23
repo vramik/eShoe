@@ -20,7 +20,7 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author mgottval
  */
-public class Login extends WebPage {
+public class Login extends PageLayout {
 
     @Inject
     private UserDao userDao;

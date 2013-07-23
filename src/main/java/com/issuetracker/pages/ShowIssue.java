@@ -29,12 +29,12 @@ public class ShowIssue extends PageLayout {
     public ShowIssue(PageParameters parameters) {
         Long issueStringId = parameters.get("issue").toLong();
         issue = issueDao.getIssueById(issueStringId);
-        Logger.getLogger(ShowIssue.class.getName()).log(Level.SEVERE, issue.getName());
         setDefaultModel(new CompoundPropertyModel<Issue>(issue));
         
         add(new Label("name"));
         add(new RequiredTextField("description"));
         add(new RequiredTextField("project.name"));
+        add(new Label("component.name"));
     }
 
     

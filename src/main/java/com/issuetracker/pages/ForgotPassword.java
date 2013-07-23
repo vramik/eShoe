@@ -17,7 +17,7 @@ import org.apache.wicket.model.PropertyModel;
  *
  * @author mgottval
  */
-public class ForgotPassword extends WebPage {
+public class ForgotPassword extends PageLayout {
 
     private Form<User> sendPasswordForm;
     private String email;

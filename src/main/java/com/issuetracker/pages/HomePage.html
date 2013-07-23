@@ -12,54 +12,8 @@ and open the template in the editor.
     <body>
     <wicket:extend>
 
-
-
-
-        <table border="0" cellpadding="5">
-            <tr>
-                <td><span wicket:id="searchIssueLink">Search for issue</span></td>
-                <!--                <td><span wicket:id="createIssueLink">Create Issue</span></td>
-                                <td><span wicket:id="createProjectLink">Create Project</span></td>-->
-                <td><span wicket:id="createIssueTypeLink">Create Project</span></td>
-                <!--                <td>  <form id="loginForm" method="get" wicket:id="loginForm">
-                                        <fieldset>
-                                            <legend style="color: #F90">Login</legend>
-                                            <p wicket:id="loginStatus"></p>
-                                            <span >Username: </span><input wicket:id="username" type="text" id="username" /><br/>
-                                            <span >Password: </span><input wicket:id="password" type="password" id="password" />
-                                            <p>
-                                                <input type="submit" name="Login" value="Login"/>
-                                            </p>
-                                        </fieldset>
-                                    </form></td>-->
-                <!--<td><span wicket:id="forgotPasswdLink">Forgot Password?</span></td>-->
-                <!--                <td><select onChange="popUp(this.value);">
-                                        <option value="0">New Element</option>
-                                        <option value="1">Element 1</option>
-                                        <option value="2">Element 2</option>
-                                        <option value="3">Element 3</option>
-                                    </select></td>-->
-
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td><span wicket:id="registerLink">Register</span></td>
-            </tr>
-
-        </table>
-
-        <!--<span wicket:id="projectTasks">-->
-            <ul wicket:id="projectTasks" id='nav'>
-                <li><a href="#">Projects</a>
-                    <ul>
-                        <li><a href="#" wicket:id="showIssue"><span wicket:id="name">[name]</span></a></li>
-                    </ul>
-                </li>
-            </ul>
-        <!--</span>-->
+        <a href="#" wicket:id="loginLink"><span wicket:id="name">[name]</span></a>
+        <!--              
 
         <!--<select wicket:id="projectLinks"></select>-->
         <!--        <select wicket:id="projectLinks">

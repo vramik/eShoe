@@ -108,24 +108,24 @@ public class CreateIssue extends PageLayout {
             }
         };
         add(insertIssueForm);
-        final DropDownChoice<Project> makes2 = new DropDownChoice<Project>("makes", new PropertyModel<Project>(this, "selectedProject"), makeChoices2, new ChoiceRenderer<Project>("name"));
-        final DropDownChoice<Component> models2 = new DropDownChoice<Component>("models", new PropertyModel<Component>(this, "issue.component"), modelChoices2, new ChoiceRenderer<Component>("name"));
-        final DropDownChoice<ProjectVersion> versionModels = new DropDownChoice<ProjectVersion>("versionModels", new PropertyModel<ProjectVersion>(this, "issue.projectVersion"), modelChoicesVersions, new ChoiceRenderer<ProjectVersion>("name"));
-        models2.setOutputMarkupId(true);
-        versionModels.setOutputMarkupId(true);
-        insertIssueForm.add(makes2);
-        insertIssueForm.add(models2);
-        insertIssueForm.add(versionModels);
+        final DropDownChoice<Project> projectDropDown = new DropDownChoice<Project>("makes", new PropertyModel<Project>(this, "selectedProject"), makeChoices2, new ChoiceRenderer<Project>("name"));
+        final DropDownChoice<Component> componentDropDown = new DropDownChoice<Component>("models", new PropertyModel<Component>(this, "issue.component"), modelChoices2, new ChoiceRenderer<Component>("name"));
+        final DropDownChoice<ProjectVersion> versionDropDown = new DropDownChoice<ProjectVersion>("versionModels", new PropertyModel<ProjectVersion>(this, "issue.projectVersion"), modelChoicesVersions, new ChoiceRenderer<ProjectVersion>("name"));
+        componentDropDown.setOutputMarkupId(true);
+        versionDropDown.setOutputMarkupId(true);
+        insertIssueForm.add(projectDropDown);
+        insertIssueForm.add(componentDropDown);
+        insertIssueForm.add(versionDropDown);
         insertIssueForm.add(new RequiredTextField("issueName", new PropertyModel<String>(this, "issue.name")));
         insertIssueForm.add(new RequiredTextField("issueDescription", new PropertyModel<String>(this, "issue.description")));
         issueTypeList = new DropDownChoice<IssueType>("issueTypes", new PropertyModel<IssueType>(this, "issue.issueType"), issueTypeDao.getIssueTypes(),new ChoiceRenderer<IssueType>("name"));
         insertIssueForm.add(issueTypeList);
 
-        makes2.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        projectDropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.add(models2);
-                target.add(versionModels);
+                target.add(componentDropDown);
+                target.add(versionDropDown);
             }
         });
 
