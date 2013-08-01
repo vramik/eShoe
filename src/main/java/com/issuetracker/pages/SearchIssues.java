@@ -111,6 +111,14 @@ public class SearchIssues extends PageLayout {
             @Override
             protected void onSubmit() {
                 issues = issueDao.getIssuesBySearch(project, version, components, issueTypes, null, containsText); //TODO
+                String s = "";
+                for (Issue i : issues) {
+                    s = s + i.getName();
+                }
+                Logger.getLogger(CreateIssue.class.getName()).log(Level.SEVERE, s);
+//                if(issues.isEmpty()) {
+//                    issuesListview.setList(new ArrayList());
+//                }
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
@@ -146,7 +154,7 @@ public class SearchIssues extends PageLayout {
                     public void onClick() {
                         PageParameters pageParameters = new PageParameters();
                         pageParameters.add("issue", ((Issue) item.getModelObject()).getIssueId());
-                        setResponsePage(ShowIssue.class, pageParameters);
+                        setResponsePage(IssueDetail.class, pageParameters);
                     }
                 };
                 nameLink.add(new Label("name", issue.getName()));

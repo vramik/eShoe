@@ -7,9 +7,11 @@ package com.issuetracker.dao;
 import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.ProjectVersionDao;
+import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.User;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +36,8 @@ public class ProjectDaoBean implements ProjectDao {
     private ComponentDao componentDao;
     @Inject
     private ProjectVersionDao projectVersionDao;
+    @Inject
+    private UserDao userDao;
     
     @PersistenceContext
     private EntityManager em;
@@ -55,6 +59,22 @@ public class ProjectDaoBean implements ProjectDao {
         CriteriaQuery<Project> projectQuery = qb.createQuery(Project.class);
         Root<Project> p = projectQuery.from(Project.class);
         Predicate pCondition = qb.equal(p.get("name"), name);
+        projectQuery.where(pCondition);
+        TypedQuery<Project> pQuery = em.createQuery(projectQuery);
+        List<Project> projectResults = pQuery.getResultList();
+        if (projectResults != null && !projectResults.isEmpty()) {
+            return projectResults.get(0);
+        } else {
+            return null;
+        }
+    }
+    
+    @Override
+    public Project getProjectById(Long id) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> projectQuery = qb.createQuery(Project.class);
+        Root<Project> p = projectQuery.from(Project.class);
+        Predicate pCondition = qb.equal(p.get("id"), id);
         projectQuery.where(pCondition);
         TypedQuery<Project> pQuery = em.createQuery(projectQuery);
         List<Project> projectResults = pQuery.getResultList();
@@ -95,6 +115,15 @@ public class ProjectDaoBean implements ProjectDao {
         project.setName("JBoss");
         project.setVersions(versin);
         project.setComponents(components);
+        
+        User user = new User("Monika", "Gottvaldova", "mgottvaldova@gmail.com", "password");
+        User user2 = new User("Sara", "Kockova", "skock@gmail.com", "password");
+        userDao.addUser(user);
+        userDao.addUser(user2);
+        project.setOwner(user);
+        
+        project.setSummary("JBoss project summary");
+        
          em.persist(project);
          
          List<ProjectVersion> versin2 = new ArrayList<ProjectVersion>();
@@ -124,6 +153,10 @@ public class ProjectDaoBean implements ProjectDao {
         project2.setName("Fedora");
         project2.setVersions(versin2);
         project2.setComponents(components2);
+        
+        project2.setOwner(user2);
+        
+        project2.setSummary("Fedora project summary");
          em.persist(project2);
         //EXAMPLE
         

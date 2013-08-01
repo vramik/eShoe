@@ -1,0 +1,39 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+    <wicket:extend>
+        <h3><span wicket:id="name">[project name]</span>  </h3>      
+        <table border="1" cellpadding="8">
+            <tr>
+                <td width="200">Versions</td>
+                <td width="200">&nbsp;</td>
+            </tr>
+            <tr wicket:id="projectVersionListView">
+                <td><span wicket:id="versionName"></span></td>
+
+                <td><a href="#" wicket:id="remove">[delete]</a></td>
+            </tr>
+        </table>       
+
+        <table border="1" cellpadding="8">
+            <tr>
+                <td width="200">Components</td>
+                <td width="200">&nbsp;</td>
+            </tr>
+            <tr wicket:id="projectComponentListView">
+                <td><span wicket:id="componentName"></span></td>
+
+                <td><a href="#" wicket:id="remove">[delete]</a></td>
+            </tr>
+        </table>
+    </wicket:extend>
+</body>
+</html>

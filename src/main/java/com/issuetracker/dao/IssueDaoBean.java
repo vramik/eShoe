@@ -8,6 +8,7 @@ import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
+import com.issuetracker.model.User;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -97,9 +98,8 @@ public class IssueDaoBean implements IssueDao {
     }
 
     @Override
-    public Issue updateIssue(Issue issue) {
-        Issue updatedIssue = em.merge(issue);
-        return updatedIssue;
+    public void updateIssue(Issue issue) {
+        em.merge(issue);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class IssueDaoBean implements IssueDao {
 
     @Override
     public List<Issue> getIssuesByProject(Project project) {
-       qb = em.getCriteriaBuilder();
+        qb = em.getCriteriaBuilder();
         CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
         Root<Issue> i = c.from(Issue.class);
         c.select(i);
@@ -121,6 +121,23 @@ public class IssueDaoBean implements IssueDao {
         return null;
     }
 //
+
+    @Override
+    public List<User> getIssueWatchers(Issue issue) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
+        Root<Issue> i = c.from(Issue.class);
+        c.select(i);
+        c.where(qb.equal(i.get("name"), issue.getName()));
+        TypedQuery query = em.createQuery(c);
+        List<Issue> issueResults = query.getResultList();
+        if (issueResults != null && !issueResults.isEmpty()) {
+            List<User> watchers = issueResults.get(0).getWatches();
+            return watchers;
+        } else {
+            return null;
+        }
+    }
 
     @Override
     public List<Issue.Priority> getPriorities() {
@@ -136,29 +153,28 @@ public class IssueDaoBean implements IssueDao {
 //        }
         return null;
     }
-    
+
     @Override
-    public List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion, 
-    List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
+    public List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion,
+            List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
         qb = em.getCriteriaBuilder();
         CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
         Root<Issue> i = c.from(Issue.class);
         c.select(i);
         Expression<String> name = i.get("name");
-        c.where(qb.like(qb.lower(name), "%"+nameContainsText.toLowerCase()+"%"));
+        c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
         c.where(qb.equal(i.get("project"), project));
         c.where(qb.equal(i.get("projectVersion"), projectVersion));
         c.where(i.get("component").in(projectComponents));
         c.where(i.get("issueType").in(issueTypes));
-       // c.where(i.get("status").in(statusList));
-        
+        // c.where(i.get("status").in(statusList));
+
         List<Issue> results = em.createQuery(c).getResultList();
         if (results != null && !results.isEmpty()) {
             return results;
         }
         return null;
     }
-
 //    public void test() {
 //        qb = em.getCriteriaBuilder();
 //        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);

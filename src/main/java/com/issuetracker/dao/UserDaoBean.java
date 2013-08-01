@@ -6,7 +6,10 @@ package com.issuetracker.dao;
  */
 import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.User;
+import java.io.Serializable;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,20 +18,17 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 
 /**
  *
  * @author mgottval
  */
 @Stateless
-public class UserDaoBean implements UserDao {
+public class UserDaoBean implements UserDao, Serializable {
 
     @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
-
 
     @Override
     public User getUserById(Long id) {
@@ -42,7 +42,7 @@ public class UserDaoBean implements UserDao {
 
     @Override
     public void updateUser(User user) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        em.merge(user);
     }
 
     @Override
@@ -73,6 +73,7 @@ public class UserDaoBean implements UserDao {
         CriteriaQuery<User> c = qb.createQuery(User.class);
         Root<User> u = c.from(User.class);
         Predicate condition = qb.equal(u.get("username"), username);
+        Logger.getLogger(UserDaoBean.class.getName()).log(Level.SEVERE, u.get("username").toString());
         c.where(condition);
         TypedQuery<User> q = em.createQuery(c);
         List<User> results = q.getResultList();
@@ -80,5 +81,31 @@ public class UserDaoBean implements UserDao {
             return results.get(0);
         }
         return null;
+    }
+
+    @Override
+    public boolean isUsernameInUse(String username) {
+        User user = null;
+
+                user = getUserByUsername(username);
+
+        if (user == null) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<User> getUsers() {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> q = qb.createQuery(User.class);
+        Root<User> p = q.from(User.class);
+        TypedQuery<User> pQuery = em.createQuery(q);
+        List<User> results = pQuery.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        } else {
+            return null;
+        }
     }
 }

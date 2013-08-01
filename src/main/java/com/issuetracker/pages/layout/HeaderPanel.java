@@ -7,6 +7,7 @@ package com.issuetracker.pages.layout;
 import com.issuetracker.pages.CreateIssue;
 import com.issuetracker.pages.CreateIssueType;
 import com.issuetracker.pages.CreateProject;
+import com.issuetracker.pages.ListProjects;
 import com.issuetracker.pages.SearchIssues;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +30,16 @@ public class HeaderPanel extends Panel {
 
         add(label);
         
-        List<String> opts = new ArrayList<String>();
-        opts.add("Create Project");
-        opts.add("Create Issue");
-        opts.add("Search Issue");
-        opts.add("Insert Types of Project");
+        List<String> optsProject = new ArrayList<String>();
+        optsProject.add("Create Project");
+        optsProject.add("Insert Types of Project");
+        optsProject.add("View all projects");
         
-        add(new PropertyListView<String>("projectTasks", opts) {
+        List<String> optsIssue = new ArrayList<String>();
+        optsIssue.add("Create Issue");
+        optsIssue.add("Search Issue");
+        
+        add(new PropertyListView<String>("projectTasks", optsProject) {
             @Override
             public void populateItem(final ListItem<String> listItem) {
                 final String stringLink = listItem.getModelObject();
@@ -46,14 +50,33 @@ public class HeaderPanel extends Panel {
                         if (selected.equals("Create Project")) {
                             setResponsePage(CreateProject.class);
                         }
+                        if (selected.equals("Insert Types of Project")) {
+                            setResponsePage(CreateIssueType.class);
+                        }
+                         if (selected.equals("View all projects")) {
+                            setResponsePage(ListProjects.class);
+                        }
+                    }
+                };
+                nameLink.add(new Label("name", stringLink));
+                listItem.add(nameLink);
+
+            }
+        });
+        
+         add(new PropertyListView<String>("issueTasks", optsIssue) {
+            @Override
+            public void populateItem(final ListItem<String> listItem) {
+                final String stringLink = listItem.getModelObject();
+                Link nameLink = new Link<String>("actionLink", listItem.getModel()) {
+                    @Override
+                    public void onClick() {
+                        selected = stringLink;
                         if (selected.equals("Create Issue")) {
                             setResponsePage(CreateIssue.class);
                         }
                         if (selected.equals("Search Issue")) {
                             setResponsePage(SearchIssues.class);
-                        }
-                        if (selected.equals("Insert Types of Project")) {
-                            setResponsePage(CreateIssueType.class);
                         }
                     }
                 };

@@ -13,7 +13,7 @@ import com.issuetracker.pages.ListProjects;
 import com.issuetracker.pages.Login;
 import com.issuetracker.pages.Register;
 import com.issuetracker.pages.SearchIssues;
-import com.issuetracker.pages.ShowIssue;
+import com.issuetracker.pages.IssueDetail;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -57,7 +57,7 @@ public class IssueWeb extends WebApplication{
         mountPage("/newProject", CreateProject.class);
         mountPage("/projects", ListProjects.class);
         mountPage("/newIssue", CreateIssue.class);
-        mountPage("/issueDetail", ShowIssue.class);
+        mountPage("/issueDetail", IssueDetail.class);
         mountPage("/searchIssues", SearchIssues.class);
         mountPage("/newIssueType", CreateIssueType.class);
         

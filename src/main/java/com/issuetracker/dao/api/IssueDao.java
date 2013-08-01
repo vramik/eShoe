@@ -11,6 +11,7 @@ import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
+import com.issuetracker.model.User;
 import java.util.List;
 
 /**
@@ -27,7 +28,7 @@ public interface IssueDao {
     
     void addIssue(Issue issue);
     
-    Issue updateIssue(Issue issue);
+    void updateIssue(Issue issue);
     
     void removeIssue(Issue issue);
     
@@ -39,5 +40,7 @@ public interface IssueDao {
     
     List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion, 
     List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText);
+    
+    List<User> getIssueWatchers(Issue issue);
     
 }

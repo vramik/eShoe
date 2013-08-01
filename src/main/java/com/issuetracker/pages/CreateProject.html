@@ -10,11 +10,16 @@ and open the template in the editor.
     </head>
     <body>
     <wicket:extend>
+
         <form method="post" action="#" wicket:id="insertProjectForm">
             <table border="0" cellpadding="5">
                 <tr>
                     <td width="200">Name</td>
                     <td><input type="text" wicket:id="name" size="30"/></td>
+                </tr>
+                <tr>
+                    <td width="200">Summary</td>
+                    <td><input type="text" wicket:id="summary" size="30"/></td>
                 </tr>
                 <tr>
                     <td width="200">Version</td>
@@ -24,68 +29,24 @@ and open the template in the editor.
                     <td width="200">Component</td>
                     <td><input type="text" wicket:id="componentName" size="30"/><input wicket:id="addComponentButton" type="submit" value="+"></td>
                 </tr>
-                <!--<tr>-->
-                <!--                    <td width="200">Version</td>
-                
-                                    <td><input type="text" wicket:id="projectVersion" size="30"/><button  wicket:id="addVersionButton" >+</button></td>
-                                </tr>
-                                <tr>
-                                    <td><input wicket:id="textField" type="text"/>
-                                        <input wicket:id="evalButton" type="submit" value="evaluate" /></td>
-                                </tr>-->
 
                 <tr>
                     <td width="200">&nbsp;</td>
                     <td><input type="submit" value="Add Project"/></td>
                 </tr>
             </table>
-        </form>
-        <!--<button type="input" wicket:id="lookup">+</button>-->
-        <!--        <p>
-                    Result: <span wicket:id="evalResultLabel">result</span>
-                </p>-->
+        </form>       
 
         <div wicket:id="wmc">
-            <table border="1" cellpadding="8">
-                <tr>
-                    <td width="200">Name</td>
-                    <td width="200">&nbsp;</td>
-                </tr>
-                <tr wicket:id="versionsList">
-                    <td><span wicket:id="name"></span></td>
-
-                    <td><a href="#" wicket:id="remove">[delete]</a></td>
-                </tr>
-            </table>
+            <div wicket:id="versionsList"/>
         </div>
 
         <div wicket:id="wmcComponent">
-            <table border="1" cellpadding="8">
-                <tr>
-                    <td width="200">Name</td>
-                    <td width="200">&nbsp;</td>
-                </tr>
-                <tr wicket:id="componentsList">
-                    <td><span wicket:id="name"></span></td>
-
-                    <td><a href="#" wicket:id="remove">[delete]</a></td>
-                </tr>
-            </table>
+            <div wicket:id="componentsList"/>
         </div>
 
-
-
-        <table border="1" cellpadding="8">
-            <tr>
-                <td width="200">Name</td>
-                <td width="200">&nbsp;</td>
-            </tr>
-            <tr wicket:id="projectList">
-                <td><span wicket:id="name"></span></td>
-                <td><a href="#" wicket:id="delete">[delete]</a></td>
-            </tr>
-        </table>
-
+        <span wicket:id="projectName"/>
+        <div wicket:id="projectList"/>
 
     </wicket:extend>
 </body>

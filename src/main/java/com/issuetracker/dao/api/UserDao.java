@@ -28,4 +28,7 @@ public interface UserDao {
     
     void removeUser(User user);
     
+    boolean isUsernameInUse(String username);
+    
+    List<User> getUsers();
 }

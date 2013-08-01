@@ -30,6 +30,9 @@ public class Project implements Serializable {
     private Long id;
 //    @Column(unique = true)
     private String name;
+    
+    private String summary;
+    
     @ManyToOne
     private User owner;
     @ManyToMany(fetch= FetchType.EAGER)
@@ -54,6 +57,14 @@ public class Project implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public User getOwner() {

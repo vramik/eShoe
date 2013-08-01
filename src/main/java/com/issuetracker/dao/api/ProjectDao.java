@@ -30,4 +30,6 @@ public interface ProjectDao {
     void remove(Project project);
     
     Project getFirstProject();
+    
+    Project getProjectById(Long id);
 }

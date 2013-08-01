@@ -6,7 +6,7 @@ and open the template in the editor.
 <html xmlns:wicket="http://wicket.sourceforge.net/">
     <head>
     <wicket:link>
-        <link rel="stylesheet" href="css/default.css" type="text/css" />
+        <link rel="stylesheet" href="default.css" type="text/css" />
     </wicket:link>
     <title>IShoe</title>
 </head>
@@ -15,19 +15,13 @@ and open the template in the editor.
 <wicket:extend>
     <section class="login">
         <div class="titulo">Welcome to Issue tracking</div>
-        <form action="#" method="post" wicket:id="insertForm" enctype="application/x-www-form-urlencoded">
-            <input type="text" wicket:id="email" required title="Username required" placeholder="Username">
-            <input type="password" wicket:id="password" required title="Password required" placeholder="Password">
-            <!--                <div class="olvido">
-                                <div class="col"><input type="submit" value="Login"/></div>
-                            </div>-->
-            <input type="submit" value="Login"/>
-        </form>
+<div wicket:id = "loginForm"></div>
+
         <a wicket:id = "forgotPasswordLink">Forgot Password?</a> 
     </section>
     <span wicket:id="feedback"></span>
 
-    <a wicket:id = "signUpLink">Need New Account? Sign Up!</a>            
+    <a wicket:id = "signUpLink">Need New Account? Sign Up!</a>    
 
 </wicket:extend>
 </body>

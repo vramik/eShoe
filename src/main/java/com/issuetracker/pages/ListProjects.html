@@ -9,6 +9,21 @@ and open the template in the editor.
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <div>TODO write content</div>
-    </body>
+    <wicket:extend>
+        <table cellpadding="8">
+            <tr>
+                <td width="200">Name</td>
+                <td width="200">Project Lead</td>
+                <td width="200">&nbsp;</td>
+            </tr>
+            <tr wicket:id="projectList">
+                <td><a href="#" wicket:id="showProject"><span wicket:id="name"></span></a></td>
+                <td><span wicket:id="projectLead"></span></td>
+                <td><a href="#" wicket:id="delete">[delete]</a></td>
+            </tr>
+        </table>
+
+
+    </wicket:extend>
+</body>
 </html>

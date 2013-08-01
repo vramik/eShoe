@@ -111,14 +111,7 @@ public class User implements Serializable {
     public List<Issue> getOwned() {
         return owned;
     }
-
-    public String getNick() {
-        return username;
-    }
-
-    public void setNick(String username) {
-        this.username = username;
-    }
+    
 
     public String getLastName() {
         return lastName;

@@ -1,0 +1,40 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+    <wicket:extend>
+        <h3><span wicket:id="name"></span></h3>
+        <div style="display: table;">
+            <div style="display: table-row;">
+                <div style="display: table-cell;">Description: </div>
+                <div style="display: table-cell;">
+                    <input type="text" wicket:id="description"/>
+                </div>
+            </div>
+            <div style="display: table-row;">
+                <div style="display: table-cell;">Username </div>
+                <div style="display: table-cell;">
+                    <input type="text" wicket:id="project.name"/>
+                </div>
+            </div>
+            Component:
+            <span wicket:id="component.name"></span> <br/>
+            Watchers:
+            <span wicket:id="watchersCountLabel">x</span> 
+            <a wicket:id="addWatcherLink">Watch this issue</a>
+
+        </div>
+
+
+        <div wicket:id="modal2"></div><br/>
+        <a wicket:id="showModal2">Show modal dialog with panel</a>
+    </wicket:extend>
+</body>
+</html>
