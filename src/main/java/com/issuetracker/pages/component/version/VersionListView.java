@@ -4,7 +4,9 @@
  */
 package com.issuetracker.pages.component.version;
 
+import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.ProjectVersionDao;
+import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import java.util.List;
 import javax.inject.Inject;
@@ -13,6 +15,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -23,14 +26,16 @@ public class VersionListView<T extends ProjectVersion> extends Panel {
 
     @Inject
     private ProjectVersionDao projectVersionDao;
+    @Inject
+    private ProjectDao projectDao;
     private List<ProjectVersion> projectVersionList;
     private final ListView<ProjectVersion> versionsListView;
 
-    public VersionListView(String id, List<ProjectVersion> versionList) {
+    public VersionListView(String id, IModel<List<ProjectVersion>> versionsModel, final IModel<Project> projectModel) {
         super(id);
-        this.projectVersionList = versionList;
+        this.projectVersionList = versionsModel.getObject();
         add(new Label("versions", "Versions"));
-        versionsListView = new ListView<ProjectVersion>("versionsList", new PropertyModel<List<ProjectVersion>>(this, "projectVersionList")) {
+        versionsListView = new ListView<ProjectVersion>("versionsList", versionsModel) {
             @Override
             protected void populateItem(ListItem<ProjectVersion> item) {
                 final ProjectVersion projectVersion = item.getModelObject();
@@ -38,12 +43,12 @@ public class VersionListView<T extends ProjectVersion> extends Panel {
                     @Override
                     public void onClick() {
                         projectVersionList.remove(projectVersion);
-//                        Page current = getPage();
-//                        if (current.getClass() == ProjectDetail.class) {
-//                            project.setComponents(projectComponentList);
-//                            projectDao.update(project);
-//                        }
-                        projectVersionDao.remove(projectVersion);
+                        if (projectModel != null) {
+                            Project project = projectDao.getProjectById(projectModel.getObject().getId());
+                            project.setVersions(projectVersionList);
+                            projectDao.update(project);
+                        }
+//                        projectVersionDao.remove(projectVersion);
                     }
                 });
                 item.add(new Label("name", projectVersion.getName()));

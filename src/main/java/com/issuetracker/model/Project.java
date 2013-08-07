@@ -28,18 +28,19 @@ public class Project implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-//    @Column(unique = true)
+//    @Column(unique = true, nullable = false)
     private String name;
     
     private String summary;
     
     @ManyToOne
     private User owner;
-    @ManyToMany(fetch= FetchType.EAGER)
+    
+    @ManyToMany(fetch= FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<ProjectVersion> versions;
     
-    @ManyToMany(fetch= FetchType.EAGER)
+    @ManyToMany(fetch= FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Component> components;
 

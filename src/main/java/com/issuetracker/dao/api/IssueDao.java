@@ -4,6 +4,7 @@
  */
 package com.issuetracker.dao.api;
 
+import com.issuetracker.model.Comment;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.Issue.Priority;
@@ -42,5 +43,7 @@ public interface IssueDao {
     List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText);
     
     List<User> getIssueWatchers(Issue issue);
+    
+    List<Comment> getComments(Issue issue);
     
 }

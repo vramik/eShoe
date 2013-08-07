@@ -11,6 +11,8 @@
     <class>org.picketlink.idm.jpa.schema.RelationshipIdentityObject</class>
     <class>org.picketlink.idm.jpa.schema.RelationshipObject</class>
     <class>org.picketlink.idm.jpa.schema.RelationshipObjectAttribute</class>-->
+    <class>com.issuetracker.model.Comment</class>
+    <class>com.issuetracker.pages.component.comment.CommentForm</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!-- Properties for Hibernate -->

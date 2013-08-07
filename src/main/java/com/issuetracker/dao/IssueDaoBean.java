@@ -2,6 +2,7 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
+import com.issuetracker.model.Comment;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssueType;
@@ -10,6 +11,8 @@ import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.User;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -184,4 +187,22 @@ public class IssueDaoBean implements IssueDao {
 //        System.out.println(i.get("name"));
 //   
 //    }
+
+    @Override
+    public List<Comment> getComments(Issue issue) {
+        Logger.getLogger(IssueDaoBean.class.getName()).log(Level.SEVERE, issue.getName());
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
+        Root<Issue> i = c.from(Issue.class);
+        c.select(i);
+        c.where(qb.equal(i.get("name"), issue.getName()));
+        TypedQuery query = em.createQuery(c);
+        List<Issue> issueResults = query.getResultList();
+        if (issueResults != null && !issueResults.isEmpty()) {
+            List<Comment> comments = issueResults.get(0).getComments();
+            return comments;
+        } else {
+            return null;
+        }
+    }
 }

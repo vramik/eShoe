@@ -6,8 +6,11 @@ package com.issuetracker.pages;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.UserDao;
+import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.User;
+import com.issuetracker.pages.component.comment.CommentListView;
+import com.issuetracker.pages.component.comment.CommentForm;
 import com.issuetracker.pages.layout.ModalPanel1;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +23,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.AbstractPropertyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -42,14 +46,17 @@ public class IssueDetail extends PageLayout {
     private final IModel<List<User>> watchersModel;
     private int watchersCount;
     private Issue issue;
-    private List<User> watchersList;
+    private List<User> watchersList; 
+    private List<Comment> comments;
     //private ListChoice<Version>
 
     public IssueDetail(PageParameters parameters) {
         Long issueStringId = parameters.get("issue").toLong();
         issue = issueDao.getIssueById(issueStringId);
-        setDefaultModel(new CompoundPropertyModel<Issue>(issue));
-        watchersCount = issue.getWatches().size();
+        PropertyModel<Issue> defaultModel = new PropertyModel<Issue>(this, "issue");
+        setDefaultModel(defaultModel);
+        watchersCount = issue.getWatches().size();  
+//        comments = issueDao.getComments(issue);
 
         add(new Label("name"));
         add(new RequiredTextField("description"));
@@ -133,9 +140,9 @@ public class IssueDetail extends PageLayout {
 //                pageParameters.add("issue", ((Issue) item.getModelObject()).getIssueId());
             }
         });
-
-
-
+        
+       add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")));
+       add(new CommentListView("commentListView", defaultModel));
 
     }
 
@@ -162,4 +169,14 @@ public class IssueDetail extends PageLayout {
     public void setWatchersList(List<User> watchersList) {
         this.watchersList = watchersList;
     }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+    
+    
 }

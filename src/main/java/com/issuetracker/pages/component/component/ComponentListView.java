@@ -5,7 +5,9 @@
 package com.issuetracker.pages.component.component;
 
 import com.issuetracker.dao.api.ComponentDao;
+import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Component;
+import com.issuetracker.model.Project;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
@@ -13,6 +15,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -24,14 +27,16 @@ public class ComponentListView<T extends Component> extends Panel{
     
     @Inject
     private ComponentDao componentDao;
+    @Inject
+    private ProjectDao projectDao;
     
     private final ListView<Component> componentsListView;
     
     private List<Component> componentList;
     
-    public ComponentListView(String id, final List<Component> componentList) {
+    public ComponentListView(String id,  IModel<List<Component>> componentsModel, final IModel<Project> projectModel) {
         super(id);
-        this.componentList = componentList;
+        componentList = componentsModel.getObject();
         add(new Label("components", "Components"));
         componentsListView = new ListView<Component>("componentsList",  new PropertyModel<List<Component>>(this, "componentList")) {
             @Override
@@ -40,8 +45,13 @@ public class ComponentListView<T extends Component> extends Panel{
                 item.add(new Link<Component>("remove", item.getModel()) {
                     @Override
                     public void onClick() {
-                        componentList.remove(component);                       
-                        componentDao.remove(component);
+                        componentList.remove(component); 
+                        if (projectModel != null) {
+                            Project project = projectDao.getProjectById(projectModel.getObject().getId());
+                            project.setComponents(componentList);
+                            projectDao.update(project);
+                        }
+//                        componentDao.remove(component);
                     }
                 });
                 item.add(new Label("name", component.getName()));

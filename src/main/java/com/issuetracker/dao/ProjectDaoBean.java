@@ -211,12 +211,17 @@ public class ProjectDaoBean implements ProjectDao {
         em.remove(em.merge(project));
     }
 
+    
+    
     @Override
-    public Project getFirstProject() {
-//         qb = em.getCriteriaBuilder();
-//        CriteriaQuery<Project> c = qb.createQuery(Project.class);
-//        Root<Project> p = c.from(Project.class);
-//        c.select(p);
-        return null;
+    public boolean isProjectNameInUse(String projectName) {
+        Project project = null;
+
+                project = getProjectByName(projectName);
+
+        if (project == null) {
+            return false;
+        }
+        return true;
     }
 }

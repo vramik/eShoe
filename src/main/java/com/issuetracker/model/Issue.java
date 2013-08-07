@@ -58,6 +58,10 @@ public class Issue implements Serializable {
     Component component;
     @ManyToOne
     ProjectVersion projectVersion;
+    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
+    List<Comment> comments;
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
     public Long getIssueId() {
@@ -139,6 +143,16 @@ public class Issue implements Serializable {
     public void setWatches(List<User> watches) {
         this.watches = watches;
     }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+    
+    
 
 //    public List<User> getVotes() {
 //        return votes;

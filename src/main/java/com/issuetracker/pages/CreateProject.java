@@ -15,6 +15,7 @@ import com.issuetracker.model.User;
 import com.issuetracker.pages.component.component.ComponentListView;
 import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.component.version.VersionListView;
+import com.issuetracker.pages.validator.ProjectNameValidator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -98,7 +99,7 @@ public class CreateProject extends PageLayout {
         };
         add(insertProjectForm);
 
-        insertProjectForm.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "project.name")));
+        insertProjectForm.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "project.name")).add(new ProjectNameValidator()));
         insertProjectForm.add(new RequiredTextField<String>("summary", new PropertyModel<String>(this, "project.summary")));
         textField = new TextField<String>("version", new PropertyModel<String>(this, "string"));
         textField.setOutputMarkupId(true);
@@ -108,7 +109,7 @@ public class CreateProject extends PageLayout {
         insertProjectForm.add(componentTextField);
         insertProjectForm.add(textField);
 
-        versionsListView = new VersionListView<ProjectVersion>("versionsList", projectVersionList);
+        versionsListView = new VersionListView<ProjectVersion>("versionsList", new PropertyModel<List<ProjectVersion>>(this, "projectVersionList"), null);
         add(versionsListView);
         wmc = new WebMarkupContainer("wmc");
         wmc.add(versionsListView);
@@ -127,7 +128,7 @@ public class CreateProject extends PageLayout {
                 projectVersion.setName(textField.getInput());
                 textField.clearInput();
                 target.add(textField);
-                projectVersionDao.insertProjectVersion(projectVersion);
+//                projectVersionDao.insertProjectVersion(projectVersion);
                 projectVersionList.add(projectVersion);
             }
 
@@ -140,7 +141,7 @@ public class CreateProject extends PageLayout {
         insertProjectForm.add(insertProjectVersionButton);
 
 
-        componentsListView = new ComponentListView<Component>("componentsList", componentList);
+        componentsListView = new ComponentListView<Component>("componentsList", new PropertyModel<List<Component>>(this, "componentList"), null);
         wmcComponent.add(componentsListView);
         wmcComponent.setOutputMarkupId(true);
 
@@ -153,7 +154,7 @@ public class CreateProject extends PageLayout {
                 componentTextField.clearInput();
                 target.add(componentTextField);
                 Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, componentTextField.getValue());
-                componentDao.insertComponent(component);
+//                componentDao.insertComponent(component);
                 componentList.add(component);
             }
 
