@@ -197,7 +197,7 @@ public class Issue implements Serializable {
     //</editor-fold>
     public enum Status {
 
-        NEW, MODIFIED, VERIFIED
+        NEW, MODIFIED, ON_QA, VERIFIED, CLOSED, REOPENED
     }
 
     public enum Priority {

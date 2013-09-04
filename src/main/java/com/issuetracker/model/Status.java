@@ -20,7 +20,8 @@ public class Status implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String statusName;
+    private String name;
+    
 
     public Long getId() {
         return id;
@@ -30,12 +31,12 @@ public class Status implements Serializable {
         this.id = id;
     }
 
-    public String getStatusName() {
-        return statusName;
+    public String getName() {
+        return name;
     }
 
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

@@ -102,6 +102,20 @@ public class CreateIssue extends PageLayout {
                 return models;
             }
         };
+        
+        IModel<List<Issue.Priority>> priorityModelChoices = new AbstractReadOnlyModel<List<Issue.Priority>>() {
+
+            @Override
+            public List<Issue.Priority> getObject() {
+                List<Issue.Priority> models = new ArrayList<Issue.Priority>();
+                models.add(Issue.Priority.LOW);
+                models.add(Issue.Priority.HIGH);
+                models.add(Issue.Priority.MEDIUM);
+                models.add(Issue.Priority.MEDIUM_HIGH);
+                models.add(Issue.Priority.MEDIUM_LOW);
+                return models;
+            }
+        };
         insertIssueForm = new Form("form") {
             @Override
             protected void onSubmit() {
@@ -131,14 +145,17 @@ public class CreateIssue extends PageLayout {
         };
         add(insertIssueForm);
         final DropDownChoice<Project> projectDropDown = new DropDownChoice<Project>("makes", new PropertyModel<Project>(this, "selectedProject"), makeChoices2, new ChoiceRenderer<Project>("name"));
+        projectDropDown.setMarkupId("projectDD");
         final DropDownChoice<Component> componentDropDown = new DropDownChoice<Component>("models", new PropertyModel<Component>(this, "issue.component"), modelChoices2, new ChoiceRenderer<Component>("name"));
         final DropDownChoice<ProjectVersion> versionDropDown = new DropDownChoice<ProjectVersion>("versionModels", new PropertyModel<ProjectVersion>(this, "issue.projectVersion"), modelChoicesVersions, new ChoiceRenderer<ProjectVersion>("name"));
+        final DropDownChoice<Issue.Priority> priorityDropDown = new DropDownChoice<Issue.Priority>("priorityDropDown", new PropertyModel<Issue.Priority>(this, "issue.priority"), priorityModelChoices);
 
         componentDropDown.setOutputMarkupId(true);
         versionDropDown.setOutputMarkupId(true);
         insertIssueForm.add(projectDropDown);
         insertIssueForm.add(componentDropDown);
         insertIssueForm.add(versionDropDown);
+        insertIssueForm.add(priorityDropDown);
         insertIssueForm.add(new RequiredTextField("issueName", new PropertyModel<String>(this, "issue.name")));
         insertIssueForm.add(new RequiredTextField("issueDescription", new PropertyModel<String>(this, "issue.description")));
         issueTypeList = new DropDownChoice<IssueType>("issueTypes", new PropertyModel<IssueType>(this, "issue.issueType"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));

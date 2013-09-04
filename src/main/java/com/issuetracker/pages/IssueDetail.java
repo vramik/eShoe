@@ -6,11 +6,11 @@ package com.issuetracker.pages;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.UserDao;
-import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.User;
 import com.issuetracker.pages.component.comment.CommentListView;
 import com.issuetracker.pages.component.comment.CommentForm;
+import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +22,8 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.AbstractPropertyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -44,24 +42,52 @@ public class IssueDetail extends PageLayout {
     private final Label watchersCountLabel;
     private final ModalWindow modal2;
     private final IModel<List<User>> watchersModel;
+    private Form<Issue> updateIssueForm;
+    private Link projectLink;
     private int watchersCount;
     private Issue issue;
-    private List<User> watchersList; 
-    private List<Comment> comments;
+    private List<User> watchersList;
+//    private IModel<List<Comment>> comments;
     //private ListChoice<Version>
 
     public IssueDetail(PageParameters parameters) {
-        Long issueStringId = parameters.get("issue").toLong();
-        issue = issueDao.getIssueById(issueStringId);
+        Long issueId = parameters.get("issue").toLong();
+        issue = issueDao.getIssueById(issueId);
         PropertyModel<Issue> defaultModel = new PropertyModel<Issue>(this, "issue");
         setDefaultModel(defaultModel);
-        watchersCount = issue.getWatches().size();  
-//        comments = issueDao.getComments(issue);
+        watchersCount = issue.getWatches().size();
+//        comments = new AbstractReadOnlyModel<List<Comment>>() {
+//
+//            @Override
+//            public List<Comment> getObject() {
+//                List<Comment> models = issue.getComments();
+//                if (models == null) {
+//                    models = Collections.emptyList();
+//                }
+//                return models;
+//            }
+//        };
 
-        add(new Label("name"));
-        add(new RequiredTextField("description"));
-        add(new RequiredTextField("project.name"));
-        add(new Label("component.name"));
+        projectLink = new Link("link") {
+            @Override
+            public void onClick() {
+                PageParameters pageParameters = new PageParameters();
+                pageParameters.add("project", issue.getProject().getId());
+                setResponsePage(ProjectDetail.class, pageParameters);
+
+            }
+        };
+        projectLink.add(new Label("project", new PropertyModel(this, "issue.project.name")));
+        add(projectLink);
+        add(new Label("name", new PropertyModel(this, "issue.name")));
+        add(new Label("description", new PropertyModel(this, "issue.description")));
+
+        add(new Label("type", new PropertyModel(this, "issue.issueType.name")));
+        add(new Label("affectsVersions", new PropertyModel(this, "issue.projectVersion.name")));
+        add(new Label("priority", new PropertyModel(this, "issue.priority")));
+//        add(new RequiredTextField("description"));
+//        add(new RequiredTextField("project.name"));
+        add(new Label("componentName", new PropertyModel(this, "issue.component.name")));
         watchersCountLabel = new Label("watchersCountLabel", new PropertyModel(this, "watchersCount"));
         watchersCountLabel.setOutputMarkupId(true);
 //        watchersCountLabel.add();
@@ -92,7 +118,7 @@ public class IssueDetail extends PageLayout {
                 userDao.addUser(user);
                 issue.setWatches(watchersList);
                 issueDao.updateIssue(issue);
-               
+
 //                target.add(modal2);
                 modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));
                 String s = "";
@@ -108,7 +134,7 @@ public class IssueDetail extends PageLayout {
         };
         add(addWatcherLink);
 
-        
+
 
         add(modal2 = new ModalWindow("modal2"));
 
@@ -140,9 +166,11 @@ public class IssueDetail extends PageLayout {
 //                pageParameters.add("issue", ((Issue) item.getModelObject()).getIssueId());
             }
         });
-        
-       add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")));
-       add(new CommentListView("commentListView", defaultModel));
+
+        add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")));
+        add(new CommentListView("commentListView", new PropertyModel<Issue>(this, "issue")));
+  
+        add(new SetIssueStateForm("setIssueStateForm", new PropertyModel<Issue>(this, "issue")));
 
     }
 
@@ -169,14 +197,11 @@ public class IssueDetail extends PageLayout {
     public void setWatchersList(List<User> watchersList) {
         this.watchersList = watchersList;
     }
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-    
-    
+//    public List<Comment> getComments() {
+//        return comments;
+//    }
+//
+//    public void setComments(List<Comment> comments) {
+//        this.comments = comments;
+//    }
 }

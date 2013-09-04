@@ -22,54 +22,59 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.wicket.model.PropertyModel;
 
 /**
  *
  * @author mgottval
  */
-public class CommentForm extends Panel{
-    
+public class CommentForm extends Panel {
+
     @Inject
     private CommentDao commentDao;
-     @Inject
+    @Inject
     private IssueDao issueDao;
-    
     private Form<Comment> commentForm;
-    
     private Comment comment;
     private List<Comment> comments;
     private Issue issue;
-    
+
     public CommentForm(String id, final IModel<Issue> issueModel) {
         super(id);
-        comment = new Comment();
-        
-        
+
+        issue = issueModel.getObject();
+
+
         add(new FeedbackPanel("feedback"));
-        
-        commentForm = new Form<Comment>("commentForm", new CompoundPropertyModel<Comment>(comment)) {
+
+        commentForm = new Form<Comment>("commentForm") {
             @Override
-             protected void onSubmit() {                
+            protected void onSubmit() {
+//                comment = new Comment();
 //                commentDao.insert(comment);
-                comments = issueDao.getComments(issue);
+                try {
+                    comments = issue.getComments();
+                } catch (NullPointerException e) {
+                    comments = new ArrayList<Comment>();
+                    Logger.getLogger(CommentForm.class.getName()).log(Level.SEVERE, "Ted se to loguje - melo by jen poprve");
+                }
+//                comments = issueDao.getComments(issue);
                 comments.add(comment);
-                issue = issueModel.getObject();
                 issue.setComments(comments);
                 issueDao.updateIssue(issue);
-                comment = new Comment();
+//                comment = new Comment();
                 String s = "";
-                for (Comment comment1 : issueDao.getComments(issue)) {
+                for (Comment comment1 : issue.getComments()) {
                     s = s + comment1.getContent();
                 }
-
                 Logger.getLogger(CommentForm.class.getName()).log(Level.SEVERE, s);
-                
+                comment = new Comment();
             }
         };
         add(commentForm);
-        
-        commentForm.add(new TextArea<String>("content"));
-        
+
+        commentForm.add(new TextArea<String>("content", new PropertyModel<String>(this, "comment.content")));
+
     }
 
     public Comment getComment() {
@@ -79,7 +84,12 @@ public class CommentForm extends Panel{
     public void setComment(Comment comment) {
         this.comment = comment;
     }
-    
-    
-    
+
+    public Issue getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Issue issue) {
+        this.issue = issue;
+    }
 }

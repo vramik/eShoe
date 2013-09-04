@@ -13,6 +13,8 @@
     <class>org.picketlink.idm.jpa.schema.RelationshipObjectAttribute</class>-->
     <class>com.issuetracker.model.Comment</class>
     <class>com.issuetracker.pages.component.comment.CommentForm</class>
+    <class>com.issuetracker.model.Transition</class>
+    <class>com.issuetracker.pages.IssueHistory</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!-- Properties for Hibernate -->

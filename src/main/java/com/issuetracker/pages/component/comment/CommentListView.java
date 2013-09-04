@@ -4,8 +4,6 @@
  */
 package com.issuetracker.pages.component.comment;
 
-import com.issuetracker.dao.IssueDaoBean;
-import com.issuetracker.dao.api.CommentDao;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
@@ -42,13 +40,11 @@ public class CommentListView extends Panel {
         Logger.getLogger(CommentListView.class.getName()).log(Level.SEVERE, issueModel.getObject().getName());
         issue = issueModel.getObject();
         try {
-        commentList = issueDao.getComments(issue);
+            commentList = issue.getComments();
         } catch (NullPointerException e) {
-            System.out.println("Oops, we went to far, better go back to 0!");
-        }
-        if (commentList == null) {
             commentList = new ArrayList<Comment>();
         }
+
 
         add(new FeedbackPanel("feedback"));
         commentsListView = new ListView<Comment>("commentsList", new PropertyModel<List<Comment>>(this, "commentList")) {
@@ -58,10 +54,11 @@ public class CommentListView extends Panel {
                 item.add(new Link<Comment>("remove", item.getModel()) {
                     @Override
                     public void onClick() {
+
                         commentList.remove(comment);
-                        Issue i = issueModel.getObject();
-                        i.setComments(commentList);
-                        issueDao.updateIssue(i);
+                        // commentList.setObject(comments);
+                        issue.setComments(commentList);
+                        issueDao.updateIssue(issue);
 
                     }
                 });
@@ -78,6 +75,13 @@ public class CommentListView extends Panel {
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
     }
+//    public IModel<List<Comment>> getCommentList() {
+//        return commentList;
+//    }
+//
+//    public void setCommentList(IModel<List<Comment>> commentList) {
+//        this.commentList = commentList;
+//    }
 
     public Issue getIssue() {
         return issue;

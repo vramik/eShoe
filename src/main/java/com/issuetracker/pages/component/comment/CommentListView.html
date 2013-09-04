@@ -11,13 +11,15 @@ and open the template in the editor.
     <body>
     <wicket:panel>
         <span wicket:id="feedback"></span>
-        <table cellpadding="8">
-            <tr wicket:id="commentsList">
-                <td><span wicket:id="comment"></span></td>
+        <!--<div wicket:id="wmc">-->
+            <table cellpadding="8">
+                <tr wicket:id="commentsList">
+                    <td><span wicket:id="comment"></span></td>
 
-                <td><a href="#" wicket:id="remove">[delete]</a></td>
-            </tr>
-        </table>
+                    <td><a href="#" wicket:id="remove">x</a></td>
+                </tr>
+            </table>
+        <!--</div>-->
     </wicket:panel>
 </body>
 </html>

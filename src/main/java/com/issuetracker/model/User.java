@@ -40,6 +40,9 @@ public class User implements Serializable {
     @OneToMany
     private List<Issue> owned;
     
+    @OneToMany
+    private List<User> connections;
+    
     public User() {
         
     }
@@ -141,6 +144,14 @@ public class User implements Serializable {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public List<User> getConnections() {
+        return connections;
+    }
+
+    public void setConnections(List<User> connections) {
+        this.connections = connections;
     }
     
     

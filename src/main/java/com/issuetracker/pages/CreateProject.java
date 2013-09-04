@@ -28,6 +28,12 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.ComponentPropertyModel;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -139,9 +145,16 @@ public class CreateProject extends PageLayout {
 
         insertProjectVersionButton.setDefaultFormProcessing(false);
         insertProjectForm.add(insertProjectVersionButton);
+ IModel<List<Component>> componModel = new CompoundPropertyModel<List<Component>>(componentList) {
 
+            @Override
+            public List<Component> getObject() {
+                return componentList; //To change body of generated methods, choose Tools | Templates.
+            }
+             
+         };
 
-        componentsListView = new ComponentListView<Component>("componentsList", new PropertyModel<List<Component>>(this, "componentList"), null);
+        componentsListView = new ComponentListView<Component>("componentsList", componModel, null);
         wmcComponent.add(componentsListView);
         wmcComponent.setOutputMarkupId(true);
 
@@ -166,10 +179,19 @@ public class CreateProject extends PageLayout {
         insertComponentButton.setDefaultFormProcessing(false);
         insertProjectForm.add(insertComponentButton);
 
-        add(new Label("projectName", "Projects"));
-        ProjectListView listViewProjects = new ProjectListView<Project>("projectList", new PropertyModel<List<Project>>(this, "projects"));
-        add(listViewProjects);
+         IModel<List<Project>> compoModel = new CompoundPropertyModel<List<Project>>(projects) {
 
+            @Override
+            public List<Project> getObject() {
+                return projectDao.getProjects(); //To change body of generated methods, choose Tools | Templates.
+            }
+             
+         };
+        
+        add(new Label("projectName", "Projects"));
+        ProjectListView listViewProjects = new ProjectListView<Project>("projectList",compoModel);
+        add(listViewProjects);
+        
     }
 
     public Project getProject() {
