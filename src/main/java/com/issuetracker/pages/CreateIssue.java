@@ -4,9 +4,10 @@ import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.dao.api.ProjectDao;
+import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
-import com.issuetracker.model.Issue.Status;
+import com.issuetracker.model.Status;
 import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
@@ -47,6 +48,8 @@ public class CreateIssue extends PageLayout {
 
     @Inject
     private IssueDao issueDao;
+    @Inject
+    private StatusDao statusDao;
     @Inject
     private ProjectDao projectDao;
     @Inject
@@ -131,7 +134,7 @@ public class CreateIssue extends PageLayout {
                     }
                     issue.setFileLocation(file.getAbsolutePath());
                 }
-                issue.setStatus(Status.NEW);//TODO ??
+                issue.setStatus(statusDao.getStatusByName("New"));//TODO ??
                 issue.setProject(selectedProject);
                 issueDao.addIssue(issue);
                 issueList = issueDao.getIssues();

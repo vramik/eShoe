@@ -5,10 +5,19 @@
 package com.issuetracker.pages.component.issue;
 
 import com.issuetracker.dao.api.IssueDao;
+import com.issuetracker.dao.api.StatusDao;
+import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.model.Issue;
+import com.issuetracker.model.Project;
+import com.issuetracker.model.Status;
+import com.issuetracker.model.Transition;
+import com.issuetracker.model.Workflow;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -22,31 +31,61 @@ import org.apache.wicket.model.PropertyModel;
  * @author mgottval
  */
 public class SetIssueStateForm extends Panel {
-    
+
     @Inject
     private IssueDao issueDao;
-     private Form<Issue> updateIssueForm;
-     private Issue issue;
-    
+    @Inject
+    private StatusDao statusDao;
+    @Inject
+    private TransitionDao transitionDao;
+    private Form<Issue> updateIssueForm;
+    private Issue issue;
+    private Project project;
+    private Workflow workflow;
+
     public SetIssueStateForm(String id, IModel<Issue> issueModel) {
         super(id);
         this.issue = issueModel.getObject();
-        
+        this.project = issue.getProject();
+        workflow = project.getWorkflow();
+
         add(new FeedbackPanel("feedback"));
-        
-         IModel<List<Issue.Status>> statusModelChoices = new AbstractReadOnlyModel<List<Issue.Status>>() {
-            @Override
-            public List<Issue.Status> getObject() {
-                List<Issue.Status> models = new ArrayList<Issue.Status>();
-                models.add(Issue.Status.NEW);
-                models.add(Issue.Status.MODIFIED);
-                models.add(Issue.Status.CLOSED);
-                models.add(Issue.Status.ON_QA);
-                models.add(Issue.Status.VERIFIED);
-                return models;
-            }
-        };
-        final DropDownChoice<Issue.Status> priorityDropDown = new DropDownChoice<Issue.Status>("statusDropDown", new PropertyModel<Issue.Status>(this, "issue.status"), statusModelChoices);
+
+        IModel<List<Status>> statusModelChoices;
+        if (workflow != null) {
+            
+            statusModelChoices = new AbstractReadOnlyModel<List<Status>>() {
+                @Override
+                public List<Status> getObject() {
+                    Status currentStatus = issue.getStatus();
+                    List<Transition> projectWorkflowTransitions = transitionDao.getTransitionsByWorkflow(workflow);
+                    List<Status> possibelStatuses = new ArrayList<Status>();
+                    possibelStatuses.add(currentStatus);
+                    for (Transition transition : projectWorkflowTransitions) {
+                        if(transition.getFromStatus().equals(currentStatus)) {                            
+                            possibelStatuses.add(transition.getToStatus());
+                            String s = "";
+                            for (Status status : possibelStatuses) {
+                                s = s + status.getName();
+                            }
+                            Logger.getLogger(SetIssueStateForm.class.getName()).log(Level.SEVERE, s);
+                        }
+                        
+                    }
+                    return possibelStatuses;
+                }
+            };
+        } else {
+            statusModelChoices = new AbstractReadOnlyModel<List<Status>>() {
+                @Override
+                public List<Status> getObject() {
+                    return statusDao.getStatuses();
+                }
+            };
+        }
+
+
+        final DropDownChoice<Status> priorityDropDown = new DropDownChoice<Status>("statusDropDown", new PropertyModel<Status>(this, "issue.status"), statusModelChoices, new ChoiceRenderer<Status>("name"));
 
         updateIssueForm = new Form<Issue>("updateIssueForm") {
             @Override
@@ -66,7 +105,4 @@ public class SetIssueStateForm extends Panel {
     public void setIssue(Issue issue) {
         this.issue = issue;
     }
-    
-    
-    
 }

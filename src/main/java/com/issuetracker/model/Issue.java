@@ -7,7 +7,6 @@ package com.issuetracker.model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -15,8 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.util.file.File;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -37,7 +34,7 @@ public class Issue implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
     private Priority priority;
-//    @ManyToOne
+    @ManyToOne
 //    private Status status;
     private Status status;
     @ManyToOne
@@ -195,10 +192,10 @@ public class Issue implements Serializable {
     }
 
     //</editor-fold>
-    public enum Status {
-
-        NEW, MODIFIED, ON_QA, VERIFIED, CLOSED, REOPENED
-    }
+//    public enum Status {
+//
+//        NEW, MODIFIED, ON_QA, VERIFIED, CLOSED, REOPENED
+//    }
 
     public enum Priority {
 

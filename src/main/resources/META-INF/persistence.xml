@@ -15,6 +15,7 @@
     <class>com.issuetracker.pages.component.comment.CommentForm</class>
     <class>com.issuetracker.model.Transition</class>
     <class>com.issuetracker.pages.IssueHistory</class>
+    <class>com.issuetracker.model.Workflow</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!-- Properties for Hibernate -->

@@ -169,29 +169,7 @@ public class SearchIssues extends PageLayout {
             }
         };
         add(issuesListview);
-        
-        
-        
-        
-        //TEST just view of added issues
-
-        Model<Issue> listModel = new Model<Issue>();
-        ChoiceRenderer<Issue> issueRender = new ChoiceRenderer<Issue>("name");
-        DropDownChoice<Issue> issuesList = new DropDownChoice<Issue>("issuesDrop", listModel, issueDao.getIssues(),
-                issueRender) {
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
-        };
-        add(issuesList);
-        form = new Form("form", new CompoundPropertyModel<Issue>(listModel));
-        form.add(new TextField("name"));
-        form.add(new TextField("description"));
-        form.add(new TextField("project.name"));
-        add(form);
-
-
+          
     }
 
     public Project getProject() {

@@ -7,6 +7,8 @@ package com.issuetracker.pages.layout;
 import com.issuetracker.pages.CreateIssue;
 import com.issuetracker.pages.CreateIssueType;
 import com.issuetracker.pages.CreateProject;
+import com.issuetracker.pages.CreateStatuses;
+import com.issuetracker.pages.CreateWorkflow;
 import com.issuetracker.pages.ListProjects;
 import com.issuetracker.pages.SearchIssues;
 import java.util.ArrayList;
@@ -38,6 +40,10 @@ public class HeaderPanel extends Panel {
         List<String> optsIssue = new ArrayList<String>();
         optsIssue.add("Create Issue");
         optsIssue.add("Search Issue");
+        
+        List<String> optsWorkflow = new ArrayList<String>();
+        optsWorkflow.add("Create Statuses");
+        optsWorkflow.add("Create Workflow");
         
         add(new PropertyListView<String>("projectTasks", optsProject) {
             @Override
@@ -86,7 +92,27 @@ public class HeaderPanel extends Panel {
             }
         });
     
-        
+        add(new PropertyListView<String>("workflowTasks", optsWorkflow) {
+            @Override
+            public void populateItem(final ListItem<String> listItem) {
+                final String stringLink = listItem.getModelObject();
+                Link nameLink = new Link<String>("actionLink", listItem.getModel()) {
+                    @Override
+                    public void onClick() {
+                        selected = stringLink;
+                        if (selected.equals("Create Statuses")) {
+                            setResponsePage(CreateStatuses.class);
+                        } 
+                        if (selected.equals("Create Workflow")) {
+                            setResponsePage(CreateWorkflow.class);
+                        }                        
+                    }
+                };
+                nameLink.add(new Label("name", stringLink));
+                listItem.add(nameLink);
+
+            }
+        });
 
     }
     

@@ -1,0 +1,31 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+    <wicket:extend>
+        <h3><span wicket:id="workflowName"/></h3><br/>
+        <span wicket:id="statusName"/>
+        <form method="post" action="#" wicket:id="addTransitionForm">
+            <table border="0" cellpadding="5">
+                <tr>
+                    <td width="200">Name</td>
+                    <td><input type="text" wicket:id="transitionName" size="30"/></td>
+                    <td><select wicket:id="statuses"></select></td>
+                </tr>
+                <tr>
+                    <td width="200">&nbsp;</td>
+                    <td><input type="submit" value="Add transition"/></td>
+                </tr>
+            </table>
+        </form>
+
+    </wicket:extend>
+</body>
+</html>

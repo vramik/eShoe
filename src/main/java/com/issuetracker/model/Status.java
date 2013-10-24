@@ -5,10 +5,12 @@
 package com.issuetracker.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
@@ -21,6 +23,8 @@ public class Status implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+//    @ManyToMany
+//    private List<Status> statuses;
     
 
     public Long getId() {
@@ -38,6 +42,16 @@ public class Status implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+//    public List<Status> getStatuses() {
+//        return statuses;
+//    }
+//
+//    public void setStatuses(List<Status> statuses) {
+//        this.statuses = statuses;
+//    }
+    
+    
 
     @Override
     public int hashCode() {

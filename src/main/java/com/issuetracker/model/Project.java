@@ -44,6 +44,8 @@ public class Project implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Component> components;
 
+    private Workflow workflow;
+    
     public Long getId() {
         return id;
     }
@@ -90,6 +92,14 @@ public class Project implements Serializable {
 
     public void setComponents(List<Component> components) {
         this.components = components;
+    }
+
+    public Workflow getWorkflow() {
+        return workflow;
+    }
+
+    public void setWorkflow(Workflow workflow) {
+        this.workflow = workflow;
     }
 
    
