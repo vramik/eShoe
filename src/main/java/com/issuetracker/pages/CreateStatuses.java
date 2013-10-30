@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractPropertyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -42,10 +43,8 @@ public class CreateStatuses extends PageLayout{
     public CreateStatuses() {
         
         status = new Status();
-        statuses = statusDao.getStatuses();
-        if (statuses == null) {
-            statuses = new ArrayList<Status>();
-        }
+        statuses = statusDao.getStatuses();        
+        add(new FeedbackPanel("feedbackPanel"));
         insertStatusForm = new Form<Status>("insertStatusForm") {
             @Override
             protected void onSubmit() {

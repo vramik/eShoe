@@ -15,9 +15,9 @@ and open the template in the editor.
             <input type="text" wicket:id="issueName" />
             <input type="text" wicket:id="issueDescription" />
             <select wicket:id="issueTypes"></select>
-            <select wicket:id="makes"></select>
-            <select wicket:id="models"></select>
-            <select wicket:id="versionModels"></select>
+            <select wicket:id="projectDropDown"></select>
+            <select wicket:id="componentDropDown"></select>
+            <select wicket:id="versionsDropDown"></select>
             <select wicket:id="priorityDropDown"></select>
             <input type="file" wicket:id="fileUploadField" value="Attach File"/>
 
@@ -25,7 +25,7 @@ and open the template in the editor.
         </form>
         <div wicket:id="feedbackPanel"></div>
 
-        <table border="1" cellpadding="8">
+<!--        <table border="1" cellpadding="8">
             <tr>
                 <td width="200">Name</td>
                 <td width="200">&nbsp;</td>
@@ -41,12 +41,11 @@ and open the template in the editor.
                 <td><span wicket:id="component"></span></td>
                 <td><span wicket:id="version"></span></td>
                 <td><span wicket:id="project"></span></td>
-                <!--<td><span wicket:id="project"></span></td>-->
+                <td><span wicket:id="project"></span></td>
                 <td><span wicket:id="file"></span></td>
 
-            </tr>
-        </table>
-        <span wicket:id="feedback"/>
+            </tr>-->
+        <!--</table>-->
     </wicket:extend>
 </body>
 </html>

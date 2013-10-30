@@ -8,6 +8,7 @@ import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -44,7 +45,7 @@ public class StatusDaoBean implements StatusDao{
         if (results != null && !results.isEmpty()) {
             return results;
         } else {
-            return null;
+            return new ArrayList<Status>();
         }
     }
 

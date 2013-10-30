@@ -41,11 +41,8 @@ public class ComponentListView<T extends Component> extends Panel {
         super(id);
         componentList = componentsModel.getObject();
         add(new Label("components", "Components"));
-        
+
         IModel<List<Component>> compoModel = new PropertyModel<List<Component>>(this, "componentList");
-        
-     
-        
         componentsListView = new ListView<Component>("componentsList", compoModel) {
             @Override
             protected void populateItem(final ListItem<Component> item) {
@@ -53,36 +50,14 @@ public class ComponentListView<T extends Component> extends Panel {
                 item.add(new Link("remove", item.getModel()) {
                     @Override
                     public void onClick() {
-                        componentList.remove(component); 
-                        String s = "";
-                        for (Component c : componentList) {
-                            s = s + c.getName();
-                        }
-                        Logger.getLogger(CommentListView.class.getName()).log(Level.SEVERE, s);
+                        componentList.remove(component);
                         if (projectModel != null) {
                             Project project = projectDao.getProjectById(projectModel.getObject().getId());
                             project.setComponents(componentList);
                             projectDao.update(project);
                         }
-//                        componentDao.remove(component);
                     }
-                }.add(new Label("name", component.getName())));
-//                item.add(removeLink("removeLink", item));
-//                Link link = new Link<Component>("remove", item.getModel()) {
-//                    @Override
-//                    public void onClick() {
-//                        componentList.remove(component);
-//                        if (projectModel != null) {
-//                            Project project = projectDao.getProjectById(projectModel.getObject().getId());
-//                            project.setComponents(componentList);
-//                            projectDao.update(project);
-//                        }
-////                        componentDao.remove(component);
-//                    }
-//                };
-//                link.setOutputMarkupId(true);
-//                item.add(link);
-
+                });
                 item.add(new Label("name", component.getName()));
             }
         };

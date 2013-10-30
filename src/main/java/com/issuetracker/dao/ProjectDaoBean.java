@@ -87,79 +87,6 @@ public class ProjectDaoBean implements ProjectDao {
 
     @Override
     public List<Project> getProjects() {
-        //EXAMPLE
-        List<ProjectVersion> versin = new ArrayList<ProjectVersion>();
-        ProjectVersion pv = new ProjectVersion();
-        pv.setName("1.1");
-        ProjectVersion pv2 = new ProjectVersion();
-        pv2.setName("1.2");
-        ProjectVersion pv3 = new ProjectVersion();
-        pv3.setName("1.3");
-        versin.add(pv);
-        versin.add(pv2);
-        versin.add(pv3);
-        projectVersionDao.insertProjectVersion(pv3);
-        projectVersionDao.insertProjectVersion(pv);
-        projectVersionDao.insertProjectVersion(pv2);
-        
-        List<Component> components = new ArrayList<Component>();
-        Component c = new Component();
-        c.setName("JB1");
-        Component c2 = new Component();
-        c2.setName("JB2");
-        components.add(c);
-        components.add(c2);
-        componentDao.insertComponent(c2);
-        componentDao.insertComponent(c);
-        Project project = new Project();
-        project.setName("JBoss");
-        project.setVersions(versin);
-        project.setComponents(components);
-        
-        User user = new User("Monika", "Gottvaldova", "mgottvaldova@gmail.com", "password");
-        User user2 = new User("Sara", "Kockova", "skock@gmail.com", "password");
-        userDao.addUser(user);
-        userDao.addUser(user2);
-        project.setOwner(user);
-        
-        project.setSummary("JBoss project summary");
-        
-         em.persist(project);
-         
-         List<ProjectVersion> versin2 = new ArrayList<ProjectVersion>();
-        ProjectVersion pvv = new ProjectVersion();
-        pvv.setName("11");
-        ProjectVersion pvv2 = new ProjectVersion();
-        pvv2.setName("12");
-        ProjectVersion pvv3 = new ProjectVersion();
-        pvv3.setName("13");
-        versin2.add(pvv);
-        versin2.add(pvv2);
-        versin2.add(pvv3);
-        projectVersionDao.insertProjectVersion(pvv3);
-        projectVersionDao.insertProjectVersion(pvv);
-        projectVersionDao.insertProjectVersion(pvv2);
-        
-        List<Component> components2 = new ArrayList<Component>();
-        Component cc = new Component();
-        cc.setName("Fed2");
-        Component cc2 = new Component();
-        cc2.setName("Fed1");
-        components2.add(cc);
-        components2.add(cc2);
-        componentDao.insertComponent(cc2);
-        componentDao.insertComponent(cc);
-        Project project2 = new Project();
-        project2.setName("Fedora");
-        project2.setVersions(versin2);
-        project2.setComponents(components2);
-        
-        project2.setOwner(user2);
-        
-        project2.setSummary("Fedora project summary");
-         em.persist(project2);
-        //EXAMPLE
-        
         qb = em.getCriteriaBuilder();
         CriteriaQuery<Project> q = qb.createQuery(Project.class);
         Root<Project> p = q.from(Project.class);
@@ -168,7 +95,7 @@ public class ProjectDaoBean implements ProjectDao {
         if (results != null && !results.isEmpty()) {
             return results;
         } else {
-            return null;
+            return new ArrayList<Project>();
         }
     }
 
@@ -185,7 +112,7 @@ public class ProjectDaoBean implements ProjectDao {
             List<ProjectVersion> versions = projectResults.get(0).getVersions();
             return versions;
         } else {
-            return null;
+            return new ArrayList<ProjectVersion>();
         }
     }
 
@@ -202,7 +129,7 @@ public class ProjectDaoBean implements ProjectDao {
             List<Component> components = projectResults.get(0).getComponents();
             return components;
         } else {
-            return null;
+            return new ArrayList<Component>();
         }
     }
 

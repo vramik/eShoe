@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -107,22 +108,16 @@ public class SearchIssues extends PageLayout {
                 return models;
             }
         };
+        add(new FeedbackPanel("feedbackPanel"));
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
                 issues = issueDao.getIssuesBySearch(project, version, components, issueTypes, null, containsText); //TODO
-                String s = "";
-                for (Issue i : issues) {
-                    s = s + i.getName();
-                }
-                Logger.getLogger(CreateIssue.class.getName()).log(Level.SEVERE, s);
-//                if(issues.isEmpty()) {
-//                    issuesListview.setList(new ArrayList());
-//                }
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
         projectDropDownChoice  = new DropDownChoice<Project>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
+        projectDropDownChoice.setRequired(true);
         form.add(projectDropDownChoice);
         versionDropDownChoice = new DropDownChoice<ProjectVersion>("versionDropDownChoice", new PropertyModel<ProjectVersion>(this, "version"), modelProjectVersionsCoices, new ChoiceRenderer<ProjectVersion>("name"));
          versionDropDownChoice.setOutputMarkupId(true);

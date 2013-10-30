@@ -10,6 +10,7 @@ import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.User;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -165,18 +166,26 @@ public class IssueDaoBean implements IssueDao {
         Root<Issue> i = c.from(Issue.class);
         c.select(i);
         Expression<String> name = i.get("name");
-        c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
+        if (name != null) {
+            c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
+        }
         c.where(qb.equal(i.get("project"), project));
-        c.where(qb.equal(i.get("projectVersion"), projectVersion));
-        c.where(i.get("component").in(projectComponents));
-        c.where(i.get("issueType").in(issueTypes));
+        if (projectVersion != null) {
+            c.where(qb.equal(i.get("projectVersion"), projectVersion));
+        }
+        if (projectComponents != null || !projectComponents.isEmpty()) {
+            c.where(i.get("component").in(projectComponents));
+        }
+        if (issueTypes != null || !issueTypes.isEmpty()) {
+            c.where(i.get("issueType").in(issueTypes));
+        }
         // c.where(i.get("status").in(statusList));
 
         List<Issue> results = em.createQuery(c).getResultList();
         if (results != null && !results.isEmpty()) {
             return results;
         }
-        return null;
+        return new ArrayList<Issue>();
     }
 //    public void test() {
 //        qb = em.getCriteriaBuilder();

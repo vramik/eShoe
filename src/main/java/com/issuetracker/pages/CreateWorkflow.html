@@ -9,7 +9,8 @@ and open the template in the editor.
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-         <wicket:extend>
+    <wicket:extend>
+        <div wicket:id="feedbackPanel"></div>
         <form method="post" action="#" wicket:id="insertWorkflowForm">
             <table border="0" cellpadding="5">
                 <tr>
@@ -26,9 +27,9 @@ and open the template in the editor.
                 </tr>
             </table>
         </form>
-              <span wicket:id="workflowName"/>
+        <span wicket:id="workflowName"/>
         <div wicket:id="workflowList"/>
-             
+
     </wicket:extend>
-    </body>
+</body>
 </html>

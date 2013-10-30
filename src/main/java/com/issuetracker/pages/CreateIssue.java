@@ -147,12 +147,16 @@ public class CreateIssue extends PageLayout {
             }
         };
         add(insertIssueForm);
-        final DropDownChoice<Project> projectDropDown = new DropDownChoice<Project>("makes", new PropertyModel<Project>(this, "selectedProject"), makeChoices2, new ChoiceRenderer<Project>("name"));
+        final DropDownChoice<Project> projectDropDown = new DropDownChoice<Project>("projectDropDown", new PropertyModel<Project>(this, "selectedProject"), makeChoices2, new ChoiceRenderer<Project>("name"));
         projectDropDown.setMarkupId("projectDD");
-        final DropDownChoice<Component> componentDropDown = new DropDownChoice<Component>("models", new PropertyModel<Component>(this, "issue.component"), modelChoices2, new ChoiceRenderer<Component>("name"));
-        final DropDownChoice<ProjectVersion> versionDropDown = new DropDownChoice<ProjectVersion>("versionModels", new PropertyModel<ProjectVersion>(this, "issue.projectVersion"), modelChoicesVersions, new ChoiceRenderer<ProjectVersion>("name"));
+        projectDropDown.setRequired(true);
+        final DropDownChoice<Component> componentDropDown = new DropDownChoice<Component>("componentDropDown", new PropertyModel<Component>(this, "issue.component"), modelChoices2, new ChoiceRenderer<Component>("name"));
+        componentDropDown.setRequired(true);
+        final DropDownChoice<ProjectVersion> versionDropDown = new DropDownChoice<ProjectVersion>("versionsDropDown", new PropertyModel<ProjectVersion>(this, "issue.projectVersion"), modelChoicesVersions, new ChoiceRenderer<ProjectVersion>("name"));
+        versionDropDown.setRequired(true);
         final DropDownChoice<Issue.Priority> priorityDropDown = new DropDownChoice<Issue.Priority>("priorityDropDown", new PropertyModel<Issue.Priority>(this, "issue.priority"), priorityModelChoices);
-
+        
+        
         componentDropDown.setOutputMarkupId(true);
         versionDropDown.setOutputMarkupId(true);
         insertIssueForm.add(projectDropDown);
@@ -162,6 +166,7 @@ public class CreateIssue extends PageLayout {
         insertIssueForm.add(new RequiredTextField("issueName", new PropertyModel<String>(this, "issue.name")));
         insertIssueForm.add(new RequiredTextField("issueDescription", new PropertyModel<String>(this, "issue.description")));
         issueTypeList = new DropDownChoice<IssueType>("issueTypes", new PropertyModel<IssueType>(this, "issue.issueType"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
+        issueTypeList.setRequired(true);
         insertIssueForm.add(issueTypeList);
         fileUploadField = new FileUploadField("fileUploadField");
         insertIssueForm.add(fileUploadField);
@@ -181,31 +186,22 @@ public class CreateIssue extends PageLayout {
 
 
 
-        ListView listViewIssues = new ListView<Issue>("issueList", new PropertyModel<List<Issue>>(this, "issueList")) {
-            @Override
-            protected void populateItem(final ListItem<Issue> item) {
-                final Issue issue = item.getModelObject();
-//                item.add(new Link<I>("edit", item.getModel()) {
-//                    @Override
-//                    public void onClick() {
-//                        PageParameters pageParameters = new PageParameters();
-//                        pageParameters.add("projectName", project.getName());
-//                        setResponsePage(EditProject.class, pageParameters);
-//                    }
-//                });
-                item.add(new Label("name", issue.getName()));
-                item.add(new Label("issueType", issue.getIssueType().getname()));
-                item.add(new Label("description", issue.getDescription()));
-                item.add(new Label("component", issue.getComponent().getName()));
-                item.add(new Label("version", issue.getProjectVersion().getName()));
-                item.add(new Label("project", issue.getProject().getName()));
-                item.add(new Label("file", issue.getFileLocation()));
-            }
-        };
+//        ListView listViewIssues = new ListView<Issue>("issueList", new PropertyModel<List<Issue>>(this, "issueList")) {
+//            @Override
+//            protected void populateItem(final ListItem<Issue> item) {
+//                final Issue issue = item.getModelObject();
+//
+//                item.add(new Label("name", issue.getName()));
+//                item.add(new Label("issueType", issue.getIssueType().getname()));
+//                item.add(new Label("description", issue.getDescription()));
+//                item.add(new Label("component", issue.getComponent().getName()));
+//                item.add(new Label("version", issue.getProjectVersion().getName()));
+//                item.add(new Label("project", issue.getProject().getName()));
+//                item.add(new Label("file", issue.getFileLocation()));
+//            }
+//        };
+//        add(listViewIssues);
 
-        add(listViewIssues);
-
-        add(new FeedbackPanel("feedback"));
 
     }
 //<editor-fold defaultstate="collapsed" desc="getter/setter">

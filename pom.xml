@@ -14,7 +14,7 @@
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
         
         <!-- Local vs. OpenShift vs. production. Controlled in profiles. -->
-        <eshoe.dataSource>IssueTrackerDS</eshoe.dataSource>
+        <eshoe.dataSource>MySqlDS</eshoe.dataSource>
         <wicket.mode>development</wicket.mode>
         <jboss-as.deploy.hostname>localhost</jboss-as.deploy.hostname>  <!-- Where to deploy. -->
         <jboss-as.deploy.user>jboss-as.deploy.user is not defined (try settings.xml).</jboss-as.deploy.user>
@@ -162,7 +162,7 @@
             By default that is to put the resulting archive into the 'deployments' folder. -->
             <id>openshift</id>
             <properties>
-                <eshoe.dataSource>MysqlDS</eshoe.dataSource>
+                <eshoe.dataSource>MySqlDS</eshoe.dataSource>
             </properties>
             <build>
                 <finalName>monca</finalName>

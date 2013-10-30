@@ -6,6 +6,7 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.model.IssueType;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -42,6 +43,6 @@ public class IssueTypeDaoBean implements IssueTypeDao {
         if (results != null && !results.isEmpty()) {
             return results;
         }
-        return null;
+        return new ArrayList<IssueType>();
     }
 }

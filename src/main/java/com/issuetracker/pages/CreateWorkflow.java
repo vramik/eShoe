@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -51,6 +52,7 @@ public class CreateWorkflow extends PageLayout {
                 return projectDao.getProjects();
             }
         };
+        add(new FeedbackPanel("feedbackPanel"));
         insertWorkflowForm = new Form<Workflow>("insertWorkflowForm") {
             @Override
             protected void onSubmit() {
@@ -61,7 +63,9 @@ public class CreateWorkflow extends PageLayout {
             }
         };
         insertWorkflowForm.add(new RequiredTextField<String>("name", new PropertyModel<String>(this, "workflow.name")));
-        insertWorkflowForm.add(new DropDownChoice<Project>("projectsDropDown", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name")));
+        DropDownChoice<Project> projectDropDown = new DropDownChoice<Project>("projectsDropDown", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
+        projectDropDown.setRequired(true);
+        insertWorkflowForm.add(projectDropDown);
         add(insertWorkflowForm);
 
         IModel<List<Workflow>> compoModel = new CompoundPropertyModel<List<Workflow>>(workflows) {

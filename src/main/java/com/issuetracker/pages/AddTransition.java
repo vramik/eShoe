@@ -24,6 +24,7 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractPropertyModel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -74,7 +75,7 @@ public class AddTransition extends PageLayout {
         };
 
         add(new Label("statusName", status.getName()));
-
+        add(new FeedbackPanel("feedbackPanel"));
         editStatusForm = new Form<Status>("addTransitionForm") {
             @Override
             protected void onSubmit() {
@@ -89,9 +90,9 @@ public class AddTransition extends PageLayout {
         };
         editStatusForm.add(new RequiredTextField("transitionName", new PropertyModel<String>(this, "transition.name")));
         dropDownStatusTo = new DropDownChoice<Status>("statuses", new PropertyModel<Status>(this, "transition.toStatus"), statusesModel, new ChoiceRenderer<Status>("name"));
+        dropDownStatusTo.setRequired(true);
         editStatusForm.add(dropDownStatusTo);
         add(editStatusForm);
-
     }
 
     public Transition getTransition() {

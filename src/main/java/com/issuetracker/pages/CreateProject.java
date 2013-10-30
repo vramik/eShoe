@@ -31,6 +31,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.ComponentPropertyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -71,36 +72,28 @@ public class CreateProject extends PageLayout {
 
     public CreateProject() {
         project = new Project();
-        projects = new ArrayList<Project>();
         projects = projectDao.getProjects();
+        if (projects == null) {
+            projects = new ArrayList<Project>();
+        }
         projectVersion = new ProjectVersion();
         projectVersionList = new ArrayList<ProjectVersion>();
         componentList = new ArrayList<Component>();
 
+        add(new FeedbackPanel("feedbackPanel"));
         insertProjectForm = new Form<Project>("insertProjectForm") {
             @Override
             protected void onSubmit() {
                 project.setVersions(projectVersionList);
                 project.setComponents(componentList);
                 //TODO set owner
-                User u = new User("Monika", "Gottvaldova", "m@email.com", "password");
-                userDao.addUser(u);
-                project.setOwner(u);
-                //
+
                 projectDao.insertProject(project);
                 project = new Project();
                 projects = projectDao.getProjects();
                 projectVersionList.clear();
                 componentList.clear();
 
-                //test
-//                List<Component> versionsTest = componentDao.getComponents();
-//                String s = "";
-//                for (Component projectVersion1 : versionsTest) {
-//                    s = s + projectVersion1.getName();
-//                }
-//                Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, s);
-                
             }
         };
         add(insertProjectForm);
@@ -145,14 +138,11 @@ public class CreateProject extends PageLayout {
 
         insertProjectVersionButton.setDefaultFormProcessing(false);
         insertProjectForm.add(insertProjectVersionButton);
- IModel<List<Component>> componModel = new CompoundPropertyModel<List<Component>>(componentList) {
-
+        IModel<List<Component>> componModel = new CompoundPropertyModel<List<Component>>(componentList) {
             @Override
             public List<Component> getObject() {
-                return componentList; //To change body of generated methods, choose Tools | Templates.
-            }
-             
-         };
+                return componentList;            }
+        };
 
         componentsListView = new ComponentListView<Component>("componentsList", componModel, null);
         wmcComponent.add(componentsListView);
@@ -166,8 +156,6 @@ public class CreateProject extends PageLayout {
                 component.setName(componentTextField.getInput());
                 componentTextField.clearInput();
                 target.add(componentTextField);
-                Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, componentTextField.getValue());
-//                componentDao.insertComponent(component);
                 componentList.add(component);
             }
 
@@ -179,19 +167,21 @@ public class CreateProject extends PageLayout {
         insertComponentButton.setDefaultFormProcessing(false);
         insertProjectForm.add(insertComponentButton);
 
-         IModel<List<Project>> compoModel = new CompoundPropertyModel<List<Project>>(projects) {
-
+        IModel<List<Project>> projectModel = new CompoundPropertyModel<List<Project>>(projects) {
             @Override
             public List<Project> getObject() {
-                return projectDao.getProjects(); //To change body of generated methods, choose Tools | Templates.
+                List<Project> projectList = projectDao.getProjects();
+                if (projectList == null) {
+                    return new ArrayList<Project>();
+                }
+                return projectList; //To change body of generated methods, choose Tools | Templates.
             }
-             
-         };
-        
+        };
+
         add(new Label("projectName", "Projects"));
-        ProjectListView listViewProjects = new ProjectListView<Project>("projectList",compoModel);
+        ProjectListView listViewProjects = new ProjectListView<Project>("projectList", projectModel);
         add(listViewProjects);
-        
+
     }
 
     public Project getProject() {
