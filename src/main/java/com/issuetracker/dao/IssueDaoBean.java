@@ -160,28 +160,33 @@ public class IssueDaoBean implements IssueDao {
 
     @Override
     public List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion,
-            List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
+            Component component, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
         qb = em.getCriteriaBuilder();
+        List<Issue> results;
         CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
         Root<Issue> i = c.from(Issue.class);
         c.select(i);
         Expression<String> name = i.get("name");
-        if (name != null) {
-            c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
-        }
-        c.where(qb.equal(i.get("project"), project));
-        if (projectVersion != null) {
-            c.where(qb.equal(i.get("projectVersion"), projectVersion));
-        }
-        if (projectComponents != null || !projectComponents.isEmpty()) {
-            c.where(i.get("component").in(projectComponents));
-        }
-        if (issueTypes != null || !issueTypes.isEmpty()) {
-            c.where(i.get("issueType").in(issueTypes));
-        }
-        // c.where(i.get("status").in(statusList));
+//        if (nameContainsText != null) {
+//            c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
+//        
+//        };
+        c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"), qb.equal(i.get("project"), project), 
+                qb.equal(i.get("projectVersion"), projectVersion), qb.equal(i.get("component"), component), i.get("issueType").in(issueTypes),
+                i.get("status").in(statusList));
+        
+//        if (projectVersion != null) {
+//            c.where(qb.equal(i.get("projectVersion"), projectVersion));
+//        }
+//        if (projectComponents != null || !projectComponents.isEmpty()) {
+//            c.where(i.get("component").in(projectComponents));
+//        }
+//        if (issueTypes != null || !issueTypes.isEmpty()) {
+//            c.where(i.get("issueType").in(issueTypes));
+//        }
+//        // c.where(i.get("status").in(statusList));
 
-        List<Issue> results = em.createQuery(c).getResultList();
+        results = em.createQuery(c).getResultList();
         if (results != null && !results.isEmpty()) {
             return results;
         }

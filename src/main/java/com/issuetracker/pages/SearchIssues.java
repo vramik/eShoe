@@ -7,6 +7,7 @@ package com.issuetracker.pages;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.dao.api.ProjectDao;
+import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssueType;
@@ -18,8 +19,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -34,9 +33,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -52,20 +49,22 @@ public class SearchIssues extends PageLayout {
     private ProjectDao projectDao;
     @Inject
     private IssueTypeDao issueTypeDao;
-    
+    @Inject
+    private StatusDao statusDao;
     private Form<List<Issue>> listIssuesForm;
     private final DropDownChoice<ProjectVersion> versionDropDownChoice;
-    private DropDownChoice<Status> statusList;
-    private final ListMultipleChoice<Component> componentsListMultiple;
+    private final DropDownChoice<Component> componentsDropDownChoice;
     private ListMultipleChoice<IssueType> listMultipleIssueTypes;
+    private ListMultipleChoice<Status> listMultipleStatuses;
     private DropDownChoice<Project> projectDropDownChoice;
     private ListView issuesListview;
-    
     private String containsText;
     private Project project;
     private List<Issue> issues;
     private ProjectVersion version;
+    private Component component;
     private IssueType issueType;
+    private List<Status> statusList;
     private List<Component> components;
     private List<IssueType> issueTypes;
     private final Map<Project, List<Component>> modelsProjectComponentsMap = new HashMap<Project, List<Component>>();
@@ -112,19 +111,21 @@ public class SearchIssues extends PageLayout {
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-                issues = issueDao.getIssuesBySearch(project, version, components, issueTypes, null, containsText); //TODO
+                issues = issueDao.getIssuesBySearch(project, version, component, issueTypes, statusList, containsText);
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
-        projectDropDownChoice  = new DropDownChoice<Project>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
+        projectDropDownChoice = new DropDownChoice<Project>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
         projectDropDownChoice.setRequired(true);
         form.add(projectDropDownChoice);
         versionDropDownChoice = new DropDownChoice<ProjectVersion>("versionDropDownChoice", new PropertyModel<ProjectVersion>(this, "version"), modelProjectVersionsCoices, new ChoiceRenderer<ProjectVersion>("name"));
-         versionDropDownChoice.setOutputMarkupId(true);
-        form.add(versionDropDownChoice);       
-        componentsListMultiple = new ListMultipleChoice<Component>("componentsListMultiple", new PropertyModel<List<Component>>(this, "components"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
-        componentsListMultiple.setOutputMarkupId(true);
-        form.add(componentsListMultiple);
+        versionDropDownChoice.setOutputMarkupId(true);
+        form.add(versionDropDownChoice);
+        componentsDropDownChoice = new DropDownChoice<Component>("componentsDropDownChoice", new PropertyModel<Component>(this, "component"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
+        componentsDropDownChoice.setOutputMarkupId(true);
+        form.add(componentsDropDownChoice);
+        listMultipleStatuses = new ListMultipleChoice<Status>("statusLMC", new PropertyModel<List<Status>>(this, "statusList"), statusDao.getStatuses(), new ChoiceRenderer<Status>("name"));
+        form.add(listMultipleStatuses);
         listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         form.add(listMultipleIssueTypes);
 
@@ -132,7 +133,7 @@ public class SearchIssues extends PageLayout {
         projectDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                target.add(componentsListMultiple);
+                target.add(componentsDropDownChoice);
                 target.add(versionDropDownChoice);
             }
         });
@@ -153,7 +154,7 @@ public class SearchIssues extends PageLayout {
                     }
                 };
                 nameLink.add(new Label("name", issue.getName()));
-                item.add(nameLink);                
+                item.add(nameLink);
                 item.add(new Label("description", issue.getDescription()));
 //                item.add(new Link<Issue>("delete", item.getModel()) {
 //                    @Override
@@ -164,7 +165,7 @@ public class SearchIssues extends PageLayout {
             }
         };
         add(issuesListview);
-          
+
     }
 
     public Project getProject() {
@@ -222,4 +223,24 @@ public class SearchIssues extends PageLayout {
     public void setIssues(List<Issue> issues) {
         this.issues = issues;
     }
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public void setComponent(Component component) {
+        this.component = component;
+    }
+
+    public List<Status> getStatusList() {
+        return statusList;
+    }
+
+    public void setStatusList(List<Status> statusList) {
+        this.statusList = statusList;
+    }
+
+    
+    
+    
 }

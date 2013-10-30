@@ -4,7 +4,7 @@
  */
 package com.issuetracker.web;
 
-import com.issuetracker.pages.CreateIssue;
+import com.issuetracker.pages.createIssue.CreateIssue;
 import com.issuetracker.pages.CreateIssueType;
 import com.issuetracker.pages.CreateProject;
 import com.issuetracker.pages.ForgotPassword;

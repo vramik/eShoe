@@ -40,7 +40,7 @@ public interface IssueDao {
     List<Priority> getPriorities();
     
     List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion, 
-    List<Component> projectComponents, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText);
+    Component component, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText);
     
     List<User> getIssueWatchers(Issue issue);
     

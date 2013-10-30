@@ -1,4 +1,4 @@
-package com.issuetracker.pages;
+package com.issuetracker.pages.createIssue;
 
 import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.dao.api.IssueDao;
@@ -7,10 +7,11 @@ import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
-import com.issuetracker.model.Status;
 import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.pages.IssueDetail;
+import com.issuetracker.pages.PageLayout;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,7 +23,6 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -30,8 +30,6 @@ import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -105,9 +103,8 @@ public class CreateIssue extends PageLayout {
                 return models;
             }
         };
-        
-        IModel<List<Issue.Priority>> priorityModelChoices = new AbstractReadOnlyModel<List<Issue.Priority>>() {
 
+        IModel<List<Issue.Priority>> priorityModelChoices = new AbstractReadOnlyModel<List<Issue.Priority>>() {
             @Override
             public List<Issue.Priority> getObject() {
                 List<Issue.Priority> models = new ArrayList<Issue.Priority>();
@@ -149,14 +146,18 @@ public class CreateIssue extends PageLayout {
         add(insertIssueForm);
         final DropDownChoice<Project> projectDropDown = new DropDownChoice<Project>("projectDropDown", new PropertyModel<Project>(this, "selectedProject"), makeChoices2, new ChoiceRenderer<Project>("name"));
         projectDropDown.setMarkupId("projectDD");
+        projectDropDown.setNullValid(false);
+//        if (projectDropDown.getChoices().get(0) != null) {
+//            projectDropDown.setModelObject(projectDropDown.getChoices().get(0));
+//        }
         projectDropDown.setRequired(true);
         final DropDownChoice<Component> componentDropDown = new DropDownChoice<Component>("componentDropDown", new PropertyModel<Component>(this, "issue.component"), modelChoices2, new ChoiceRenderer<Component>("name"));
         componentDropDown.setRequired(true);
         final DropDownChoice<ProjectVersion> versionDropDown = new DropDownChoice<ProjectVersion>("versionsDropDown", new PropertyModel<ProjectVersion>(this, "issue.projectVersion"), modelChoicesVersions, new ChoiceRenderer<ProjectVersion>("name"));
         versionDropDown.setRequired(true);
         final DropDownChoice<Issue.Priority> priorityDropDown = new DropDownChoice<Issue.Priority>("priorityDropDown", new PropertyModel<Issue.Priority>(this, "issue.priority"), priorityModelChoices);
-        
-        
+
+
         componentDropDown.setOutputMarkupId(true);
         versionDropDown.setOutputMarkupId(true);
         insertIssueForm.add(projectDropDown);
