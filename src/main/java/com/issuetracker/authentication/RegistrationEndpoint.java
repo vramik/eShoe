@@ -26,13 +26,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.servlet.ServletContext;
-import javax.ws.rs.core.Context;
 import org.picketbox.core.DefaultPicketBoxManager;
 
 import org.picketbox.core.PicketBoxManager;
 import org.picketbox.core.config.ConfigurationBuilder;
 import org.picketbox.core.config.PicketBoxConfiguration;
-import org.picketbox.http.PicketBoxConstants;
 //import org.picketbox.http.authentication.AbstractHTTPAuthentication;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.credential.Password;
@@ -42,7 +40,6 @@ import org.picketlink.idm.model.Role;
 import org.picketlink.idm.model.SimpleRole;
 import org.picketlink.idm.model.SimpleUser;
 import org.picketlink.idm.model.User;
-import org.picketbox.http.wrappers.RequestWrapper;
 /**
  * <p>
  * JAX-RS Endpoint to register users.

@@ -12,7 +12,6 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 /**

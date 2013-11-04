@@ -1,7 +1,6 @@
 package com.issuetracker.pages;
 
 import com.issuetracker.pages.component.register.RegisterForm;
-import org.apache.wicket.markup.html.link.Link;
 
 /**
  *

@@ -3,7 +3,6 @@ package com.issuetracker.pages;
 import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.Workflow;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;

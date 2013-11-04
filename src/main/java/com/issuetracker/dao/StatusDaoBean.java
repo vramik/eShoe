@@ -1,9 +1,7 @@
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.StatusDao;
-import com.issuetracker.model.Project;
 import com.issuetracker.model.Status;
-import com.issuetracker.model.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;

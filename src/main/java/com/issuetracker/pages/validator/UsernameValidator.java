@@ -1,7 +1,5 @@
 package com.issuetracker.pages.validator;
 
-import com.issuetracker.dao.UserDaoBean;
-import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.UserDao;
 import java.util.logging.Level;
 import java.util.logging.Logger;

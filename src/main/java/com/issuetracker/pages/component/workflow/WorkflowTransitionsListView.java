@@ -1,18 +1,12 @@
 package com.issuetracker.pages.component.workflow;
 
-import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.dao.api.WorkflowDao;
-import com.issuetracker.model.Transition;
-import com.issuetracker.model.Issue;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
-import javax.transaction.Transaction;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;

@@ -1,19 +1,9 @@
 package com.issuetracker.TEST;
 
 import com.issuetracker.dao.IssueDaoBean;
-import  com.issuetracker.dao.ProjectDaoBean;
-import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.mail.MailClient;
-import com.issuetracker.mail.PasswordGenerator;
 import com.issuetracker.model.Issue;
-import com.issuetracker.model.Project;
-import java.util.ArrayList;
-import java.util.List;
-import javax.ejb.EJB;
-import javax.inject.Inject;
 import javax.mail.MessagingException;
-import javax.resource.spi.AuthenticationMechanism;
 
 /**
  *

@@ -4,18 +4,13 @@ import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
-import com.issuetracker.pages.component.comment.CommentListView;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
