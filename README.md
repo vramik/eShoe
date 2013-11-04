@@ -1,3 +1,6 @@
+This project aims to be a Java EE 6 + Wicket based issue tracker
+which combines flexibility, maintainability, performance and user friendly UI.
+
 
 Openshift stuff
 ==================
