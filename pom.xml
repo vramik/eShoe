@@ -354,7 +354,7 @@
         <dependency>
             <groupId>org.picketlink</groupId>
             <artifactId>picketlink-idm-api</artifactId>
-            <version>3.0-2013Jan04</version>
+            <version>3.0.0.Beta2</version>
             <type>jar</type>
         </dependency>
 
