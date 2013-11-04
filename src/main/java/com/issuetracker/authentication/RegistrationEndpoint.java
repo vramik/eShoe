@@ -35,7 +35,7 @@ import org.picketbox.core.config.PicketBoxConfiguration;
 import org.picketbox.http.PicketBoxConstants;
 //import org.picketbox.http.authentication.AbstractHTTPAuthentication;
 import org.picketlink.idm.IdentityManager;
-import org.picketlink.idm.credential.PlainTextPassword;
+import org.picketlink.idm.credential.Password;
 //import org.picketlink.idm.credential.internal.DigestCredentialHandler;
 //import org.picketlink.idm.credential.internal.Password;
 import org.picketlink.idm.model.Role;
@@ -101,7 +101,7 @@ public class RegistrationEndpoint {
             
 //            Password password = new Password(request.getPassword().toCharArray());
             
-            identityManager.updateCredential(user, new PlainTextPassword(request.getPassword().toCharArray()));
+            identityManager.updateCredential(user, new Password(request.getPassword().toCharArray()));
             
 //            try {
 //                Digest digest = new Digest();
