@@ -7,6 +7,7 @@ package com.issuetracker.pages;
 import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.dao.api.WorkflowDao;
+import com.issuetracker.model.Status;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
 import java.util.ArrayList;
