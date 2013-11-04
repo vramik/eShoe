@@ -120,9 +120,11 @@ public class SearchIssues extends PageLayout {
         form.add(projectDropDownChoice);
         versionDropDownChoice = new DropDownChoice<ProjectVersion>("versionDropDownChoice", new PropertyModel<ProjectVersion>(this, "version"), modelProjectVersionsCoices, new ChoiceRenderer<ProjectVersion>("name"));
         versionDropDownChoice.setOutputMarkupId(true);
+        versionDropDownChoice.setRequired(true);
         form.add(versionDropDownChoice);
         componentsDropDownChoice = new DropDownChoice<Component>("componentsDropDownChoice", new PropertyModel<Component>(this, "component"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
         componentsDropDownChoice.setOutputMarkupId(true);
+        componentsDropDownChoice.setRequired(true);
         form.add(componentsDropDownChoice);
         listMultipleStatuses = new ListMultipleChoice<Status>("statusLMC", new PropertyModel<List<Status>>(this, "statusList"), statusDao.getStatuses(), new ChoiceRenderer<Status>("name"));
         form.add(listMultipleStatuses);

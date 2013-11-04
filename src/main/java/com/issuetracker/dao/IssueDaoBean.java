@@ -11,6 +11,7 @@ import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.User;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -108,7 +109,7 @@ public class IssueDaoBean implements IssueDao {
 
     @Override
     public void removeIssue(Issue issue) {
-        em.remove(issue);
+        em.remove(em.contains(issue)? issue : em.merge(issue));
     }
 
     @Override
@@ -171,52 +172,55 @@ public class IssueDaoBean implements IssueDao {
 //            c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
 //        
 //        };
-        c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"), qb.equal(i.get("project"), project), 
-                qb.equal(i.get("projectVersion"), projectVersion), qb.equal(i.get("component"), component), i.get("issueType").in(issueTypes),
-                i.get("status").in(statusList));
+        List<Predicate> predicates = new ArrayList<Predicate>();
+        predicates.add(qb.equal(i.get("project"), project));
+        predicates.add(qb.equal(i.get("projectVersion"), projectVersion));
+        predicates.add(qb.equal(i.get("component"), component));
+
+        if (nameContainsText != null) {
+            predicates.add(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
+        };
+        if (issueTypes != null && !issueTypes.isEmpty()) {
+            predicates.add(i.get("issueType").in(issueTypes));
+        };
+        if (statusList != null && !statusList.isEmpty()) {
+            predicates.add(i.get("status").in(statusList));
+        };
+        Object[] objectArray = predicates.toArray();
+        Predicate[] predicateArray = Arrays.copyOf(objectArray, objectArray.length, Predicate[].class);
+        c.where(predicateArray);
+
+//            c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"), qb.equal(i.get("project"), project),
+//                    qb.equal(i.get("projectVersion"), projectVersion), qb.equal(i.get("component"), component), i.get("issueType").in(issueTypes),
+//                    i.get("status").in(statusList));
+
+
+
+            results = em.createQuery(c).getResultList();
+            if (results != null && !results.isEmpty()) {
+                return results;
+            }
+            return new ArrayList<Issue>();
+        }
+
+        @Override
+        public List<Comment> getComments
+        (Issue issue
         
-//        if (projectVersion != null) {
-//            c.where(qb.equal(i.get("projectVersion"), projectVersion));
-//        }
-//        if (projectComponents != null || !projectComponents.isEmpty()) {
-//            c.where(i.get("component").in(projectComponents));
-//        }
-//        if (issueTypes != null || !issueTypes.isEmpty()) {
-//            c.where(i.get("issueType").in(issueTypes));
-//        }
-//        // c.where(i.get("status").in(statusList));
-
-        results = em.createQuery(c).getResultList();
-        if (results != null && !results.isEmpty()) {
-            return results;
-        }
-        return new ArrayList<Issue>();
-    }
-//    public void test() {
-//        qb = em.getCriteriaBuilder();
-//        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
-//        Root<Issue> i = c.from(Issue.class);
-//        c.select(i);
-//       
-//        System.out.println(i.get("name"));
-//   
-//    }
-
-    @Override
-    public List<Comment> getComments(Issue issue) {
+            ) {
         Logger.getLogger(IssueDaoBean.class.getName()).log(Level.SEVERE, issue.getName());
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
-        Root<Issue> i = c.from(Issue.class);
-        c.select(i);
-        c.where(qb.equal(i.get("name"), issue.getName()));
-        TypedQuery query = em.createQuery(c);
-        List<Issue> issueResults = query.getResultList();
-        if (issueResults != null && !issueResults.isEmpty()) {
-            List<Comment> comments = issueResults.get(0).getComments();
-            return comments;
-        } else {
-            return null;
+            qb = em.getCriteriaBuilder();
+            CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
+            Root<Issue> i = c.from(Issue.class);
+            c.select(i);
+            c.where(qb.equal(i.get("name"), issue.getName()));
+            TypedQuery query = em.createQuery(c);
+            List<Issue> issueResults = query.getResultList();
+            if (issueResults != null && !issueResults.isEmpty()) {
+                List<Comment> comments = issueResults.get(0).getComments();
+                return comments;
+            } else {
+                return null;
+            }
         }
     }
-}
