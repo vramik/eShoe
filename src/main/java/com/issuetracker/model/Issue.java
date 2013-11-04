@@ -6,6 +6,7 @@ package com.issuetracker.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -59,6 +60,9 @@ public class Issue implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     List<Comment> comments;
+    
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<CustomField> customFields;
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
     public Long getIssueId() {
@@ -147,6 +151,14 @@ public class Issue implements Serializable {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public List<CustomField> getCustomFields() {
+        return customFields;
+    }
+
+    public void setCustomFields(List<CustomField> customFields) {
+        this.customFields = customFields;
     }
     
     

@@ -11,11 +11,7 @@ and open the template in the editor.
     <body>
     <wicket:extend>
         <a wicket:id="link"><span wicket:id="project"></span></a>
-
-
         <h2><span wicket:id="name"></span></h2>
-
-
         <span wicket:id="description"></span><br/>
         <br/>
 
@@ -24,26 +20,21 @@ and open the template in the editor.
         Type: <span wicket:id="type"></span><br/>
         Affects versions: <span wicket:id="affectsVersions"></span><br/>
         <div>
-            <!--            <div style="display: table-row;">
-                            <div style="display: table-cell;">Description: </div>
-                            <div style="display: table-cell;">
-                                <input type="text" wicket:id="description"/>
-                            </div>
-                        </div>
-                        <div style="display: table-row;">
-                            <div style="display: table-cell;">Username </div>
-                            <div style="display: table-cell;">
-                                <input type="text" wicket:id="project.name"/>
-                            </div>
-                        </div>-->
             Component: <span wicket:id="componentName"></span> <br/>
             Priority: <span wicket:id="priority"></span> <br/>
             Watchers: <span wicket:id="watchersCountLabel">x</span> 
             <a wicket:id="addWatcherLink">Watch this issue</a>
 
         </div>
+        <div wicket:id="cfListView"/>
+        <span wicket:id="cfHeader"></span>
+        <form wicket:id="form">
+            <input type="text" wicket:id="cfName" />
+            <input type="text" wicket:id="cfValue" />
 
-
+            <input type="submit" value="Done"/>
+        </form>
+        
         <div wicket:id="modal2"></div><br/>
         <a wicket:id="showModal2">Show watchers</a>
 

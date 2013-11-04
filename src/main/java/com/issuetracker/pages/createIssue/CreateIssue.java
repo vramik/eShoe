@@ -184,26 +184,6 @@ public class CreateIssue extends PageLayout {
                 target.add(versionDropDown);
             }
         });
-
-
-
-//        ListView listViewIssues = new ListView<Issue>("issueList", new PropertyModel<List<Issue>>(this, "issueList")) {
-//            @Override
-//            protected void populateItem(final ListItem<Issue> item) {
-//                final Issue issue = item.getModelObject();
-//
-//                item.add(new Label("name", issue.getName()));
-//                item.add(new Label("issueType", issue.getIssueType().getname()));
-//                item.add(new Label("description", issue.getDescription()));
-//                item.add(new Label("component", issue.getComponent().getName()));
-//                item.add(new Label("version", issue.getProjectVersion().getName()));
-//                item.add(new Label("project", issue.getProject().getName()));
-//                item.add(new Label("file", issue.getFileLocation()));
-//            }
-//        };
-//        add(listViewIssues);
-
-
     }
 //<editor-fold defaultstate="collapsed" desc="getter/setter">
 
