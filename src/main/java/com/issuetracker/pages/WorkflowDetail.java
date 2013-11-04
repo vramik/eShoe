@@ -58,8 +58,7 @@ public class WorkflowDetail extends PageLayout{
                 return statusDao.getStatuses(); 
             }            
          };
-        
-        
+              
         add(new StatusListView("statusListView", statusesModel, new CompoundPropertyModel<Workflow>(workflow)));
     }
 
