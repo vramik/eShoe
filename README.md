@@ -1,5 +1,10 @@
+
+Openshift stuff
+==================
+
 Repo layout
-=========== 
+-----------
+
 deployments/ - location for built wars (Details below)
 src/ - Maven src structure
 pom.xml - Maven build file  
@@ -17,7 +22,7 @@ pom.xml - Maven build file
 
 
 Notes about layout
-==================
+------------------
 Note: Every time you push, everything in your remote repo dir gets recreated
       please store long term items (like an sqlite database) in the OpenShift
       data directory, which will persist between pushes of your repo.
@@ -26,7 +31,7 @@ Note: Every time you push, everything in your remote repo dir gets recreated
 
 
 Details about layout and deployment options
-==================
+---------------------------------
 There are two options for deploying content to the JBoss Application Server within OpenShift. Both options
 can be used together (i.e. build one archive from source and others pre-built)
 
@@ -97,7 +102,7 @@ their deployment content (e.g. war, ear, jar, sar files) to have it
 automatically deployed into the server runtime.
 
 Environment Variables
-=====================
+----------------------
 
 OpenShift provides several environment variables to reference for ease
 of use.  The following list are some common variables but far from exhaustive:
