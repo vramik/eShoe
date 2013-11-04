@@ -317,7 +317,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>4.2.1.Final</version>
+            <version>4.2.7.Final</version>
             <scope>provided</scope>
         </dependency>
         <!-- Hibernate -->
