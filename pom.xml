@@ -23,7 +23,7 @@
         
         <!-- Define the version of JBoss' Java EE 6 APIs we want to import. -->
         <jboss.spec.version>3.0.2.Final</jboss.spec.version>
-        <version.wicket>6.6.0</version.wicket>
+        <version.wicket>6.11.0</version.wicket>
         <version.wicket.cdi>1.2</version.wicket.cdi>
         <version.picketbox>5.0.0.Final</version.picketbox>
 
