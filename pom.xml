@@ -39,7 +39,7 @@
         <resources>
             <resource>
                 <directory>src/main/resources</directory>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
             </resource>
             <!-- For persistence.xml, and to keep src/main/java non-filtered. -->
             <resource> 
