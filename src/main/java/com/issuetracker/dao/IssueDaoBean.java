@@ -32,7 +32,7 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class IssueDaoBean implements IssueDao {
 
-    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
+    @PersistenceContext(unitName = "issuetrackerPU2")
     private EntityManager em;
     private CriteriaBuilder qb;
     @Inject

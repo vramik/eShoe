@@ -16,7 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Stateless
 public class CommentDaoBean implements CommentDao {
 
-    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
+    @PersistenceContext(unitName = "issuetrackerPU2")
     private EntityManager em;
     private CriteriaBuilder qb;
 
