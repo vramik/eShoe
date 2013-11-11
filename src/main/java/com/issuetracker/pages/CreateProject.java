@@ -9,10 +9,12 @@ import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.ProjectVersionDao;
 import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.Component;
+import com.issuetracker.model.CustomField;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.User;
 import com.issuetracker.pages.component.component.ComponentListView;
+import com.issuetracker.pages.component.customField.CustomFieldListView;
 import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.component.version.VersionListView;
 import com.issuetracker.pages.validator.ProjectNameValidator;
@@ -166,6 +168,35 @@ public class CreateProject extends PageLayout {
 
         insertComponentButton.setDefaultFormProcessing(false);
         insertProjectForm.add(insertComponentButton);
+        
+//        
+//                //CUSTOM FIELD
+//        add(new Label("cfHeader", "Add Custom Field:"));
+//        final List<CustomField> customFields = new ArrayList<CustomField>();
+//        final Form<CustomField> cfForm;
+//        cfForm = new Form("form") {
+//            @Override
+//            protected void onSubmit() {                
+//                customFields.add(customField);
+//                issue.setCustomFields(null);
+//                issueDao.updateIssue(issue);  
+//                customField = new CustomField();
+//            }
+//        };
+//
+//        cfForm.add(new RequiredTextField("cfName", new PropertyModel<String>(this, "customField.cfName")));
+//        cfForm.add(new RequiredTextField("cfValue", new PropertyModel<String>(this, "customField.cfValue")));
+//        add(cfForm);
+//
+//        IModel<List<CustomField>> cfModel = new CompoundPropertyModel<List<CustomField>>(customFields) {
+//            @Override
+//            public List<CustomField> getObject() {
+//                return customFields;
+//            }
+//        };
+//
+//        add(new CustomFieldListView("cfListView", cfModel));
+//        //CUSTOM F
 
         IModel<List<Project>> projectModel = new CompoundPropertyModel<List<Project>>(projects) {
             @Override

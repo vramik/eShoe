@@ -7,29 +7,26 @@ package com.issuetracker.pages;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.CustomField;
+import com.issuetracker.model.CustomFieldIssueValue;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.User;
 import com.issuetracker.pages.component.comment.CommentListView;
 import com.issuetracker.pages.component.comment.CommentForm;
 import com.issuetracker.pages.component.customField.CustomFieldListView;
+import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueValueListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javassist.runtime.Cflow;
 import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -53,6 +50,8 @@ public class IssueDetail extends PageLayout {
     private Issue issue;
     private CustomField customField;
     private List<User> watchersList;
+    private List<CustomFieldIssueValue> cfIssueValueList;
+    
 
     public IssueDetail(PageParameters parameters) {
         Long issueId = parameters.get("issue").toLong();
@@ -61,6 +60,7 @@ public class IssueDetail extends PageLayout {
         PropertyModel<Issue> defaultModel = new PropertyModel<Issue>(this, "issue");
         setDefaultModel(defaultModel);
         watchersCount = issue.getWatches().size();
+        
 
         projectLink = new Link("link") {
             @Override
@@ -70,7 +70,7 @@ public class IssueDetail extends PageLayout {
                 setResponsePage(ProjectDetail.class, pageParameters);
 
             }
-        };
+        };        
         projectLink.add(new Label("project", new PropertyModel(this, "issue.project.name")));
         add(projectLink);
         add(new Label("name", new PropertyModel(this, "issue.name")));
@@ -115,11 +115,6 @@ public class IssueDetail extends PageLayout {
 
 //                target.add(modal2);
                 modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));
-                String s = "";
-                for (User u : watchersList) {
-                    s = s + u.getUserId();
-                }
-                Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, s);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -162,45 +157,23 @@ public class IssueDetail extends PageLayout {
         });
 
 
-        //CUSTOM FIELD
-        add(new Label("cfHeader", "Add Custom Field:"));
-        final List<CustomField> customFields = new ArrayList<CustomField>();
-        final Form<CustomField> cfForm;
-        cfForm = new Form("form") {
-            @Override
-            protected void onSubmit() {                
-                customFields.add(customField);
-                issue.setCustomFields(null);
-                issueDao.updateIssue(issue);  
-                customField = new CustomField();
-            }
-        };
-//       cfForm.setVisible(false);
-//        AjaxButton addCustomFieldButton = new AjaxButton("button") {
-//            @Override
-//            public void onSubmit() {
-//                cfForm.setVisible(true);
-//            }
-//        };
-//        add(addCustomFieldButton);
-
-        cfForm.add(new RequiredTextField("cfName", new PropertyModel<String>(this, "customField.cfName")));
-        cfForm.add(new RequiredTextField("cfValue", new PropertyModel<String>(this, "customField.cfValue")));
-        add(cfForm);
-
-        IModel<List<CustomField>> cfModel = new CompoundPropertyModel<List<CustomField>>(customFields) {
-            @Override
-            public List<CustomField> getObject() {
-                return customFields;
-            }
-        };
-
-        add(new CustomFieldListView("cfListView", cfModel));
 
         add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")));
         add(new CommentListView("commentListView", new PropertyModel<Issue>(this, "issue")));
 
         add(new SetIssueStateForm("setIssueStateForm", new PropertyModel<Issue>(this, "issue")));
+        
+        IModel <List<CustomFieldIssueValue>> cfModel = new PropertyModel<List<CustomFieldIssueValue>>(this, "cfList") {
+            @Override
+            public List<CustomFieldIssueValue> getObject() {
+                List<CustomFieldIssueValue> customFieldIssueValueList = issue.getCustomFields();
+                if (customFieldIssueValueList == null) {
+                    return new ArrayList<CustomFieldIssueValue>();
+                }
+                return customFieldIssueValueList;
+            }
+        };
+        add(new CustomFieldIssueValueListView<CustomFieldIssueValue>("cfListView", cfModel));
 
     }
 
@@ -235,4 +208,12 @@ public class IssueDetail extends PageLayout {
     public void setCustomField(CustomField customField) {
         this.customField = customField;
     }
+
+    public List<CustomFieldIssueValue> getCfList() {
+        return cfIssueValueList;
+    }
+
+    public void setCfList(List<CustomFieldIssueValue> cfIssueValueList) {
+        this.cfIssueValueList = cfIssueValueList;
+    }  
 }

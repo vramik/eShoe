@@ -33,7 +33,6 @@ public class CustomFieldListView<T extends CustomField> extends Panel {
             protected void populateItem(final ListItem<CustomField> item) {
                 final CustomField customField = item.getModelObject();
                 item.add(new Label("name", customField.getCfName()));
-                item.add(new Label("value", customField.getCfValue()));
 
                 item.add(new Link<CustomField>("delete", item.getModel()) {
                     @Override

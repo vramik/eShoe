@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -61,8 +62,10 @@ public class Issue implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     List<Comment> comments;
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<CustomField> customFields;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<CustomFieldIssueValue> customFields;
+    
+    
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
     public Long getIssueId() {
@@ -153,14 +156,16 @@ public class Issue implements Serializable {
         this.comments = comments;
     }
 
-    public List<CustomField> getCustomFields() {
+    public List<CustomFieldIssueValue> getCustomFields() {
         return customFields;
     }
 
-    public void setCustomFields(List<CustomField> customFields) {
+    public void setCustomFields(List<CustomFieldIssueValue> customFields) {
         this.customFields = customFields;
     }
-    
+
+  
+
     
 
 //    public List<User> getVotes() {

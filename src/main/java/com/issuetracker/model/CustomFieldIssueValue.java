@@ -6,28 +6,27 @@ package com.issuetracker.model;
 
 import java.io.Serializable;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
  * @author mgottval
  */
 @Entity
-public class CustomField implements Serializable {
+public class CustomFieldIssueValue implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
-    private String cfName;
-    
-    private String cfValue;
-    
+    @OneToOne
+    private CustomField customField;     
+    @OneToOne
+    private Issue Issue;
+    private String value;
+
     public Long getId() {
         return id;
     }
@@ -36,20 +35,28 @@ public class CustomField implements Serializable {
         this.id = id;
     }
 
-    public String getCfName() {
-        return cfName;
+    public CustomField getCustomField() {
+        return customField;
     }
 
-    public void setCfName(String cfName) {
-        this.cfName = cfName;
+    public void setCustomField(CustomField customField) {
+        this.customField = customField;
     }
 
-    public String getCfValue() {
-        return cfValue;
+    public String getValue() {
+        return value;
     }
 
-    public void setCfValue(String cfValue) {
-        this.cfValue = cfValue;
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public Issue getIssue() {
+        return Issue;
+    }
+
+    public void setIssue(Issue Issue) {
+        this.Issue = Issue;
     }
     
 
@@ -63,10 +70,10 @@ public class CustomField implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CustomField)) {
+        if (!(object instanceof CustomFieldIssueValue)) {
             return false;
         }
-        CustomField other = (CustomField) object;
+        CustomFieldIssueValue other = (CustomFieldIssueValue) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -75,7 +82,7 @@ public class CustomField implements Serializable {
 
     @Override
     public String toString() {
-        return "com.issuetracker.model.CustomField[ id=" + id + " ]";
+        return "com.issuetracker.model.CustomFieldIssueValue[ id=" + id + " ]";
     }
     
 }
