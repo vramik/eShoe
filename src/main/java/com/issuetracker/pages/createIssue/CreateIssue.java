@@ -6,6 +6,8 @@ import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.model.Component;
+import com.issuetracker.model.CustomField;
+import com.issuetracker.model.CustomFieldIssueValue;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
@@ -63,8 +65,11 @@ public class CreateIssue extends PageLayout {
     private Issue issue;
     private List<Issue> issueList;
     private Project selectedProject;
+    private List<CustomField> projectCustomFieldList;
     private final Map<Project, List<Component>> modelsProjectMap = new HashMap<Project, List<Component>>();
     private final Map<Project, List<ProjectVersion>> modelsProjectVersionsMap = new HashMap<Project, List<ProjectVersion>>();
+    private CreateIssueCustomFIeldsListView cfListView;
+    private List<CustomFieldIssueValue> cfIssueValues;
 
     public CreateIssue() {
         issueList = new ArrayList<Issue>();
@@ -116,6 +121,35 @@ public class CreateIssue extends PageLayout {
                 return models;
             }
         };
+
+
+
+
+
+
+        IModel<List<CustomFieldIssueValue>> customFieldsModel = new PropertyModel<List<CustomFieldIssueValue>>(this, "cfIssueValues") {
+            @Override
+            public List<CustomFieldIssueValue> getObject() {
+                if (selectedProject == null) {
+                    projectCustomFieldList = new ArrayList<CustomField>();
+                } else {
+                    projectCustomFieldList = selectedProject.getCustomFields();
+                }
+                cfIssueValues = new ArrayList<CustomFieldIssueValue>();
+                CustomFieldIssueValue cfIssueValue;
+                for (CustomField customField : projectCustomFieldList) {
+                    cfIssueValue = new CustomFieldIssueValue();
+                    cfIssueValue.setCustomField(customField);
+                    cfIssueValue.setIssue(issue);
+                    cfIssueValues.add(cfIssueValue);
+                }
+                return cfIssueValues;
+            }
+        };
+
+
+        cfListView = new CreateIssueCustomFIeldsListView("cfListView", customFieldsModel);
+        cfListView.setOutputMarkupId(true);
         insertIssueForm = new Form("form") {
             @Override
             protected void onSubmit() {
@@ -133,10 +167,10 @@ public class CreateIssue extends PageLayout {
                 }
                 issue.setStatus(statusDao.getStatusByName("New"));//TODO ??
                 issue.setProject(selectedProject);
+                issue.setCustomFields(cfIssueValues);
                 issueDao.addIssue(issue);
                 issueList = issueDao.getIssues();
                 PageParameters pageParameters = new PageParameters();
-                Logger.getLogger(CreateIssue.class.getName()).log(Level.SEVERE, issue.getIssueId().toString());
                 pageParameters.add("issue", issue.getIssueId());
                 setResponsePage(IssueDetail.class, pageParameters);
                 issue = new Issue();
@@ -174,6 +208,8 @@ public class CreateIssue extends PageLayout {
         insertIssueForm.setMultiPart(true);
 //set a limit for uploaded file's size
         insertIssueForm.setMaxSize(Bytes.kilobytes(100));
+        insertIssueForm.add(cfListView);
+
         add(new FeedbackPanel("feedbackPanel"));
 
         projectDropDown.add(
@@ -182,6 +218,7 @@ public class CreateIssue extends PageLayout {
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(componentDropDown);
                 target.add(versionDropDown);
+                target.add(cfListView);
             }
         });
     }
@@ -209,6 +246,22 @@ public class CreateIssue extends PageLayout {
 
     public void setIssueList(List<Issue> issueList) {
         this.issueList = issueList;
+    }
+
+    public List<CustomField> getProjectCustomFieldList() {
+        return projectCustomFieldList;
+    }
+
+    public void setProjectCustomFieldList(List<CustomField> projectCustomFieldList) {
+        this.projectCustomFieldList = projectCustomFieldList;
+    }
+
+    public List<CustomFieldIssueValue> getCfIssueValues() {
+        return cfIssueValues;
+    }
+
+    public void setCfIssueValues(List<CustomFieldIssueValue> cfIssueValues) {
+        this.cfIssueValues = cfIssueValues;
     }
     //</editor-fold>
 }

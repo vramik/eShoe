@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -20,36 +21,35 @@ import org.hibernate.annotations.FetchMode;
  */
 @Entity
 public class Project implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 //    @Column(unique = true, nullable = false)
     private String name;
-    
     private String summary;
-    
     @ManyToOne
     private User owner;
-    
-    @ManyToMany(fetch= FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<ProjectVersion> versions;
-    
-    @ManyToMany(fetch= FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
     private List<Component> components;
-
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
+    List<CustomField> customFields;
     @OneToOne
     private Workflow workflow;
-    
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }        
+    }
 
     public String getName() {
         return name;
@@ -99,10 +99,14 @@ public class Project implements Serializable {
         this.workflow = workflow;
     }
 
-   
+    public List<CustomField> getCustomFields() {
+        return customFields;
+    }
 
-    
-    
+    public void setCustomFields(List<CustomField> customFields) {
+        this.customFields = customFields;
+    }
+
 //    @Override
 //    public int hashCode() {
 //        int hash = 0;
@@ -122,9 +126,6 @@ public class Project implements Serializable {
 //        }
 //        return true;
 //    }
-    
-    
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -146,12 +147,9 @@ public class Project implements Serializable {
         }
         return true;
     }
-    
-    
 
     @Override
     public String toString() {
         return "com.issuetracker.Project[ id=" + name + " ]";
     }
-    
 }
