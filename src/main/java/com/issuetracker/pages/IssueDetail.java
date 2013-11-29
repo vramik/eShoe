@@ -16,13 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javassist.runtime.Cflow;
 import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -70,6 +75,7 @@ public class IssueDetail extends PageLayout {
         projectLink.add(new Label("project", new PropertyModel(this, "issue.project.name")));
         add(projectLink);
         add(new Label("name", new PropertyModel(this, "issue.name")));
+        add(new Label("summary", new PropertyModel(this, "issue.summary")));
         add(new Label("description", new PropertyModel(this, "issue.description")));
 
         add(new Label("type", new PropertyModel(this, "issue.issueType.name")));

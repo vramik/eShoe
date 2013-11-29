@@ -30,6 +30,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -199,7 +200,8 @@ public class CreateIssue extends PageLayout {
         insertIssueForm.add(versionDropDown);
         insertIssueForm.add(priorityDropDown);
         insertIssueForm.add(new RequiredTextField("issueName", new PropertyModel<String>(this, "issue.name")));
-        insertIssueForm.add(new RequiredTextField("issueDescription", new PropertyModel<String>(this, "issue.description")));
+        insertIssueForm.add(new RequiredTextField("issueSummary", new PropertyModel<String>(this, "issue.summary")));
+        insertIssueForm.add(new TextArea<String>("description", new PropertyModel<String>(this, "issue.description")));
         issueTypeList = new DropDownChoice<IssueType>("issueTypes", new PropertyModel<IssueType>(this, "issue.issueType"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         issueTypeList.setRequired(true);
         insertIssueForm.add(issueTypeList);
