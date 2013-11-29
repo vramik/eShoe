@@ -30,8 +30,8 @@ public class Issue implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long issueId;
-//    @Column(unique = true)
     private String name;
+    private String summary;
     private String description;
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
@@ -50,20 +50,27 @@ public class Issue implements Serializable {
     private String fileLocation;
     @ManyToMany(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
-    List<User> watches;
+    private List<User> watches;
 //    @ManyToMany()
 //    List<User> votes;
     @ManyToOne
-    Component component;
+    private Component component;
     @ManyToOne
-    ProjectVersion projectVersion;
+    private ProjectVersion projectVersion;
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
-    List<Comment> comments;
+    private List<Comment> comments;
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<CustomFieldIssueValue> customFields;
+    private List<CustomFieldIssueValue> customFields;
+    
+    @OneToMany(mappedBy="isRelatedIssue", cascade= CascadeType.ALL)
+    private List<IssuesRelationship> isRelated;
+    
+    @OneToMany(mappedBy="relatesToIssue", cascade= CascadeType.ALL)
+    private List<IssuesRelationship> relatesTo;
+  
     
     
 
@@ -164,6 +171,14 @@ public class Issue implements Serializable {
         this.customFields = customFields;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
   
 
     
@@ -208,11 +223,25 @@ public class Issue implements Serializable {
         this.fileLocation = fileLocation;
     }
 
+    public List<IssuesRelationship> getIsRelated() {
+        return isRelated;
+    }
+
+    public void setIsRelated(List<IssuesRelationship> isRelated) {
+        this.isRelated = isRelated;
+    }
+
+    public List<IssuesRelationship> getRelatesTo() {
+        return relatesTo;
+    }
+
+    public void setRelatesTo(List<IssuesRelationship> relatesTo) {
+        this.relatesTo = relatesTo;
+    }
+    
+    
+
     //</editor-fold>
-//    public enum Status {
-//
-//        NEW, MODIFIED, ON_QA, VERIFIED, CLOSED, REOPENED
-//    }
 
     public enum Priority {
 

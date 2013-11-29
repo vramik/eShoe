@@ -79,6 +79,7 @@ public class IssueDetail extends PageLayout {
         projectLink.add(new Label("project", new PropertyModel(this, "issue.project.name")));
         add(projectLink);
         add(new Label("name", new PropertyModel(this, "issue.name")));
+        add(new Label("summary", new PropertyModel(this, "issue.summary")));
         add(new Label("description", new PropertyModel(this, "issue.description")));
 
         add(new Label("type", new PropertyModel(this, "issue.issueType.name")));
