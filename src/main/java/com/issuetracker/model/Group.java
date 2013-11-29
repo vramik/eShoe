@@ -5,22 +5,28 @@
 package com.issuetracker.model;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 /**
  *
  * @author mgottval
  */
 @Entity
-public class Permission implements Serializable {
+public class Group implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String permissionName;
+    private String name;
+    @ManyToMany
+    private List<User> users;
+    @ManyToMany
+    List<Role> roles;
 
     public Long getId() {
         return id;
@@ -30,16 +36,33 @@ public class Permission implements Serializable {
         this.id = id;
     }
 
-    public String getPermissionName() {
-        return permissionName;
+    public String getName() {
+        return name;
     }
 
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
+    public void setName(String name) {
+        this.name = name;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+  
     
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -50,10 +73,10 @@ public class Permission implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Permission)) {
+        if (!(object instanceof Group)) {
             return false;
         }
-        Permission other = (Permission) object;
+        Group other = (Group) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -62,7 +85,7 @@ public class Permission implements Serializable {
 
     @Override
     public String toString() {
-        return "com.issuetracker.Permission[ id=" + id + " ]";
+        return "com.issuetracker.UserGroup[ id=" + id + " ]";
     }
     
 }

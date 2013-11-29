@@ -18,12 +18,15 @@ import javax.persistence.ManyToMany;
  */
 @Entity
 public class Role implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToMany
     private List<Permission> permission;
+    @ManyToMany
+    private List<Group> groups;
 
     public Long getId() {
         return id;
@@ -65,5 +68,4 @@ public class Role implements Serializable {
     public String toString() {
         return "com.issuetracker.Role[ id=" + id + " ]";
     }
-    
 }

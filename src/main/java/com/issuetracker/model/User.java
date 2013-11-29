@@ -32,7 +32,7 @@ public class User implements Serializable {
     private String confirmPassword;
     
     @ManyToMany
-    private List<UserGroup> userGroup;
+    private List<Group> userGroup;
     
     @OneToMany
     private List<Issue> created;
@@ -55,11 +55,11 @@ public class User implements Serializable {
     }
 
     //<editor-fold defaultstate="collapsed" desc="get/set">
-    public List<UserGroup> getUserGroup() {
+    public List<Group> getUserGroup() {
         return userGroup;
     }
     
-    public void setUserGroup(List<UserGroup> userGroup) {
+    public void setUserGroup(List<Group> userGroup) {
         this.userGroup = userGroup;
     }
     
