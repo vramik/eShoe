@@ -4,7 +4,9 @@
  */
 package com.issuetracker.pages;
 
+import com.issuetracker.pages.component.login.ForgotPasswordLink;
 import com.issuetracker.pages.component.login.LoginForm;
+import com.issuetracker.pages.component.login.SignUpLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
@@ -15,6 +17,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 public class Login extends PageLayout {
 
     private LoginForm loginForm;
+    private SignUpLink signUpLink;
+    private ForgotPasswordLink forgotPasswordLink;
 
 
     public Login() {
@@ -24,25 +28,11 @@ public class Login extends PageLayout {
         loginForm = new LoginForm("loginForm");
         add(loginForm);
 
-        final Link forgotPasswordLink = new Link("forgotPasswordLink") {
-            @Override
-            public void onClick() {
-                setResponsePage(ForgotPassword.class);
-            }
-        };
-
+        forgotPasswordLink = new ForgotPasswordLink("forgotPasswordLink");
         add(forgotPasswordLink);
-
-        final Link signUpLink = new Link("signUpLink") {
-            @Override
-            public void onClick() {
-                setResponsePage(Register.class);
-            }
-        };
-
+        
+        signUpLink = new SignUpLink("signUpLink");
         add(signUpLink);
-
-
 
     }
 }
