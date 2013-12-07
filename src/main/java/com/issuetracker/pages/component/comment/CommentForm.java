@@ -42,24 +42,14 @@ public class CommentForm extends Panel {
         commentForm = new Form<Comment>("commentForm") {
             @Override
             protected void onSubmit() {
-//                comment = new Comment();
-//                commentDao.insert(comment);
                 try {
                     comments = issue.getComments();
                 } catch (NullPointerException e) {
                     comments = new ArrayList<Comment>();
-                    Logger.getLogger(CommentForm.class.getName()).log(Level.SEVERE, "Ted se to loguje - melo by jen poprve");
                 }
-//                comments = issueDao.getComments(issue);
                 comments.add(comment);
                 issue.setComments(comments);
                 issueDao.updateIssue(issue);
-//                comment = new Comment();
-                String s = "";
-                for (Comment comment1 : issue.getComments()) {
-                    s = s + comment1.getContent();
-                }
-                Logger.getLogger(CommentForm.class.getName()).log(Level.SEVERE, s);
                 comment = new Comment();
             }
         };

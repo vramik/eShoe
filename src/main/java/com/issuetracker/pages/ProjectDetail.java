@@ -51,11 +51,6 @@ public class ProjectDetail extends PageLayout {
         projectComponentList = project.getComponents();
         projectCustomFieldsList = project.getCustomFields();
         customFieldsList = project.getCustomFields();
-         String z = "";
-                for (CustomField cf : projectCustomFieldsList) {
-                    z = z+cf.getCfName();
-                }
-                Logger.getLogger(ProjectDetail.class.getName()).log(Logger.Level.FATAL, z);
         
         add(new Label("name", project.getName()));
         
@@ -77,7 +72,7 @@ public class ProjectDetail extends PageLayout {
             }
         };
         add(projectVersionListView);
-        
+ 
         projectComponentListView = new ListView<Component>("projectComponentListView", projectComponentList) {
             @Override
             protected void populateItem(ListItem<Component> item) {
