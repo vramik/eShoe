@@ -12,9 +12,14 @@ and open the template in the editor.
     <wicket:panel>
         <span wicket:id="feedback"></span>
         <form wicket:id="updateIssueForm">
-            <select wicket:id="statusDropDown"></select>
+
+            Issue relates to ID:
+            <input type="text" wicket:id="issueRelatesToId" size="30"/>
+            <select wicket:id="statusDropDown"></select><br/><br/>
+            <select wicket:id="relTypeDropDown"></select><br/>
             <input type="submit" value="Update Issue"/>
         </form>
+
     </wicket:panel>  
 </body>
 </html>

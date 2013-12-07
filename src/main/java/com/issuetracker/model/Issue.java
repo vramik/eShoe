@@ -65,10 +65,11 @@ public class Issue implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<CustomFieldIssueValue> customFields;
     
-    @OneToMany(mappedBy="isRelatedIssue", cascade= CascadeType.ALL)
-    private List<IssuesRelationship> isRelated;
+//    @OneToMany(mappedBy="isRelatedIssue", cascade= CascadeType.ALL)
+//    private List<IssuesRelationship> isRelated;
     
-    @OneToMany(mappedBy="relatesToIssue", cascade= CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade= CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
     private List<IssuesRelationship> relatesTo;
   
     
@@ -223,13 +224,13 @@ public class Issue implements Serializable {
         this.fileLocation = fileLocation;
     }
 
-    public List<IssuesRelationship> getIsRelated() {
-        return isRelated;
-    }
-
-    public void setIsRelated(List<IssuesRelationship> isRelated) {
-        this.isRelated = isRelated;
-    }
+//    public List<IssuesRelationship> getIsRelated() {
+//        return isRelated;
+//    }
+//
+//    public void setIsRelated(List<IssuesRelationship> isRelated) {
+//        this.isRelated = isRelated;
+//    }
 
     public List<IssuesRelationship> getRelatesTo() {
         return relatesTo;
