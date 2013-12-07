@@ -14,7 +14,6 @@
     <class>com.issuetracker.model.Comment</class>
     <class>com.issuetracker.pages.component.comment.CommentForm</class>
     <class>com.issuetracker.model.Transition</class>
-    <class>com.issuetracker.pages.IssueHistory</class>
     <class>com.issuetracker.model.Workflow</class>
     <class>com.issuetracker.model.CustomField</class>
     <class>com.issuetracker.pages.component.customField.CustomFieldListView</class>
