@@ -26,5 +26,9 @@ public interface UserDao {
     
     boolean isUsernameInUse(String username);
     
+    boolean isEmailInUse(String email);
+    
     List<User> getUsers();
+    
+    User loadUserIfPasswordMatches(String name, String password);
 }

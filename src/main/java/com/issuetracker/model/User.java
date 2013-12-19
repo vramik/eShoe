@@ -50,6 +50,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
+     public User(String name, String pass) {
+        this.name = name;
+        this.password = pass;
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="get/set">
     public List<Group> getUserGroup() {
         return userGroup;

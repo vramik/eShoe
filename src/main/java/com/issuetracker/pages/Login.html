@@ -10,15 +10,26 @@
 <body>
 <wicket:extend>
 
-    <div wicket:id = "loginForm"></div>
+        
+        <h1>Login</h1>
+
+        <div wicket:id="feedback"/>
+            
+        <form wicket:id="form" method="post" action="#">
+            <table border="0" cellpadding="5">
+                <tr> <td>User</td>     <td><input wicket:id="user" type="text" size="20"/></td> </tr>
+                <tr> <td>Password</td> <td><input wicket:id="password" type="password" size="20"/></td> </tr>
+                <tr> <td colspan="2"><input wicket:id="login" name="login" type="submit" style="width: 100%" value="Log in"/></td></tr>
+                            
+            </table>
+        </form>
+        
+
 
     <div wicket:id = "forgotPasswordLink"></div>
 
-    <span wicket:id="feedback"></span>
 
     <div wicket:id = "signUpLink"></div>
-    <!--<a wicket:id = "signUpLink">Need New Account? Sign Up!</a>-->    
-
 </wicket:extend>
 </body>
 </html>
