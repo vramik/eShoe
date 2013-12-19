@@ -5,6 +5,8 @@
 package com.issuetracker.pages;
 
 import com.issuetracker.dao.api.UserDao;
+import com.issuetracker.web.security.TrackerAuthSession;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.WebPage;
@@ -12,6 +14,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -32,15 +35,15 @@ public class HomePage extends PageLayout {
 
         final Link loginLink = new Link("loginLink") {
             @Override
-            public void onClick() {
+            public void onClick() {                      
                 setResponsePage(Login.class);
             }
         };
         loginLink.add(new Label("name", "Log In"));
         add(loginLink);
 
-
-
+      
+((TrackerAuthSession)getSession()).getAttribute("session");
 
 //        ListView listview = new ListView<Issue>("issues", new PropertyModel<List<Issue>>(this, "issues")) {
 //            @Override

@@ -116,7 +116,6 @@ public class SetIssueStateForm extends Panel {
 
                     issuesRelationship.setIsRelatedIssue(issue);
                     issuesRelationship.setRelatesToIssue(issueRelatesTo);
-                    issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
                     issuesRelationships.add(issuesRelationship);
                     issue.setRelatesTo(issuesRelationships);
                     issueRelatesToId = "";

@@ -17,6 +17,7 @@ import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueVa
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
+import com.issuetracker.web.security.TrackerAuthSession;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -102,18 +104,21 @@ public class IssueDetail extends PageLayout {
 
         addWatcherLink = new IndicatingAjaxLink("addWatcherLink") {
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                watchersCount++;
+            public void onClick(AjaxRequestTarget target) {                
                 target.add(watchersCountLabel);
                 watchersList = issueDao.getIssueWatchers(issue);
                 if (watchersList == null) {
                     watchersList = new ArrayList<User>();
                 }
-                //CREATENEWUSER .. will be current user               
-                User user = new User();
-                watchersList.add(user);
-                userDao.addUser(user);
-                issue.setWatches(watchersList);
+                TrackerAuthSession sess = (TrackerAuthSession) getSession();
+                if (sess.isSignedIn()) {
+                    User user = sess.getUser();
+                    if (!watchersList.contains(user)) {
+                        watchersList.add(user);
+                        watchersCount++;
+                    }
+                    issue.setWatches(watchersList);
+                }
                 issueDao.updateIssue(issue);
 
 //                target.add(modal2);

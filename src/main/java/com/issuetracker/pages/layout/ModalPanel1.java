@@ -46,28 +46,11 @@ public class ModalPanel1 extends Panel{
         }
 
         add(new Label("name", "LABEL"));
-        String s = "";
-        for (User user : watchersList) {
-            s = s + user.getUserId();
-        }
-        Logger.getLogger(CreateProject.class.getName()).log(Level.SEVERE, s);
-//        {
-//            /**
-//             * @see org.apache.wicket.extensions.yui.calendar.DateTimeField#configure(java.util.Map)
-//             */
-//            @Override
-//            protected void configure(Map<String, Object> widgetProperties)
-//            {
-//                super.configure(widgetProperties);
-//                // IE 6 breaks layout with iframe - is that a YUI bug?
-//                widgetProperties.put("iframe", false);
-//            }
-//        });
         watchersListView = new ListView<User>("watchersListView", new PropertyModel<List<User>>(this, "watchersList")) {
             @Override
             protected void populateItem(ListItem<User> item) {
                 final User user = item.getModelObject();
-                item.add(new Label("name", user.getUserId()));
+                item.add(new Label("name", user.getUsername()));
             }
         };
 //        watchersListView.setOutputMarkupId(true);

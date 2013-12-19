@@ -94,6 +94,18 @@ public class UserDaoBean implements UserDao, Serializable {
         }
         return true;
     }
+    
+    @Override
+    public boolean isEmailInUse(String email) {
+        User user = null;
+
+                user = getUserByEmail(email);
+
+        if (user == null) {
+            return false;
+        }
+        return true;
+    }
 
     @Override
     public List<User> getUsers() {
@@ -107,5 +119,22 @@ public class UserDaoBean implements UserDao, Serializable {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public User loadUserIfPasswordMatches(String name, String password) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> c = qb.createQuery(User.class);
+        Root<User> u = c.from(User.class);
+        Predicate condition = qb.equal(u.get("name"), name);
+        c.where(condition);
+        TypedQuery<User> q = em.createQuery(c);
+        List<User> results = q.getResultList();
+        if (results != null && !results.isEmpty()) {
+            if( results.get(0).getPassword().equals(password)) {
+                return results.get(0);
+            }
+        }
+        return null;
     }
 }
