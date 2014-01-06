@@ -23,7 +23,6 @@ public class CustomFieldListView<T extends CustomField> extends Panel {
 
     @Inject
     private CustomFieldDao customFieldDao;
-//    private List<CustomField> customFields;
     private ListView listViewCustomFields;
 
     public CustomFieldListView(String id, IModel<List<CustomField>> customFieldModel) {
@@ -34,25 +33,10 @@ public class CustomFieldListView<T extends CustomField> extends Panel {
                 final CustomField customField = item.getModelObject();
                 item.add(new Label("name", customField.getCfName()));
 
-                item.add(new Link<CustomField>("delete", item.getModel()) {
-                    @Override
-                    public void onClick() {
-                        customFieldDao.delete(customField);
-//                        projects = projectDao.getProjects();
-                    }
-                });
             }
         };
         add(listViewCustomFields);
     }
-
-//    public List<CustomField> getCustomFields() {
-//        return customFields;
-//    }
-//
-//    public void setCustomFields(List<CustomField> customFields) {
-//        this.customFields = customFields;
-//    }
 
   
 }

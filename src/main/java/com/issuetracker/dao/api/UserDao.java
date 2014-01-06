@@ -18,6 +18,8 @@ public interface UserDao {
     
     User getUserByUsername(String username);
     
+    User getUserByName(String username);
+    
     void addUser(User user);
     
     void updateUser(User user);

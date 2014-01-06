@@ -37,15 +37,13 @@ public class Status implements Serializable {
         this.name = name;
     }
 
-//    public List<Status> getStatuses() {
-//        return statuses;
-//    }
-//
-//    public void setStatuses(List<Status> statuses) {
-//        this.statuses = statuses;
-//    }
     
-    
+    public Status(String name) {
+        this.name = name;
+    }
+    public Status(){
+        
+    }
 
     @Override
     public int hashCode() {

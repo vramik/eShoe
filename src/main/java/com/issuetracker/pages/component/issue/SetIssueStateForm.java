@@ -56,6 +56,7 @@ public class SetIssueStateForm extends Panel {
         this.project = issue.getProject();
         workflow = project.getWorkflow();
         issuesRelationship = new IssuesRelationship();
+        issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
 
         add(new FeedbackPanel("feedback"));
 
@@ -66,7 +67,8 @@ public class SetIssueStateForm extends Panel {
         }
 
         IModel<List<Status>> statusModelChoices;
-        if (workflow != null) {
+        if (workflow != null && !transitionDao.getTransitionsByWorkflow(workflow).isEmpty()) {
+            Logger.getLogger(SetIssueStateForm.class.getName()).log(Level.SEVERE, workflow.getTransitions().toString());
 
             statusModelChoices = new AbstractReadOnlyModel<List<Status>>() {
                 @Override
@@ -89,7 +91,11 @@ public class SetIssueStateForm extends Panel {
             statusModelChoices = new AbstractReadOnlyModel<List<Status>>() {
                 @Override
                 public List<Status> getObject() {
-                    return statusDao.getStatuses();
+                    List<Status> statuses = new ArrayList<Status>();
+                    statuses.add(statusDao.getStatusByName("New"));
+                    statuses.add(statusDao.getStatusByName("Modified"));
+                    statuses.add(statusDao.getStatusByName("Closed"));
+                    return statuses;
                 }
             };
         }
@@ -107,11 +113,11 @@ public class SetIssueStateForm extends Panel {
             @Override
             protected void onSubmit() {
                 
-                if (issueRelatesToId != null && !issueRelatesToId.equals("")) {
+                if ((issueRelatesToId != null && !issueRelatesToId.equals("")) && issueDao.getIssueById(Long.valueOf(issueRelatesToId))!=null) {
                     issueRelatesTo = issueDao.getIssueById(Long.valueOf(issueRelatesToId));
 
                     issuesRelationship.setIsRelatedIssue(issue);
-                    issuesRelationship.setRelatesToIssue(issueRelatesTo);
+                    issuesRelationship.setRelatesToIssue(issueRelatesTo);                    
                     issuesRelationships.add(issuesRelationship);
                     issue.setRelatesTo(issuesRelationships);
                     issueRelatesToId = "";

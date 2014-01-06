@@ -35,25 +35,18 @@ public class StatusListView<T extends Status> extends Panel {
 
     public StatusListView(String id, IModel<List<Status>> statusesModel, final IModel<Workflow> workflowModel) {
         super(id);
-        //boolean isWorkflowPresent = false;
         final boolean workflowPresent;
-        String s;
-//        Logger.getLogger(StatusListView.class.getName()).log(Level.SEVERE, s);
         statuses = statusDao.getStatuses();
         if (statuses == null) {
             statuses = new ArrayList<Status>();
         }
 
         if (workflowModel != null) {
-            Logger.getLogger(StatusListView.class.getName()).log(Level.SEVERE, workflowModel.getObject().getName());
-           // isWorkflowPresent = true;
             workflowPresent = true;
             workflow = workflowModel.getObject();
         } else {
             workflowPresent = false;
         }
-        s = String.valueOf(workflowPresent);
-        Logger.getLogger(StatusListView.class.getName()).log(Level.SEVERE, s);
         listViewStatus = new ListView<Status>("statusList", statusesModel) {
             @Override
             protected void populateItem(final ListItem<Status> item) {

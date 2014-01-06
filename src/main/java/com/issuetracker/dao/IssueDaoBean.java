@@ -123,7 +123,7 @@ public class IssueDaoBean implements IssueDao {
         if (results != null && !results.isEmpty()) {
             return results;
         }
-        return null;
+        return new ArrayList<Issue>();
     }
 //
 

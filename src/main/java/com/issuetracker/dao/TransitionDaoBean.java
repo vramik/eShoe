@@ -3,6 +3,7 @@ package com.issuetracker.dao;
 import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -41,7 +42,7 @@ public class TransitionDaoBean implements TransitionDao{
         if (results != null && !results.isEmpty()) {
             return results;
         } else {
-            return null;
+            return new ArrayList<Transition>();
         }
     }
 

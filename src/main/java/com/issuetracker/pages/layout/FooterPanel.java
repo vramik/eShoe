@@ -15,7 +15,7 @@ public class FooterPanel extends Panel{
     public FooterPanel(String id) {
         super(id);
         
-        add(new Label("name", "Monika Gottvaldova"));
+        add(new Label("name", "eShoe"));
         
         IModel timeStampModel = new Model<String>() {
             @Override

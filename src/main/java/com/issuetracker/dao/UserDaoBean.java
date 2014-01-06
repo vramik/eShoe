@@ -82,6 +82,22 @@ public class UserDaoBean implements UserDao, Serializable {
         }
         return null;
     }
+    
+    @Override
+    public User getUserByName(String name) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> c = qb.createQuery(User.class);
+        Root<User> u = c.from(User.class);
+        Predicate condition = qb.equal(u.get("name"), name);
+        Logger.getLogger(UserDaoBean.class.getName()).log(Level.SEVERE, u.get("name").toString());
+        c.where(condition);
+        TypedQuery<User> q = em.createQuery(c);
+        List<User> results = q.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results.get(0);
+        }
+        return null;
+    }
 
     @Override
     public boolean isUsernameInUse(String username) {
