@@ -63,16 +63,6 @@ public class ProjectDetail extends PageLayout {
             protected void populateItem(ListItem item) {
                 final ProjectVersion projectVersion = (ProjectVersion) item.getModelObject();
                 item.add(new Label("versionName", projectVersion.getName()));
-                //ADMINS ONLY
-                item.add(new Link<ProjectVersion>("remove", item.getModel()) {
-                    @Override
-                    public void onClick() {
-                        projectVersionList.remove(projectVersion);                        
-                        project.setVersions(projectVersionList);
-                        projectDao.update(project);
-                        projectVersionDao.remove(projectVersion);
-                    }
-                });
             }
         };
         add(projectVersionListView);
@@ -82,15 +72,15 @@ public class ProjectDetail extends PageLayout {
             protected void populateItem(ListItem<Component> item) {
                 final Component component = item.getModelObject();
                 item.add(new Label("componentName", component.getName()));
-                item.add(new Link<Component>("remove", item.getModel()) {
-                    @Override
-                    public void onClick() {
-                        projectComponentList.remove(component);                        
-                        project.setComponents(projectComponentList);
-                        projectDao.update(project);
-                        componentDao.remove(component);
-                    }
-                });
+//                item.add(new Link<Component>("remove", item.getModel()) {
+//                    @Override
+//                    public void onClick() {
+//                        projectComponentList.remove(component);                        
+//                        project.setComponents(projectComponentList);
+//                        projectDao.update(project);
+//                        componentDao.remove(component);
+//                    }
+//                });
             }
         };
         add(projectComponentListView);

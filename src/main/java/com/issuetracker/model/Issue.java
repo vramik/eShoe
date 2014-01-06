@@ -252,7 +252,7 @@ public class Issue implements Serializable {
         MEDIUM_LOW,
         LOW;
     }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

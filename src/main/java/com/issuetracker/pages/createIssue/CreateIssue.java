@@ -12,6 +12,7 @@ import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Status;
 import com.issuetracker.pages.IssueDetail;
 import com.issuetracker.pages.PageLayout;
 import java.io.IOException;
@@ -124,10 +125,6 @@ public class CreateIssue extends PageLayout {
         };
 
 
-
-
-
-
         IModel<List<CustomFieldIssueValue>> customFieldsModel = new PropertyModel<List<CustomFieldIssueValue>>(this, "cfIssueValues") {
             @Override
             public List<CustomFieldIssueValue> getObject() {
@@ -165,6 +162,20 @@ public class CreateIssue extends PageLayout {
                         e.printStackTrace();
                     }
                     issue.setFileLocation(file.getAbsolutePath());
+                }
+                if(issueDao.getIssues().isEmpty()) {
+                    if (statusDao.getStatusByName("New")== null){
+                    Status newStatus = new Status("New");
+                    statusDao.insert(newStatus);
+                    }
+                    if (statusDao.getStatusByName("Modified")== null){
+                    Status modifiedStatus = new Status("Modified");
+                    statusDao.insert(modifiedStatus);
+                    }
+                    if (statusDao.getStatusByName("Closed")==null){
+                    Status closedStatus = new Status("Closed");                    
+                    statusDao.insert(closedStatus);
+                    }
                 }
                 issue.setStatus(statusDao.getStatusByName("New"));//TODO ??
                 issue.setProject(selectedProject);

@@ -7,6 +7,7 @@ package com.issuetracker.model;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class Workflow implements Serializable {
     private String name;
     @ManyToMany
     private List<Status> statuses;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Transition> transitions;
 
     public Long getId() {

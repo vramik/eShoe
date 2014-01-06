@@ -4,6 +4,7 @@
  */
 package com.issuetracker.pages.component.project;
 
+import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Project;
 import java.util.List;
@@ -24,6 +25,8 @@ public class ProjectListView<T extends Project> extends Panel {
 
     @Inject
     private ProjectDao projectDao;
+    @Inject
+    private IssueDao issueDao;
     private List<Project> projects;
     private ListView listViewProjects;
 
@@ -34,15 +37,6 @@ public class ProjectListView<T extends Project> extends Panel {
             protected void populateItem(final ListItem<Project> item) {
                 final Project project = item.getModelObject();
                 item.add(new Label("name", project.getName()));
-                // item.add(new Label("owner", )); //owner
-
-                item.add(new Link<Project>("delete", item.getModel()) {
-                    @Override
-                    public void onClick() {
-                        projectDao.remove(project);
-                        projects = projectDao.getProjects();
-                    }
-                });
             }
         };
         add(listViewProjects);

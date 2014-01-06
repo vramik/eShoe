@@ -10,20 +10,16 @@ import com.issuetracker.model.Status;
 import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.AddTransition;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 
@@ -43,25 +39,18 @@ public class StatusListView<T extends Status> extends Panel {
 
     public StatusListView(String id, IModel<List<Status>> statusesModel, final IModel<Workflow> workflowModel) {
         super(id);
-        //boolean isWorkflowPresent = false;
         final boolean workflowPresent;
-        String s;
-//        Logger.getLogger(StatusListView.class.getName()).log(Level.SEVERE, s);
         statuses = statusDao.getStatuses();
         if (statuses == null) {
             statuses = new ArrayList<Status>();
         }
 
         if (workflowModel != null) {
-            Logger.getLogger(StatusListView.class.getName()).log(Level.SEVERE, workflowModel.getObject().getName());
-           // isWorkflowPresent = true;
             workflowPresent = true;
             workflow = workflowModel.getObject();
         } else {
             workflowPresent = false;
         }
-        s = String.valueOf(workflowPresent);
-        Logger.getLogger(StatusListView.class.getName()).log(Level.SEVERE, s);
         listViewStatus = new ListView<Status>("statusList", statusesModel) {
             @Override
             protected void populateItem(final ListItem<Status> item) {

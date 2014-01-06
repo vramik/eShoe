@@ -25,32 +25,6 @@ public class TrackerAuthSession extends AuthenticatedWebSession {
         super.signOut();
     }
 
-//    @Override
-//    public boolean authenticate( String name, String pass ) {
-//        if( this.user != null )
-//            return true;
-//        return authenticate( new User( name, pass ) );
-//    }
-//
-//    public boolean authenticate( User user_) {
-//        if( this.user != null )  return true;
-//
-//        try {
-//            this.user = userDao.loadUserIfPasswordMatches( user_ );
-//            return true;
-//        } catch (NoResultException ex){
-//            return false;
-//        }
-//    }
-//
-//    @Override
-//    public Roles getRoles() {
-//        if( ! isSignedIn() )  return null;
-//        
-//        // If the user is signed in, they have these roles
-//        //return new Roles( Roles.ADMIN ); // TODO
-//        return new Roles( (String[]) getUser().getGroupsNames().toArray());
-//    }
     public TrackerSettings getSettings() {
         return settings;
     }
@@ -66,19 +40,7 @@ public class TrackerAuthSession extends AuthenticatedWebSession {
         this.user = user;
     }
 
-//    public boolean isUserInGroup_Prefix(String groupPrefix) {
-//        if (getUser() == null) {
-//            return false;
-//        }
-//        return getUser().isInGroups_Prefix(groupPrefix);
-//    }
-//
-//    public boolean isUserInGroup_Pattern(String groupPattern) {
-//        if (getUser() == null) {
-//            return false;
-//        }
-//        return getUser().isInGroups_Pattern(groupPattern);
-//    }
+
     @Override
     public boolean authenticate(String name, String pass) {
         if (this.user != null) {
@@ -102,6 +64,6 @@ public class TrackerAuthSession extends AuthenticatedWebSession {
 
     @Override
     public Roles getRoles() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
-}// class
+}

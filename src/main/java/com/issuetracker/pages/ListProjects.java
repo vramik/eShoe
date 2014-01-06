@@ -46,15 +46,6 @@ public class ListProjects extends PageLayout {
                 };
                 projectDetailLink.add(new Label("name", project.getName()));
                 item.add(projectDetailLink);
-//                item.add(new Link<Project>("showProject", item.getModel()) {
-//                    @Override
-//                    public void onClick() {
-//                        PageParameters pageParameters = new PageParameters();
-//                        pageParameters.add("project", project.getId());
-//                        setResponsePage(ProjectDetail.class, pageParameters);
-//                    }
-//                }.add(new Label("name", project.getName())));
-//                item.add(new Label("name", project.getName()));
                 User projectOwner =  project.getOwner();
                 String owner;
                 if(projectOwner!=null) {
@@ -64,14 +55,6 @@ public class ListProjects extends PageLayout {
                 }
                 item.add(new Label("projectLead", owner));
 
-// ADMINS CAN SEE
-                item.add(new Link<Project>("delete", item.getModel()) {
-                    @Override
-                    public void onClick() {
-                        projectDao.remove(project);
-                        projects = projectDao.getProjects();
-                    }
-                });
             }
         };
         add(listViewProjects);
