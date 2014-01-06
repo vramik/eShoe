@@ -177,7 +177,7 @@ public class CreateIssue extends PageLayout {
                     statusDao.insert(closedStatus);
                     }
                 }
-                issue.setStatus(statusDao.getStatusByName("New"));//TODO ??
+                issue.setStatus(statusDao.getStatusByName("New"));
                 issue.setProject(selectedProject);
                 issue.setCustomFields(cfIssueValues);
                 issueDao.addIssue(issue);

@@ -77,7 +77,6 @@ public class CreateProject extends PageLayout {
             protected void onSubmit() {
                 project.setVersions(projectVersionList);
                 project.setComponents(componentList);
-                //TODO set owner
 
                 projectDao.insertProject(project);
                 project = new Project();
