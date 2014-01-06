@@ -33,7 +33,6 @@ public class CommentListView extends Panel {
 
     public CommentListView(String id, final IModel<Issue> issueModel) {
         super(id);
-        Logger.getLogger(CommentListView.class.getName()).log(Level.SEVERE, issueModel.getObject().getName());
         issue = issueModel.getObject();
         try {
             commentList = issue.getComments();
