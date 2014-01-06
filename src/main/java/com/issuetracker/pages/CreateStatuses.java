@@ -13,6 +13,8 @@ import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.component.status.StatusListView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -28,43 +30,51 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  *
  * @author mgottval
  */
-public class CreateStatuses extends PageLayout{
-    
-    private Workflow workflow;
+public class CreateStatuses extends PageLayout {
 
+    private Workflow workflow;
     @Inject
     private StatusDao statusDao;
     private Status status;
     private List<Status> statuses;
-    
     private Form<Status> insertStatusForm;
-    
-    
+    private FeedbackPanel feedbackPanel;
+    private RequiredTextField nameField;
+
     public CreateStatuses() {
-        
+
         status = new Status();
-        statuses = statusDao.getStatuses();        
-        add(new FeedbackPanel("feedbackPanel"));
+        statuses = statusDao.getStatuses();
+        feedbackPanel = new FeedbackPanel("feedbackPanel");
+        add(feedbackPanel);
         insertStatusForm = new Form<Status>("insertStatusForm") {
             @Override
             protected void onSubmit() {
-                statusDao.insert(status); 
-                statuses = statusDao.getStatuses();
+                if (statusDao.getStatusByName(status.getName()) != null) {
+                    nameField.clearInput();
+
+                } else {
+                    statusDao.insert(status);
+                    statuses = statusDao.getStatuses();
+                }
                 status = new Status();
-                
-            }         
+
+
+            }
         };
+        nameField = new RequiredTextField("statusName", new PropertyModel<String>(this, "status.name"));
         insertStatusForm.add(new RequiredTextField("statusName", new PropertyModel<String>(this, "status.name")));
-        add(insertStatusForm); 
-        
-        
+        add(insertStatusForm);
+
+
+
         IModel<List<Status>> statusesModel = new CompoundPropertyModel<List<Status>>(statuses) {
             @Override
             public List<Status> getObject() {
-                return statusDao.getStatuses(); 
-            }            
-         };
-        
+                return statusDao.getStatuses();
+            }
+        };
+
         add(new StatusListView("statusListView", statusesModel, null));
     }
 
@@ -74,6 +84,5 @@ public class CreateStatuses extends PageLayout{
 
     public void setStatus(Status status) {
         this.status = status;
-    } 
-    
+    }
 }
