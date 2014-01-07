@@ -111,9 +111,9 @@ public class SetIssueStateForm extends Panel {
 
         updateIssueForm = new Form<Issue>("updateIssueForm") {
             @Override
-            protected void onSubmit() {  
-                if(issueRelatesToId.matches("[0-9]+")){
-                if ((issueRelatesToId != null && !issueRelatesToId.equals("")) && issueDao.getIssueById(Long.valueOf(issueRelatesToId))!=null ) {
+            protected void onSubmit() {
+                
+                if (issueRelatesToId != null && !issueRelatesToId.equals("") && issueRelatesToId.matches("[0-9]+") && issueDao.getIssueById(Long.valueOf(issueRelatesToId))!=null) {
                     issueRelatesTo = issueDao.getIssueById(Long.valueOf(issueRelatesToId));
 
                     issuesRelationship.setIsRelatedIssue(issue);
@@ -123,7 +123,6 @@ public class SetIssueStateForm extends Panel {
                     issueRelatesToId = "";
                     issuesRelationship = new IssuesRelationship();
                     issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
-                }
                 }
                 issueDao.updateIssue(issue);
 
