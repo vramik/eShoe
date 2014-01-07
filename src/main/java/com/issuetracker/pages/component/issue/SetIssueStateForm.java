@@ -123,10 +123,11 @@ public class SetIssueStateForm extends Panel {
                     issueRelatesToId = "";
                     issuesRelationship = new IssuesRelationship();
                     issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
-                    issueDao.updateIssue(issue);
                 }
                 }
-             
+                issueDao.updateIssue(issue);
+
+
             }
         };
         updateIssueForm.add(priorityDropDown);
