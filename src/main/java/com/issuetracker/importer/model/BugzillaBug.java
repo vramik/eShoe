@@ -14,6 +14,7 @@ public class BugzillaBug {
 
     private String creator;
     private String summary;
+    private String component;
 
     public String getCreator() {
         return creator;
@@ -31,11 +32,20 @@ public class BugzillaBug {
         this.summary = summary;
     }
 
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
+    }
+
     @Override
     public String toString() {
         return "BugzillaBug{" +
                 "creator='" + creator + '\'' +
                 ", summary='" + summary + '\'' +
+                ", component='" + component + '\'' +
                 '}';
     }
 }

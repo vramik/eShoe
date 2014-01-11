@@ -1,13 +1,10 @@
 package com.issuetracker.importer;
 
 
+import com.issuetracker.importer.mapper.Mapper;
 import com.issuetracker.importer.parser.Parser;
 import com.issuetracker.importer.reader.Reader;
-import com.issuetracker.importer.parser.JsonParser;
-import com.issuetracker.importer.reader.RestReader;
 import com.issuetracker.importer.model.BugzillaBug;
-
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,13 +23,22 @@ public class Importer {
     }
 
     private void run() {
-        reader = new RestReader();
+        /*reader = new RestReader();
         parser = new JsonParser();
 
         String readResult = reader.read();
         List<BugzillaBug> result = parser.parse(readResult);
 
-        System.out.println(result);
+        System.out.println(result);*/
+
+        BugzillaBug bug = new BugzillaBug();
+        bug.setSummary("Summary value");
+        bug.setComponent("Component value");
+        bug.setCreator("Creator value");
+
+        Mapper mapper = new Mapper();
+
+        mapper.map(bug);
     }
 
 }

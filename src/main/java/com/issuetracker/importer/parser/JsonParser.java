@@ -18,7 +18,6 @@ import java.util.List;
  */
 public class JsonParser implements Parser {
 
-
     public List<BugzillaBug> parse(String input) {
         JsonFactory factory = new JsonFactory();
         ObjectMapper mapper = new ObjectMapper(factory);
@@ -35,6 +34,4 @@ public class JsonParser implements Parser {
         List<BugzillaBug> bugs = output.getBugs();
         return bugs;
     }
-
-
 }
