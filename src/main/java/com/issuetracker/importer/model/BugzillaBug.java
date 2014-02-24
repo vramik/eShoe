@@ -1,6 +1,9 @@
 package com.issuetracker.importer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,8 +16,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class BugzillaBug {
 
     private String creator;
+    @JsonProperty("assigned_to")
+    private String owner;
+    @JsonProperty("cf_type")
+    private String issueType;
     private String summary;
-    private String component;
+    private List<String> component;
+    private List<String> version;
 
     public String getCreator() {
         return creator;
@@ -32,12 +40,36 @@ public class BugzillaBug {
         this.summary = summary;
     }
 
-    public String getComponent() {
+    public List<String> getComponent() {
         return component;
     }
 
-    public void setComponent(String component) {
+    public void setComponent(List<String> component) {
         this.component = component;
+    }
+
+    public String getIssueType() {
+        return issueType;
+    }
+
+    public void setIssueType(String issueType) {
+        this.issueType = issueType;
+    }
+
+    public List<String> getVersion() {
+        return version;
+    }
+
+    public void setVersion(List<String> version) {
+        this.version = version;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     @Override

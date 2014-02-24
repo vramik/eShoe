@@ -44,6 +44,7 @@ public class RestReader implements Reader {
         Invocation invocation = resourceTarget.request("application/json").buildGet();
 
         String response = invocation.invoke(String.class);
+        System.out.println(response);
 
         return response;
     }

@@ -1,10 +1,21 @@
 package com.issuetracker.importer;
 
+<<<<<<< HEAD:src/main/java/com/issuetracker/importer/Importer.java
 
 import com.issuetracker.importer.mapper.Mapper;
 import com.issuetracker.importer.parser.Parser;
 import com.issuetracker.importer.reader.Reader;
 import com.issuetracker.importer.model.BugzillaBug;
+=======
+import com.issuetracker.importer.importer.Importer;
+import com.issuetracker.importer.importer.ProjectVersionImporter;
+import com.issuetracker.importer.parser.Parser;
+import com.issuetracker.importer.reader.Reader;
+import com.issuetracker.importer.model.BugzillaBug;
+
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> fdc9f10... Importer structure evolved:src/main/java/com/issuetracker/importer/ImporterMain.java
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,13 +24,13 @@ import com.issuetracker.importer.model.BugzillaBug;
  * Time: 10:42
  * To change this template use File | Settings | File Templates.
  */
-public class Importer {
+public class ImporterMain {
 
     private Reader reader;
     private Parser parser;
 
     public static void main(String[] args) {
-        new Importer().run();
+        new ImporterMain().run();
     }
 
     private void run() {
@@ -31,14 +42,21 @@ public class Importer {
 
         System.out.println(result);*/
 
+
         BugzillaBug bug = new BugzillaBug();
         bug.setSummary("Summary value");
-        bug.setComponent("Component value");
+
+        List<String> versionList = new ArrayList<String>();
+        versionList.add("6.2.0");
+        bug.setVersion(versionList);
+
+        //bug.setComponent("Component value");
         bug.setCreator("Creator value");
 
-        Mapper mapper = new Mapper();
+        Importer importer = new ProjectVersionImporter();
 
-        mapper.map(bug);
+
+        importer.process(bug);
     }
 
 }

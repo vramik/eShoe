@@ -1,4 +1,4 @@
-package com.issuetracker.importer.mapper;
+package com.issuetracker.importer.importer;
 
 import com.issuetracker.importer.model.BugzillaBug;
 
@@ -9,7 +9,7 @@ import com.issuetracker.importer.model.BugzillaBug;
  * Time: 15:13
  * To change this template use File | Settings | File Templates.
  */
-public interface Mapper<T> {
+public interface Importer<T> {
 
-    public T map(BugzillaBug bug);
+    public T process(BugzillaBug bug);
 }

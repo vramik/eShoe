@@ -1,4 +1,4 @@
-package com.issuetracker.importer.mapper;
+package com.issuetracker.importer.importer;
 
 import com.issuetracker.importer.model.BugzillaBug;
 import com.issuetracker.model.User;
@@ -10,11 +10,13 @@ import com.issuetracker.model.User;
  * Time: 13:03
  * To change this template use File | Settings | File Templates.
  */
-public class UserMapper implements Mapper<User> {
+public class CreatorImporter implements Importer<User> {
 
     @Override
-    public User map(BugzillaBug bug) {
+    public User process(BugzillaBug bug) {
         User user = new User();
-        user.set
+        user.setName(bug.getCreator());
+
+        return user;
     }
 }
