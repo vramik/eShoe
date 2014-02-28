@@ -19,9 +19,9 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class WorkflowDaoBean implements WorkflowDao {
 
-    @PersistenceContext(unitName = "issuetrackerPU2")
+    @PersistenceContext
     private EntityManager em;
-     private CriteriaBuilder qb;
+    private CriteriaBuilder qb;
      
     @Override
     public void insertWorkflow(Workflow workflow) {

@@ -19,7 +19,7 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class IssueTypeDaoBean implements IssueTypeDao {
 
-    @PersistenceContext(unitName = "issuetrackerPU2")
+    @PersistenceContext
     private EntityManager em;
      private CriteriaBuilder qb;
      

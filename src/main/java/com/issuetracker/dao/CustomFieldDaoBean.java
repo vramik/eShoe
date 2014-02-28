@@ -18,7 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Stateless
 public class CustomFieldDaoBean implements CustomFieldDao {
 
-    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
+    @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
 
