@@ -21,6 +21,13 @@ public class BugzillaBug {
     @JsonProperty("cf_type")
     private String issueType;
     private String summary;
+<<<<<<< HEAD
+=======
+
+    @JsonProperty("product")
+    private String project;
+
+>>>>>>> 8d73390... Importer functionality improved
     private List<String> component;
     private List<String> version;
 
@@ -66,6 +73,14 @@ public class BugzillaBug {
 
     public String getOwner() {
         return owner;
+    }
+
+    public String getProject() {
+        return project;
+    }
+
+    public void setProject(String project) {
+        this.project = project;
     }
 
     public void setOwner(String owner) {
