@@ -1,5 +1,10 @@
 package com.issuetracker.model;
 
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import javax.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -21,6 +26,7 @@ public class Issue implements Serializable {
     private Long issueId;
     private String name;
     private String summary;
+    @Lob
     private String description;
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;

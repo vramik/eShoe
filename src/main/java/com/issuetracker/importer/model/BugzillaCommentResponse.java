@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,17 +16,22 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BugzillaResponse {
+public class BugzillaCommentResponse {
 
-    public BugzillaResponse() {}
+    public BugzillaCommentResponse() {}
 
     private String id;
 
     @JsonProperty("result")
     private BugzillaResponseResult responseResult;
 
-    public List<BugzillaBug> getBugs() {
-        return Collections.unmodifiableList(responseResult.getBugs());
+    public Map<String, List<BugzillaComment>> getComments() {
+        Map<String, List<BugzillaComment>> result = new HashMap<String, List<BugzillaComment>>();
+        for(String key: responseResult.getBugs().keySet()) {
+            result.put(key, responseResult.getBugs().get(key).get("comments"));
+        }
+
+        return result;
     }
 
     public void setResponseResult(BugzillaResponseResult responseResult) {
@@ -41,7 +48,7 @@ public class BugzillaResponse {
 
     @Override
     public String toString() {
-        return "BugzillaResponse{" +
+        return "BugzillaBugResponse{" +
                 "id='" + id + '\'' +
                 ", bugzillaResponseResult=" + responseResult +
                 '}';
@@ -50,13 +57,13 @@ public class BugzillaResponse {
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class BugzillaResponseResult {
 
-        private List<BugzillaBug> bugs;
+        private Map<String, Map<String, List<BugzillaComment>>> bugs;
 
-        public List<BugzillaBug> getBugs() {
+        public Map<String, Map<String, List<BugzillaComment>>> getBugs() {
             return bugs;
         }
 
-        public void setBugs(List<BugzillaBug> bugs) {
+        public void setBugs(Map<String, Map<String, List<BugzillaComment>>> bugs) {
             this.bugs = bugs;
         }
 

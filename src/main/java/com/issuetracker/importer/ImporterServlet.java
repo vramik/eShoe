@@ -1,15 +1,16 @@
 package com.issuetracker.importer;
 
 import com.issuetracker.dao.api.*;
+import com.issuetracker.importer.loader.IdFileLoader;
+import com.issuetracker.importer.model.BugzillaBugResponse;
+import com.issuetracker.importer.model.BugzillaComment;
+import com.issuetracker.importer.model.BugzillaCommentResponse;
+import com.issuetracker.importer.parser.JsonParser;
 import com.issuetracker.importer.parser.Parser;
-import com.issuetracker.importer.reader.Reader;
 import com.issuetracker.importer.model.BugzillaBug;
-import com.issuetracker.model.Component;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssueType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.User;
+import com.issuetracker.importer.reader.RestReader;
+import com.issuetracker.model.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.servlet.annotation.WebServlet;
@@ -19,9 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,7 +34,10 @@ import java.util.Set;
 @WebServlet("/importer")
 public class ImporterServlet extends HttpServlet {
 
-    private Reader reader;
+    private static final String BUGZILLA_URL = "https://bugzilla.redhat.com/";
+    private static final String IDS_FILENAME = "importer-bugzilla-ids.txt";
+
+    private RestReader reader;
     private Parser parser;
 
     @Inject
@@ -48,12 +52,12 @@ public class ImporterServlet extends HttpServlet {
     private ProjectVersionDao projectVersionDao;
     @Inject
     private UserDao userDao;
+    @Inject
+    private StatusDao statusDao;
 
-    private Set<Component> componentSet = new HashSet<Component>();
-    private Set<Project> projectSet = new HashSet<Project>();
-    private Set<IssueType> issueTypeSet = new HashSet<IssueType>();
-    private Set<ProjectVersion> projectVersionSet = new HashSet<ProjectVersion>();
-
+    private List<IssueType> issueTypeList = new ArrayList<IssueType>();
+    private List<Component> componentList = new ArrayList<Component>();
+    private List<ProjectVersion> projectVersionList = new ArrayList<ProjectVersion>();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -69,87 +73,102 @@ public class ImporterServlet extends HttpServlet {
 
     private void run() {
         System.out.println("Import running");
-        /*reader = new RestReader();
+        reader = new RestReader();
         parser = new JsonParser();
 
-        String readResult = reader.read();
-        List<BugzillaBug> result = parser.parse(readResult);
+        IdFileLoader idLoader = new IdFileLoader();
+        List<String> ids = idLoader.loadIdsFromFile(IDS_FILENAME);
+        String joinedIds = StringUtils.join(ids, ",");
 
-        System.out.println(result);*/
+        String bugReadResult = reader.read(BUGZILLA_URL + "jsonrpc.cgi?method=Bug.get&params=[ { \"ids\": [" + joinedIds + "] } ]");
+        String commentReadResult = reader.read(BUGZILLA_URL + "jsonrpc.cgi?method=Bug.comments&params=[ { \"ids\": [" + joinedIds + "] } ]");
 
-        BugzillaBug bug = prepareTestBug();
+        BugzillaBugResponse bugResponse = parser.parse(bugReadResult, BugzillaBugResponse.class);
+        BugzillaCommentResponse response = parser.parse(commentReadResult, BugzillaCommentResponse.class);
 
-        Component component = mapComponent(bug);
-        List<Component> components = new ArrayList<Component>();
-        components.add(component);
-        componentDao.insertComponent(component);
+        List<BugzillaBug> bugs = bugResponse.getBugs();
+        Map<String, List<BugzillaComment>> comments = response.getComments();
 
-        ProjectVersion projectVersion = mapProjectVersion(bug);
-        List<ProjectVersion> projectVersions = new ArrayList<ProjectVersion>();
-        projectVersions.add(projectVersion);
-        projectVersionDao.insertProjectVersion(projectVersion);
+        for(BugzillaBug bug: bugs) {
+            Project project = mapProject(bug);
+            List<Component> components = project.getComponents();
+            if(components == null) {
+                components = new ArrayList<Component>();
+            }
+            
+            Component component = mapComponent(bug);
+            if(!components.contains(component)) {
+                components.add(component);
+            }            
+                        
+            List<ProjectVersion> projectVersions = project.getVersions();
+            if(projectVersions == null) {
+                projectVersions = new ArrayList<ProjectVersion>();
+            }
 
-        Project project = mapProject(bug);
-        project.setComponents(components);
-        project.setVersions(projectVersions);
-        projectDao.insertProject(project);
+            ProjectVersion projectVersion = mapProjectVersion(bug);
+            if(!projectVersions.contains(projectVersion)) {
+                projectVersions.add(projectVersion);
+            }
 
-        IssueType issueType = mapIssueType(bug);
-        issueTypeDao.insertIssueType(issueType);
+            project.setComponents(components);
+            project.setVersions(projectVersions);
 
-        User creator = mapCreator(bug);
-        User owner = mapOwner(bug);
-        Issue issue = mapIssue(bug);
+            IssueType issueType = mapIssueType(bug);
 
-        List<Issue> createdIssues = new ArrayList<Issue>();
-        createdIssues.add(issue);
-        creator.setCreated(createdIssues);
+            User creator = mapCreator(bug);
+            User owner = mapOwner(bug);
 
-        List<Issue> ownedIssues = new ArrayList<Issue>();
-        ownedIssues.add(issue);
-        owner.setOwned(ownedIssues);
+            Issue.Priority priority = mapPriority(bug);
 
-        issue.setProject(project);
-        issue.setCreator(creator);
-        issue.setOwner(owner);
-        issue.setIssueType(issueType);
-        issue.setComponent(component);
-        issue.setProjectVersion(projectVersion);
+            Issue issue = mapIssue(bug, comments);
 
-        userDao.addUser(creator);
-        userDao.addUser(owner);
-        issueDao.addIssue(issue);
+            List<Issue> createdIssues = new ArrayList<Issue>();
+            createdIssues.add(issue);
+            creator.setCreated(createdIssues);
+
+            List<Issue> ownedIssues = new ArrayList<Issue>();
+            ownedIssues.add(issue);
+            owner.setOwned(ownedIssues);
+
+            Status status = mapStatus(bug);
+
+            issue.setProject(project);
+            issue.setCreator(creator);
+            issue.setOwner(owner);
+            issue.setPriority(priority);
+            issue.setIssueType(issueType);
+            issue.setComponent(component);
+            issue.setStatus(status);
+            issue.setProjectVersion(projectVersion);
+
+            issueDao.updateIssue(issue);
+        }
     }
 
-    private BugzillaBug prepareTestBug() {
-        BugzillaBug bug = new BugzillaBug();
-        bug.setName("Name value");
-        bug.setSummary("Summary value");
-
-        List<String> versionList = new ArrayList<String>();
-        versionList.add("Version value");
-        bug.setVersion(versionList);
-
-        bug.setProject("Project value");
-        bug.setCreator("Creator value");
-        bug.setOwner("Owner value");
-        bug.setIssueType("Issue type value");
-
-        List<String> componentList = new ArrayList<String>();
-        componentList.add("Component value");
-        bug.setComponent(componentList);
-
-        return bug;
+    private Issue.Priority mapPriority(BugzillaBug bug) {
+        switch(bug.getPriority().toLowerCase()) {
+            case "high": return Issue.Priority.HIGH;
+            case "medium": return Issue.Priority.MEDIUM;
+            case "low": return Issue.Priority.LOW;
+            default: return Issue.Priority.HIGH;
+        }
     }
 
     private Component mapComponent(BugzillaBug bug) {
+        componentList = componentDao.getComponents();
+
+        if(componentList != null) {
+            for(Component component: componentList) {
+                if(component.getName().equals(bug.getComponent().get(0))) {
+                    return component;
+                }
+            }
+        }
+
         Component component = new Component();
         component.setName(bug.getComponent().get(0));
-
-        if(!componentSet.contains(component)) {
-            //componentDao.insertComponent(component);
-            componentSet.add(component);
-        }
+        componentDao.insertComponent(component);
 
         return component;
     }
@@ -160,8 +179,7 @@ public class ImporterServlet extends HttpServlet {
         if(user == null) {
             user = new User();
             user.setName(bug.getCreator());
-
-            //userDao.addUser(user);
+            userDao.addUser(user);
         }
 
         return user;
@@ -173,55 +191,93 @@ public class ImporterServlet extends HttpServlet {
         if(user == null) {
             user = new User();
             user.setName(bug.getOwner());
-
-            //userDao.addUser(user);
+            userDao.addUser(user);
         }
 
         return user;
     }
 
-    private Issue mapIssue(BugzillaBug bug) {
+    private Issue mapIssue(BugzillaBug bug, Map<String, List<BugzillaComment>> comments) {
         Issue issue = new Issue();
         issue.setSummary(bug.getSummary());
-        issue.setName(bug.getName());
-        issue.setDescription("Fixed description value, CHANGE THIS!");
+        if(bug.getName() != null && !bug.getName().isEmpty()) {
+            issue.setName(bug.getName().get(0));
+        }
+
+        if(issue.getName() == null) {
+            issue.setName(bug.getSummary());
+        }
+
+        issue.setDescription(comments.get(bug.getId()).remove(0).getText());
+
+        List<Comment> issueComments = new ArrayList<Comment>();
+        for(BugzillaComment bugzillaComment: comments.get(bug.getId())) {
+            Comment comment = new Comment();
+            comment.setContent(bugzillaComment.getText());
+            issueComments.add(comment);
+        }
+
+        issue.setComments(issueComments);
 
         return issue;
     }
 
     private IssueType mapIssueType(BugzillaBug bug) {
+        issueTypeList = issueTypeDao.getIssueTypes();
+
+        for(IssueType issueType: issueTypeList) {
+            if(issueType.getName().equals(bug.getIssueType())) {
+                return issueType;
+            }
+        }
+
         IssueType issueType = new IssueType();
         issueType.setName(bug.getIssueType());
-
-        if(!issueTypeSet.contains(issueType)) {
-            //issueTypeDao.insertIssueType(issueType);
-            issueTypeSet.add(issueType);
-        }
+        issueTypeDao.insertIssueType(issueType);
 
         return issueType;
     }
 
     private Project mapProject(BugzillaBug bug) {
-        Project project = new Project();
-        project.setName(bug.getProject());
+        Project project = projectDao.getProjectByName(bug.getProject());
 
-        if(!projectSet.contains(project)) {
-            //projectDao.insertProject(project);
-            projectSet.add(project);
+        if(project == null) {
+            project = new Project();
+            project.setName(bug.getProject());
         }
 
         return project;
     }
 
     private ProjectVersion mapProjectVersion(BugzillaBug bug) {
-        ProjectVersion version = new ProjectVersion();
-        version.setName(bug.getVersion().get(0));
-
-        if(!projectVersionSet.contains(version)) {
-            //projectVersionDao.insertProjectVersion(version);
-            projectVersionSet.add(version);
+        projectVersionList = projectVersionDao.getProjectVersions();
+        
+        if(projectVersionList != null) {
+            for(ProjectVersion projectVersion: projectVersionList) {
+                if(projectVersion.getName().equals(bug.getVersion().get(0))) {
+                    return projectVersion;
+                }
+            }
         }
 
-        return version;
+        ProjectVersion projectVersion = new ProjectVersion();
+        projectVersion.setName(bug.getVersion().get(0));
+        projectVersionDao.insertProjectVersion(projectVersion);
+
+        return projectVersion;
     }
+    
+    private Status mapStatus(BugzillaBug bug) {
+        Status status = statusDao.getStatusByName(bug.getStatus());
+
+        if(status == null) {
+            status = new Status();
+            status.setName(bug.getStatus());
+            statusDao.insert(status);
+        }
+
+        return status;
+    }
+    
+    
 }

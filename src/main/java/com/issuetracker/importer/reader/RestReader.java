@@ -1,7 +1,5 @@
 package com.issuetracker.importer.reader;
 
-import com.issuetracker.importer.reader.Reader;
-
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation;
@@ -18,12 +16,12 @@ import java.net.URL;
  * Time: 12:22
  * To change this template use File | Settings | File Templates.
  */
-public class RestReader implements Reader {
+public class RestReader {
 
-    public String read() {
+    public String read(String requestUrl) {
         Client client = ClientBuilder.newClient();
         //TODO: handle more bugs
-        String myURL = "https://bugzilla.redhat.com/jsonrpc.cgi?method=Bug.get&params=[ { \"ids\": [1003675,1012321] } ]";
+        String myURL = requestUrl;
         URL url = null;
         try {
             url = new URL(myURL);
@@ -44,7 +42,6 @@ public class RestReader implements Reader {
         Invocation invocation = resourceTarget.request("application/json").buildGet();
 
         String response = invocation.invoke(String.class);
-        System.out.println(response);
 
         return response;
     }

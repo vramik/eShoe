@@ -2,12 +2,11 @@ package com.issuetracker.importer.parser;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.issuetracker.importer.parser.Parser;
-import com.issuetracker.importer.model.BugzillaBug;
-import com.issuetracker.importer.model.BugzillaResponse;
+import com.issuetracker.importer.model.BugzillaBugResponse;
+import com.issuetracker.importer.model.BugzillaComment;
+import com.issuetracker.importer.model.BugzillaCommentResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,20 +17,19 @@ import java.util.List;
  */
 public class JsonParser implements Parser {
 
-    public List<BugzillaBug> parse(String input) {
+    public <T> T parse(String input, Class<T> clazz) {
         JsonFactory factory = new JsonFactory();
         ObjectMapper mapper = new ObjectMapper(factory);
         
-        BugzillaResponse output = null;
-        
+        T output = null;
+
         try {            
-            output = mapper.readValue(input, BugzillaResponse.class);
+            output = mapper.<T>readValue(input, clazz);
         } catch (IOException e) {
             //TODO: change this
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        List<BugzillaBug> bugs = output.getBugs();
-        return bugs;
+        return output;
     }
 }

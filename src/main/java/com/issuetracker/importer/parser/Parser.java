@@ -1,8 +1,7 @@
 package com.issuetracker.importer.parser;
 
-import com.issuetracker.importer.model.BugzillaBug;
-
-import java.util.List;
+import com.issuetracker.importer.model.BugzillaBugResponse;
+import com.issuetracker.importer.model.BugzillaCommentResponse;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,5 +12,5 @@ import java.util.List;
  */
 public interface Parser {
 
-    public List<BugzillaBug> parse(String input);
+    public <T> T parse(String input, Class<T> clazz);
 }

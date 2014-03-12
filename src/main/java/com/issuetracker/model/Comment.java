@@ -14,10 +14,10 @@ public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Lob
     private String content;
     private Date created;
     private Date updated;
-    
 
     public Long getId() {
         return id;
