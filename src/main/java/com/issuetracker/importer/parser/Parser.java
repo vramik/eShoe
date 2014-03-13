@@ -1,16 +1,19 @@
 package com.issuetracker.importer.parser;
 
-import com.issuetracker.importer.model.BugzillaBugResponse;
-import com.issuetracker.importer.model.BugzillaCommentResponse;
-
 /**
- * Created with IntelliJ IDEA.
- * User: Jirka
- * Date: 11.12.13
- * Time: 12:25
- * To change this template use File | Settings | File Templates.
+ * Responsible for parsing string input and returning parsed entity object.
+ *
+ * @author Jiri Holusa
  */
 public interface Parser {
 
+    /**
+     * Parses input into entity of class "clazz".
+     *
+     * @param input string to be parsed
+     * @param clazz output class of returned entity
+     * @param <T> type of the entity
+     * @return parsed entity of gived class
+     */
     public <T> T parse(String input, Class<T> clazz);
 }

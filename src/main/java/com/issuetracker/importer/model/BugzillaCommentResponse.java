@@ -3,17 +3,14 @@ package com.issuetracker.importer.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Jirka
- * Date: 11.12.13
- * Time: 13:27
- * To change this template use File | Settings | File Templates.
+ * This entity represents parsed Bugzilla comment response.
+ *
+ * @author Jiri Holusa
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BugzillaCommentResponse {

@@ -6,11 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Jirka
- * Date: 11.12.13
- * Time: 13:35
- * To change this template use File | Settings | File Templates.
+ * This entity represents parsed Bugzilla bug.
+ *
+ * @author Jiri Holusa
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BugzillaBug {

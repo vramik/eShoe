@@ -7,11 +7,9 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Jirka
- * Date: 11.12.13
- * Time: 13:27
- * To change this template use File | Settings | File Templates.
+ * This entity represents parsed response from Bugzilla JSON RPC.
+ *
+ * @author Jiri Holusa
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BugzillaBugResponse {

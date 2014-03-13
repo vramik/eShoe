@@ -2,12 +2,12 @@ package com.issuetracker.importer;
 
 import com.issuetracker.dao.api.*;
 import com.issuetracker.importer.loader.IdFileLoader;
+import com.issuetracker.importer.model.BugzillaBug;
 import com.issuetracker.importer.model.BugzillaBugResponse;
 import com.issuetracker.importer.model.BugzillaComment;
 import com.issuetracker.importer.model.BugzillaCommentResponse;
 import com.issuetracker.importer.parser.JsonParser;
 import com.issuetracker.importer.parser.Parser;
-import com.issuetracker.importer.model.BugzillaBug;
 import com.issuetracker.importer.reader.RestReader;
 import com.issuetracker.model.*;
 import org.apache.commons.lang3.StringUtils;
@@ -20,16 +20,16 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Jirka
- * Date: 4.12.13
- * Time: 10:42
- * To change this template use File | Settings | File Templates.
+ * Main importing servlet accessible from /importer URL. Reads ID's of bugs to
+ * be imported from file "importer-bugzilla-ids.txt", reads all information
+ * about them from Red Hat Bugzilla. Them maps the Bugzilla bugs into our
+ * data model and saves them into database and index search.
+ *
+ * @author
  */
 @WebServlet("/importer")
 public class ImporterServlet extends HttpServlet {
@@ -208,6 +208,7 @@ public class ImporterServlet extends HttpServlet {
             issue.setName(bug.getSummary());
         }
 
+        //first comment of Bugzilla's bug is the description of the bug
         issue.setDescription(comments.get(bug.getId()).remove(0).getText());
 
         List<Comment> issueComments = new ArrayList<Comment>();

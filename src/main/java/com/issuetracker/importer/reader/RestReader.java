@@ -10,32 +10,34 @@ import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Jirka
- * Date: 11.12.13
- * Time: 12:22
- * To change this template use File | Settings | File Templates.
+ * REST calls handler.
+ *
+ * @author Jiri Holusa
  */
 public class RestReader {
 
+    /**
+     * Accesses provided URL and returns its response.
+     *
+     * @param requestUrl
+     * @return JSON response
+     */
     public String read(String requestUrl) {
         Client client = ClientBuilder.newClient();
-        //TODO: handle more bugs
+
         String myURL = requestUrl;
         URL url = null;
         try {
             url = new URL(myURL);
         } catch (MalformedURLException e) {
-            //TODO: change this
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new IllegalArgumentException("Invalid URL address provided.", e);
         }
 
-        URI uri = null;
+        URI uri;
         try {
             uri = new URI(url.getProtocol(), url.getHost(), url.getPath(), url.getQuery(), null);
         } catch (URISyntaxException e) {
-            //TODO: change this
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            throw new IllegalStateException("Error occurred during processing the URL.", e);
         }
 
         WebTarget resourceTarget = client.target(uri.toString());
