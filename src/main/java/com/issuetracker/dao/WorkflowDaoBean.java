@@ -24,7 +24,7 @@ public class WorkflowDaoBean implements WorkflowDao {
     private CriteriaBuilder qb;
      
     @Override
-    public void insertWorkflow(Workflow workflow) {
+    public void insert(Workflow workflow) {
         em.persist(workflow);
     }
 

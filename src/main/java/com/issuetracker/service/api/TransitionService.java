@@ -1,14 +1,15 @@
-package com.issuetracker.dao.api;
+package com.issuetracker.service.api;
 
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
+
 import java.util.List;
 
 /**
  *
  * @author mgottval
  */
-public interface TransitionDao {
+public interface TransitionService {
     
     void insert(Transition transition);
     

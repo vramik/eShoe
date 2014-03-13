@@ -24,7 +24,7 @@ public class IssueTypeDaoBean implements IssueTypeDao {
      private CriteriaBuilder qb;
      
     @Override
-    public void insertIssueType(IssueType issueType) {
+    public void insert(IssueType issueType) {
         em.persist(issueType);
     }
 

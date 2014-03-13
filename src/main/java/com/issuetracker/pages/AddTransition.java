@@ -69,7 +69,7 @@ public class AddTransition extends PageLayout {
             protected void onSubmit() {
                 transition.setFromStatus(status);
                 transition.setWorkflow(workflow);
-                transitionDao.insertTransition(transition);
+                transitionDao.insert(transition);
                 transition = new Transition();
                 PageParameters pageParameters = new PageParameters();
                 pageParameters.add("workflow", workflow.getId());

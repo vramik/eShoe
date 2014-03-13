@@ -58,10 +58,10 @@ public class HomePage extends PageLayout {
 //                // item.add(new Label("name", issue.getName()));
 //                item.add(new Label("description", issue.getDescription()));
 //                item.add(new Label("projectName", issue.getProject().getName()));
-//                item.add(new Link<Issue>("delete", item.getModel()) {
+//                item.add(new Link<Issue>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
-//                        issueDao.removeIssue(item.getModelObject());
+//                        issueDao.remove(item.getModelObject());
 //                    }
 //                });
 //            }

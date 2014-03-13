@@ -52,7 +52,7 @@ public class CreateWorkflow extends PageLayout {
         insertWorkflowForm = new Form<Workflow>("insertWorkflowForm") {
             @Override
             protected void onSubmit() {
-                workflowDao.insertWorkflow(workflow);
+                workflowDao.insert(workflow);
                 project.setWorkflow(workflow);
                 projectDao.update(project);
                 workflow = new Workflow();

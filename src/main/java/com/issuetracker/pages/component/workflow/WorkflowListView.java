@@ -41,7 +41,7 @@ public class WorkflowListView<T extends Workflow> extends Panel {
                 workflowDetailLink.add(new Label("name", workflow.getName()));
                 item.add(workflowDetailLink);
                 
-//                item.add(new Link<Workflow>("delete", item.getModel()) {
+//                item.add(new Link<Workflow>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
 //                        workflowDao.remove(workflow);

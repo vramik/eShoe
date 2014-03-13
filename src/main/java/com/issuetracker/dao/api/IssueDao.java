@@ -23,11 +23,11 @@ public interface IssueDao {
     
     Issue getIssueByName(String name);
     
-    void addIssue(Issue issue);
+    void insert(Issue issue);
     
-    void updateIssue(Issue issue);
+    void update(Issue issue);
     
-    void removeIssue(Issue issue);
+    void remove(Issue issue);
     
     List<Issue> getIssuesByProject(Project project);
     

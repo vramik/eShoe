@@ -20,11 +20,11 @@ public interface UserDao {
     
     User getUserByName(String username);
     
-    void addUser(User user);
+    void insert(User user);
     
-    void updateUser(User user);
+    void update(User user);
     
-    void removeUser(User user);
+    void remove(User user);
     
     boolean isUsernameInUse(String username);
     

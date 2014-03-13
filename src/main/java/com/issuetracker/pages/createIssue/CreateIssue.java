@@ -180,7 +180,7 @@ public class CreateIssue extends PageLayout {
                 issue.setStatus(statusDao.getStatusByName("New"));
                 issue.setProject(selectedProject);
                 issue.setCustomFields(cfIssueValues);
-                issueDao.addIssue(issue);
+                issueDao.insert(issue);
                 issueList = issueDao.getIssues();
                 PageParameters pageParameters = new PageParameters();
                 pageParameters.add("issue", issue.getIssueId());

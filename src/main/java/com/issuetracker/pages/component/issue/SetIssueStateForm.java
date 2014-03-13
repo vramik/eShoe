@@ -7,13 +7,11 @@ import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssuesRelationship;
 import com.issuetracker.model.IssuesRelationship.RelationshipType;
 import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -124,7 +122,7 @@ public class SetIssueStateForm extends Panel {
                     issuesRelationship = new IssuesRelationship();
                     issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
                 }
-                issueDao.updateIssue(issue);
+                issueDao.update(issue);
 
 
             }

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface ProjectDao {
     
-    void insertProject(Project project);
+    void insert(Project project);
     
     void update(Project project);
     

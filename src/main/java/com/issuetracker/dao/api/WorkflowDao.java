@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface WorkflowDao {
     
-    void insertWorkflow(Workflow workflow);
+    void insert(Workflow workflow);
     
     List<Workflow> getWorkflows();
     

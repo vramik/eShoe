@@ -22,7 +22,7 @@ public class CreateIssueType extends PageLayout {
         insertIssueTypeForm = new Form<IssueType>("insertIssueTypeForm") {
             @Override
             protected void onSubmit() {
-                issueTypeDao.insertIssueType(issueType);
+                issueTypeDao.insert(issueType);
                 issueType = new IssueType();
             }
         };

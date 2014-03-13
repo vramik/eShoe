@@ -12,8 +12,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.wicket.model.PropertyModel;
 
 /**
@@ -49,7 +47,7 @@ public class CommentForm extends Panel {
                 }
                 comments.add(comment);
                 issue.setComments(comments);
-                issueDao.updateIssue(issue);
+                issueDao.update(issue);
                 comment = new Comment();
             }
         };

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ProjectVersionDao {
     
-    void insertProjectVersion(ProjectVersion projectVersion);
+    void insert(ProjectVersion projectVersion);
     
     void remove(ProjectVersion projectVersion);
     

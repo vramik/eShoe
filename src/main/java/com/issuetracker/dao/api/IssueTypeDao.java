@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface IssueTypeDao {
     
-    void insertIssueType(IssueType issueType);
+    void insert(IssueType issueType);
     
     List<IssueType> getIssueTypes();
 }

@@ -5,11 +5,9 @@ import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.ProjectVersionDao;
 import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.Component;
-import com.issuetracker.model.CustomField;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.pages.component.component.ComponentListView;
-import com.issuetracker.pages.component.customField.CustomFieldListView;
 import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.component.version.VersionListView;
 import com.issuetracker.pages.validator.ProjectNameValidator;
@@ -78,7 +76,7 @@ public class CreateProject extends PageLayout {
                 project.setVersions(projectVersionList);
                 project.setComponents(componentList);
 
-                projectDao.insertProject(project);
+                projectDao.insert(project);
                 project = new Project();
                 projects = projectDao.getProjects();
                 projectVersionList.clear();
@@ -117,7 +115,7 @@ public class CreateProject extends PageLayout {
                 projectVersion.setName(textField.getInput());
                 textField.clearInput();
                 target.add(textField);
-//                projectVersionDao.insertProjectVersion(projectVersion);
+//                projectVersionDao.insert(projectVersion);
                 projectVersionList.add(projectVersion);
             }
 
@@ -167,7 +165,7 @@ public class CreateProject extends PageLayout {
 //            protected void onSubmit() {                
 //                customFields.add(customField);
 //                issue.setCustomFields(null);
-//                issueDao.updateIssue(issue);  
+//                issueDao.update(issue);
 //                customField = new CustomField();
 //            }
 //        };

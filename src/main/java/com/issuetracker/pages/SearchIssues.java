@@ -154,10 +154,10 @@ public class SearchIssues extends PageLayout {
                 nameLink.add(new Label("name", issue.getName()));
                 item.add(nameLink);
                 item.add(new Label("description", issue.getDescription()));
-//                item.add(new Link<Issue>("delete", item.getModel()) {
+//                item.add(new Link<Issue>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
-//                        issueDao.removeIssue(item.getModelObject());
+//                        issueDao.remove(item.getModelObject());
 //                    }
 //                });
             }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.issuetracker.dao.api;
+package com.issuetracker.service.api;
 
 import com.issuetracker.model.CustomField;
 
@@ -10,7 +10,7 @@ import com.issuetracker.model.CustomField;
  *
  * @author mgottval
  */
-public interface CustomFieldDao {
+public interface CustomFieldService {
     
     void insert(CustomField customField);
     

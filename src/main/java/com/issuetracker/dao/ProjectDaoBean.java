@@ -38,7 +38,7 @@ public class ProjectDaoBean implements ProjectDao {
     private CriteriaBuilder qb;
     
     @Override
-    public void insertProject(Project project) {
+    public void insert(Project project) {
         em.persist(project);
     }
     

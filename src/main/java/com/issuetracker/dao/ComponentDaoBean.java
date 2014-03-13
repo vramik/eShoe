@@ -24,7 +24,7 @@ public class ComponentDaoBean implements ComponentDao{
     private CriteriaBuilder qb;
 
     @Override
-    public void insertComponent(Component component) {
+    public void insert(Component component) {
         em.persist(component);
     }
 

@@ -23,7 +23,7 @@ public class ProjectVersionDaoBean implements ProjectVersionDao {
     private CriteriaBuilder qb;
 
     @Override
-    public void insertProjectVersion(ProjectVersion projectVersion) {
+    public void insert(ProjectVersion projectVersion) {
         em.persist(projectVersion);
     }
 

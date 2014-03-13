@@ -28,7 +28,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.jboss.logging.Logger;
 
 /**
  *
@@ -115,7 +114,7 @@ public class IssueDetail extends PageLayout {
                     }
                     issue.setWatches(watchersList);
                 }
-                issueDao.updateIssue(issue);
+                issueDao.update(issue);
 
 //                target.add(modal2);
                 modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));

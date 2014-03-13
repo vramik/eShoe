@@ -98,17 +98,17 @@ public class IssueDaoBean implements IssueDao {
     }
 
     @Override
-    public void addIssue(Issue issue) {
+    public void insert(Issue issue) {
         em.persist(issue);
     }
 
     @Override
-    public void updateIssue(Issue issue) {
+    public void update(Issue issue) {
         em.merge(issue);
     }
 
     @Override
-    public void removeIssue(Issue issue) {
+    public void remove(Issue issue) {
         em.remove(em.contains(issue)? issue : em.merge(issue));
     }
 

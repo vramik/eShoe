@@ -34,7 +34,7 @@ public class RegisterForm extends Panel {
             @Override
             protected void onSubmit() {
                 //  user = new User();
-                userDao.addUser(user);
+                userDao.insert(user);
                 setResponsePage(Login.class);
             }
         };

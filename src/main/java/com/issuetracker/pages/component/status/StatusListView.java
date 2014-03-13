@@ -68,7 +68,7 @@ public class StatusListView<T extends Status> extends Panel {
 
                 item.add(new Label("name", status.getName()).setVisible(!workflowPresent));
 
-//                item.add(new Link<Status>("delete", item.getModel()) {
+//                item.add(new Link<Status>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
 //                        statuses.remove(status);

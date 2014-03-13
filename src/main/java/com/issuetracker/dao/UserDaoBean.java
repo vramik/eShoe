@@ -36,17 +36,17 @@ public class UserDaoBean implements UserDao, Serializable {
     }
 
     @Override
-    public void addUser(User user) {
+    public void insert(User user) {
         em.persist(user);
     }
 
     @Override
-    public void updateUser(User user) {
+    public void update(User user) {
         em.merge(user);
     }
 
     @Override
-    public void removeUser(User user) {
+    public void remove(User user) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

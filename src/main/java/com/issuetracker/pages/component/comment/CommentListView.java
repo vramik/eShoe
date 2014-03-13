@@ -5,8 +5,6 @@ import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -53,7 +51,7 @@ public class CommentListView extends Panel {
                         commentList.remove(comment);
                         // commentList.setObject(comments);
                         issue.setComments(commentList);
-                        issueDao.updateIssue(issue);
+                        issueDao.update(issue);
 
                     }
                 });

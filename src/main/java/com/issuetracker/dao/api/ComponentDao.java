@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface ComponentDao {
     
-    void insertComponent(Component component);
+    void insert(Component component);
     
     List<Component> getComponents();
     

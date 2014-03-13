@@ -1,0 +1,159 @@
+package com.issuetracker.service;
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+import com.issuetracker.dao.api.UserDao;
+import com.issuetracker.model.User;
+import com.issuetracker.service.api.UserService;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author mgottval
+ */
+@Stateless
+public class UserServiceBean implements UserService, Serializable {
+
+    @PersistenceContext
+    private EntityManager em;
+    private CriteriaBuilder qb;
+
+    @Override
+    public User getUserById(Long id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void insert(User user) {
+        em.persist(user);
+    }
+
+    @Override
+    public void update(User user) {
+        em.merge(user);
+    }
+
+    @Override
+    public void remove(User user) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> c = qb.createQuery(User.class);
+        Root<User> u = c.from(User.class);
+        Predicate condition = qb.equal(u.get("email"), email);
+        c.where(condition);
+        TypedQuery<User> q = em.createQuery(c);
+        List<User> results = q.getResultList();
+
+        //  List<User> results = em.createQuery("SELECT u FROM User u WHERE email = :email", User.class).setParameter("email", email).getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> c = qb.createQuery(User.class);
+        Root<User> u = c.from(User.class);
+        Predicate condition = qb.equal(u.get("username"), username);
+        Logger.getLogger(UserServiceBean.class.getName()).log(Level.SEVERE, u.get("username").toString());
+        c.where(condition);
+        TypedQuery<User> q = em.createQuery(c);
+        List<User> results = q.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results.get(0);
+        }
+        return null;
+    }
+    
+    @Override
+    public User getUserByName(String name) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> c = qb.createQuery(User.class);
+        Root<User> u = c.from(User.class);
+        Predicate condition = qb.equal(u.get("name"), name);
+        Logger.getLogger(UserServiceBean.class.getName()).log(Level.SEVERE, u.get("name").toString());
+        c.where(condition);
+        TypedQuery<User> q = em.createQuery(c);
+        List<User> results = q.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isUsernameInUse(String username) {
+        User user = null;
+
+                user = getUserByUsername(username);
+
+        if (user == null) {
+            return false;
+        }
+        return true;
+    }
+    
+    @Override
+    public boolean isEmailInUse(String email) {
+        User user = null;
+
+                user = getUserByEmail(email);
+
+        if (user == null) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public List<User> getUsers() {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> q = qb.createQuery(User.class);
+        Root<User> p = q.from(User.class);
+        TypedQuery<User> pQuery = em.createQuery(q);
+        List<User> results = pQuery.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public User loadUserIfPasswordMatches(String name, String password) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<User> c = qb.createQuery(User.class);
+        Root<User> u = c.from(User.class);
+        Predicate condition = qb.equal(u.get("name"), name);
+        c.where(condition);
+        TypedQuery<User> q = em.createQuery(c);
+        List<User> results = q.getResultList();
+        if (results != null && !results.isEmpty()) {
+            if( results.get(0).getPassword().equals(password)) {
+                return results.get(0);
+            }
+        }
+        return null;
+    }
+}
