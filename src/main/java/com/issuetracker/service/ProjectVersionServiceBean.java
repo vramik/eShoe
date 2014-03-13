@@ -5,6 +5,7 @@ import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.service.api.ProjectVersionService;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -20,33 +21,21 @@ import java.util.List;
 @Stateless
 public class ProjectVersionServiceBean implements ProjectVersionService {
 
-    @PersistenceContext
-    private EntityManager em;
-    private CriteriaBuilder qb;
+    @Inject
+    private ProjectVersionDao projectVersionDao;
 
     @Override
     public void insert(ProjectVersion projectVersion) {
-        em.persist(projectVersion);
+        projectVersionDao.insert(projectVersion);
     }
 
     @Override
     public void remove(ProjectVersion projectVersion) {
-        em.remove(em.merge(projectVersion));
+        projectVersionDao.remove(projectVersion);
     }
     
     @Override
     public List<ProjectVersion> getProjectVersions() {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<ProjectVersion> q = qb.createQuery(ProjectVersion.class);
-        Root<ProjectVersion> p = q.from(ProjectVersion.class);
-        TypedQuery<ProjectVersion> pQuery = em.createQuery(q);
-        List<ProjectVersion> results = pQuery.getResultList();
-        if (results != null && !results.isEmpty()) {
-            return results;
-        } else {
-            return null;
-        }
+        return projectVersionDao.getProjectVersions();
     }
-    
-    
 }

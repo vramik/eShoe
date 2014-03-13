@@ -5,6 +5,7 @@ import com.issuetracker.model.Status;
 import com.issuetracker.service.api.StatusService;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -22,64 +23,31 @@ import java.util.List;
 @Stateless
 public class StatusServiceBean implements StatusService {
 
-    @PersistenceContext
-    private EntityManager em;
-    private CriteriaBuilder qb;
+    @Inject
+    private StatusDao statusDao;
     
     @Override
     public void insert(Status status) {
-        em.persist(status);
+        statusDao.insert(status);
     }
 
     @Override
     public List<Status> getStatuses() {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Status> c = qb.createQuery(Status.class);
-        Root<Status> u = c.from(Status.class);
-        TypedQuery<Status> pQuery = em.createQuery(c);
-        List<Status> results = pQuery.getResultList();
-        if (results != null && !results.isEmpty()) {
-            return results;
-        } else {
-            return new ArrayList<Status>();
-        }
+        return statusDao.getStatuses();
     }
 
     @Override
     public void remove(Status status) {
-        em.remove(em.contains(status)? status : em.merge(status));
+        statusDao.remove(status);
     }
 
     @Override
     public Status getStatusById(Long id) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Status> statusQuery = qb.createQuery(Status.class);
-        Root<Status> p = statusQuery.from(Status.class);
-        Predicate pCondition = qb.equal(p.get("id"), id);
-        statusQuery.where(pCondition);
-        TypedQuery<Status> pQuery = em.createQuery(statusQuery);
-        List<Status> statusResults = pQuery.getResultList();
-        if (statusResults != null && !statusResults.isEmpty()) {
-            return statusResults.get(0);
-        } else {
-            return null;
-        }
+        return statusDao.getStatusById(id);
     }
 
     @Override
     public Status getStatusByName(String name) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Status> statusQuery = qb.createQuery(Status.class);
-        Root<Status> p = statusQuery.from(Status.class);
-        Predicate pCondition = qb.equal(p.get("name"), name);
-        statusQuery.where(pCondition);
-        TypedQuery<Status> pQuery = em.createQuery(statusQuery);
-        List<Status> statusResults = pQuery.getResultList();
-        if (statusResults != null && !statusResults.isEmpty()) {
-            return statusResults.get(0);
-        } else {
-            return null;
-        }
+        return statusDao.getStatusByName(name);
     }
-    
 }

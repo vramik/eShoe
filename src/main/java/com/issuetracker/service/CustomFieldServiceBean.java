@@ -9,6 +9,7 @@ import com.issuetracker.model.CustomField;
 import com.issuetracker.service.api.CustomFieldService;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -20,22 +21,21 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Stateless
 public class CustomFieldServiceBean implements CustomFieldService {
 
-    @PersistenceContext
-    private EntityManager em;
-    private CriteriaBuilder qb;
+    @Inject
+    private CustomFieldDao customFieldDao;
 
     @Override
     public void insert(CustomField customField) {
-        em.persist(customField);
+        customFieldDao.insert(customField);
     }
 
     @Override
     public void remove(CustomField customField) {
-        em.remove(em.contains(customField)? customField : em.merge(customField));
+        customFieldDao.remove(customField);
     }
 
     @Override
     public void update(CustomField customField) {
-        em.merge(customField);
+        customFieldDao.update(customField);
     }
 }

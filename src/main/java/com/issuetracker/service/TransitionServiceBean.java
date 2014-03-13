@@ -6,6 +6,7 @@ import com.issuetracker.model.Workflow;
 import com.issuetracker.service.api.TransitionService;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -23,34 +24,21 @@ import java.util.List;
 @Stateless
 public class TransitionServiceBean implements TransitionService {
 
-    @PersistenceContext
-    private EntityManager em;
-    private CriteriaBuilder qb;
+    @Inject
+    private TransitionDao transitionDao;
     
     @Override
     public void insert(Transition transition) {
-        em.persist(transition);
+        transitionDao.insert(transition);
     }
 
     @Override
     public List<Transition> getTransitionsByWorkflow(Workflow workflow) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Transition> transitionQuery = qb.createQuery(Transition.class);
-        Root<Transition> p = transitionQuery.from(Transition.class);
-        Predicate pCondition = qb.equal(p.get("workflow"), workflow);
-        transitionQuery.where(pCondition);
-        TypedQuery<Transition> pQuery = em.createQuery(transitionQuery);
-        List<Transition> results = pQuery.getResultList();
-        if (results != null && !results.isEmpty()) {
-            return results;
-        } else {
-            return new ArrayList<Transition>();
-        }
+        return transitionDao.getTransitionsByWorkflow(workflow);
     }
 
     @Override
     public void remove(Transition transition) {
-        em.remove(em.contains(transition) ? transition : em.merge(transition));
+        transitionDao.remove(transition);
     }
-    
 }
