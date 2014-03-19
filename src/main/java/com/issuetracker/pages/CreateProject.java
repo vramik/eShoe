@@ -1,8 +1,5 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.dao.api.ProjectVersionDao;
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
@@ -10,10 +7,6 @@ import com.issuetracker.pages.component.component.ComponentListView;
 import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.component.version.VersionListView;
 import com.issuetracker.pages.validator.ProjectNameValidator;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.ComponentService;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.ProjectVersionService;
@@ -29,6 +22,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

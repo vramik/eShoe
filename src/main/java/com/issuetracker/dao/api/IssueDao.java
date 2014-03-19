@@ -1,14 +1,8 @@
 package com.issuetracker.dao.api;
 
-import com.issuetracker.model.Comment;
-import com.issuetracker.model.Component;
-import com.issuetracker.model.Issue;
+import com.issuetracker.model.*;
 import com.issuetracker.model.Issue.Priority;
-import com.issuetracker.model.IssueType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.Status;
-import com.issuetracker.model.User;
+
 import java.util.List;
 
 /**

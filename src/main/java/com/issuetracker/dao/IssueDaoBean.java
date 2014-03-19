@@ -2,29 +2,19 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.model.Comment;
-import com.issuetracker.model.Component;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssueType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.Status;
-import com.issuetracker.model.User;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.issuetracker.model.*;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

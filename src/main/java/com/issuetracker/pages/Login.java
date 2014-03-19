@@ -1,12 +1,8 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.User;
 import com.issuetracker.pages.component.login.ForgotPasswordLink;
 import com.issuetracker.pages.component.login.SignUpLink;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
-
 import com.issuetracker.service.api.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -17,6 +13,9 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.cookies.CookieUtils;
+
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 /**
  *

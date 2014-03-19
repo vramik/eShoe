@@ -1,16 +1,9 @@
 package com.issuetracker.pages.layout;
 
 import com.issuetracker.model.User;
+import com.issuetracker.pages.*;
 import com.issuetracker.pages.createIssue.CreateIssue;
-import com.issuetracker.pages.CreateIssueType;
-import com.issuetracker.pages.CreateProject;
-import com.issuetracker.pages.CreateStatuses;
-import com.issuetracker.pages.CreateWorkflow;
-import com.issuetracker.pages.ListProjects;
-import com.issuetracker.pages.SearchIssues;
 import com.issuetracker.web.security.TrackerAuthSession;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -22,6 +15,9 @@ import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeaderPanel extends Panel {
 

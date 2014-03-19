@@ -1,6 +1,7 @@
 package com.issuetracker.dao.api;
 
 import com.issuetracker.model.Component;
+
 import java.util.List;
 
 /**

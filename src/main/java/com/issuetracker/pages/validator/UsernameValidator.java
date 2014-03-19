@@ -1,15 +1,14 @@
 package com.issuetracker.pages.validator;
 
-import com.issuetracker.dao.api.UserDao;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.UserService;
 import net.ftlines.wicket.cdi.CdiContainer;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
+
+import javax.inject.Inject;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

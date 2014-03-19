@@ -5,13 +5,8 @@
 package com.issuetracker.pages.component;
 
 import com.issuetracker.model.Component;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssuesRelationship;
 import com.issuetracker.model.Project;
 import com.issuetracker.pages.component.component.ComponentListView;
-import com.issuetracker.pages.component.issue.IssueRelationsListView;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -20,6 +15,9 @@ import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

@@ -2,8 +2,9 @@ package com.issuetracker.dao.api;
 
 
 import com.issuetracker.model.User;
-import java.util.List;
+
 import javax.ejb.Local;
+import java.util.List;
 
 /**
  *

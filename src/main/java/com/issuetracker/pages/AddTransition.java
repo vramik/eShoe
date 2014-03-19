@@ -1,14 +1,8 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.TransitionService;
 import com.issuetracker.service.api.WorkflowService;
@@ -22,6 +16,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *

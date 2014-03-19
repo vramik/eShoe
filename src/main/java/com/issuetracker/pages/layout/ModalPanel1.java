@@ -1,15 +1,7 @@
 package com.issuetracker.pages.layout;
 
-import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.User;
-import com.issuetracker.pages.CreateProject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.IssueService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -17,6 +9,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author mgottval

@@ -4,13 +4,9 @@
  */
 package com.issuetracker.pages.component.issue;
 
-import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssuesRelationship;
 import com.issuetracker.pages.IssueDetail;
-import java.util.List;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.IssueService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -18,8 +14,10 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *

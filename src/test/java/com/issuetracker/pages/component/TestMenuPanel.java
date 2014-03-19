@@ -4,7 +4,6 @@
  */
 package com.issuetracker.pages.component;
 
-import com.issuetracker.pages.layout.HeaderPanel;
 import com.issuetracker.pages.layout.MenuPanel;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.tester.WicketTester;

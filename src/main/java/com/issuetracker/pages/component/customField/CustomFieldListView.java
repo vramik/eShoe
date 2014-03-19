@@ -4,18 +4,16 @@
  */
 package com.issuetracker.pages.component.customField;
 
-import com.issuetracker.dao.api.CustomFieldDao;
 import com.issuetracker.model.CustomField;
-import java.util.List;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.CustomFieldService;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *

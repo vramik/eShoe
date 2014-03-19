@@ -1,16 +1,10 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.dao.api.ProjectVersionDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.CustomField;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.pages.component.customField.CustomFieldListView;
-
-import java.util.List;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.ComponentService;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.ProjectVersionService;
@@ -23,6 +17,9 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *

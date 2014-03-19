@@ -1,17 +1,15 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.service.api.UserService;
 import com.issuetracker.web.security.TrackerAuthSession;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
-import org.jboss.logging.Logger;
+
+import javax.inject.Inject;
+import java.util.Map;
 
 /**
  *

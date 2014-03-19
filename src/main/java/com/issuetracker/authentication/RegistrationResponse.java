@@ -1,8 +1,8 @@
 package com.issuetracker.authentication;
 
-import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  *

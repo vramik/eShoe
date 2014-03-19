@@ -6,6 +6,7 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.CustomFieldDao;
 import com.issuetracker.model.CustomField;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

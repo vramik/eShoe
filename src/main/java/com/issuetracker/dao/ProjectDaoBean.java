@@ -7,8 +7,7 @@ import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -18,6 +17,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

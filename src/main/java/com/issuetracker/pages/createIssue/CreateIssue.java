@@ -1,35 +1,12 @@
 package com.issuetracker.pages.createIssue;
 
-import com.issuetracker.dao.api.StatusDao;
-import com.issuetracker.model.Component;
-import com.issuetracker.model.CustomField;
-import com.issuetracker.model.CustomFieldIssueValue;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssueType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.Status;
+import com.issuetracker.model.*;
 import com.issuetracker.pages.IssueDetail;
 import com.issuetracker.pages.PageLayout;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -39,6 +16,12 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.file.File;
 import org.apache.wicket.util.lang.Bytes;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

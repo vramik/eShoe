@@ -5,12 +5,13 @@
 package com.issuetracker.pages.component.customFieldIssueValue;
 
 import com.issuetracker.model.CustomFieldIssueValue;
-import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+
+import java.util.List;
 
 /**
  *

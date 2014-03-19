@@ -4,12 +4,10 @@ package com.issuetracker.dao;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.User;
-import java.io.Serializable;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +16,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

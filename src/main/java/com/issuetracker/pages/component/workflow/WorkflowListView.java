@@ -1,11 +1,7 @@
 package com.issuetracker.pages.component.workflow;
 
-import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.WorkflowDetail;
-import java.util.List;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -14,6 +10,9 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *

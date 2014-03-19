@@ -1,13 +1,12 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.model.IssueType;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.IssueTypeService;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
 
 /**
  *

@@ -3,11 +3,12 @@ package com.issuetracker.dao;
 import com.issuetracker.dao.api.CommentDao;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
+import java.util.List;
 
 /**
  *

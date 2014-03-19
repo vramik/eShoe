@@ -1,16 +1,16 @@
 package com.issuetracker.form;
 
-import com.issuetracker.dao.api.UserDao;
-//import com.issuetracker.model.Credentials;
 import com.issuetracker.model.User;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.UserService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+
+import javax.inject.Inject;
+
+//import com.issuetracker.model.Credentials;
 
 /**
  *

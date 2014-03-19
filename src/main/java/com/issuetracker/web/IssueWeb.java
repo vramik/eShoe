@@ -1,30 +1,24 @@
 package com.issuetracker.web;
 
 import com.issuetracker.model.User;
+import com.issuetracker.pages.*;
 import com.issuetracker.pages.createIssue.CreateIssue;
-import com.issuetracker.pages.CreateIssueType;
-import com.issuetracker.pages.CreateProject;
-import com.issuetracker.pages.ForgotPassword;
-import com.issuetracker.pages.HomePage;
-import com.issuetracker.pages.ListProjects;
-import com.issuetracker.pages.Login;
-import com.issuetracker.pages.Register;
-import com.issuetracker.pages.SearchIssues;
-import com.issuetracker.pages.IssueDetail;
 import com.issuetracker.web.quilifiers.CurrentSession;
 import com.issuetracker.web.quilifiers.LoggedIn;
 import com.issuetracker.web.security.TrackerAuthSession;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import net.ftlines.wicket.cdi.CdiConfiguration;
-import static net.ftlines.wicket.cdi.ConversationPropagation.NONE;
 import org.apache.wicket.Page;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
+
+import javax.enterprise.inject.Produces;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import static net.ftlines.wicket.cdi.ConversationPropagation.NONE;
 
 /**
  *

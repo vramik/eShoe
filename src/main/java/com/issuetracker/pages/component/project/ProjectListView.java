@@ -1,19 +1,16 @@
 package com.issuetracker.pages.component.project;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Project;
-import java.util.List;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.ProjectService;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *

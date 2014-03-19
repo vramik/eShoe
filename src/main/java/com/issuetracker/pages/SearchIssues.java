@@ -1,19 +1,6 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.StatusDao;
-import com.issuetracker.model.Component;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssueType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.Status;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
-
+import com.issuetracker.model.*;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.IssueTypeService;
 import com.issuetracker.service.api.ProjectService;
@@ -21,11 +8,7 @@ import com.issuetracker.service.api.StatusService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -34,6 +17,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  *

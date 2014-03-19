@@ -2,7 +2,6 @@ package com.issuetracker.pages;
 
 import com.issuetracker.pages.layout.FooterPanel;
 import com.issuetracker.pages.layout.HeaderPanel;
-import com.issuetracker.pages.layout.MenuPanel;
 import com.issuetracker.web.security.TrackerAuthSession;
 import org.apache.wicket.Component;
 import org.apache.wicket.Session;

@@ -1,14 +1,8 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.UserDao;
-import com.issuetracker.model.CustomField;
-import com.issuetracker.model.CustomFieldIssueValue;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssuesRelationship;
-import com.issuetracker.model.User;
-import com.issuetracker.pages.component.comment.CommentListView;
+import com.issuetracker.model.*;
 import com.issuetracker.pages.component.comment.CommentForm;
+import com.issuetracker.pages.component.comment.CommentListView;
 import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueValueListView;
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
@@ -16,10 +10,6 @@ import com.issuetracker.pages.layout.ModalPanel1;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.UserService;
 import com.issuetracker.web.security.TrackerAuthSession;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -30,6 +20,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *

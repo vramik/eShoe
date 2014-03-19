@@ -1,14 +1,13 @@
 package com.issuetracker.web.security;
 
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.User;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
-
 import com.issuetracker.service.api.UserService;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
+
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
 
 public class TrackerAuthSession extends AuthenticatedWebSession {
 

@@ -1,20 +1,7 @@
 package com.issuetracker.pages.component.issue;
 
-import com.issuetracker.dao.api.TransitionDao;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssuesRelationship;
+import com.issuetracker.model.*;
 import com.issuetracker.model.IssuesRelationship.RelationshipType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.Status;
-import com.issuetracker.model.Transition;
-import com.issuetracker.model.Workflow;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.TransitionService;
@@ -27,6 +14,13 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *

@@ -22,7 +22,15 @@
 
 package com.issuetracker.authentication;
 
-import java.io.IOException;
+import org.picketbox.core.DefaultPicketBoxManager;
+import org.picketbox.core.PicketBoxManager;
+import org.picketbox.core.config.ConfigurationBuilder;
+import org.picketbox.core.config.PicketBoxConfiguration;
+import org.picketlink.idm.IdentityManager;
+import org.picketlink.idm.model.Role;
+import org.picketlink.idm.model.SimpleRole;
+import org.picketlink.idm.model.SimpleUser;
+import org.picketlink.idm.model.User;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
@@ -31,18 +39,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.picketbox.core.DefaultPicketBoxManager;
+import java.io.IOException;
 
-import org.picketbox.core.PicketBoxManager;
-import org.picketbox.core.config.ConfigurationBuilder;
-import org.picketbox.core.config.PicketBoxConfiguration;
 //import org.picketbox.http.PicketBoxConstants;
-import org.picketlink.idm.IdentityManager;
 //import org.picketlink.idm.credential.internal.Password;
-import org.picketlink.idm.model.Role;
-import org.picketlink.idm.model.SimpleRole;
-import org.picketlink.idm.model.SimpleUser;
-import org.picketlink.idm.model.User;
 
 /**
  * <p>
