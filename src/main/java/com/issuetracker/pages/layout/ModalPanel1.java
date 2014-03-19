@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.IssueService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -24,7 +26,7 @@ public class ModalPanel1 extends Panel{
     private List<User> watchersList;
     
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     
     private Issue issue;
 

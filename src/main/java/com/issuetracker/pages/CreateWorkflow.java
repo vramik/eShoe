@@ -1,6 +1,5 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.Workflow;
@@ -8,6 +7,9 @@ import com.issuetracker.pages.component.workflow.WorkflowListView;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -28,33 +30,33 @@ public class CreateWorkflow extends PageLayout {
     private Form<Workflow> insertWorkflowForm;
     private Workflow workflow;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     private List<Workflow> workflows;
     private Project project;
 
     public CreateWorkflow() {
         workflows = new ArrayList<Workflow>();
-        if (workflowDao.getWorkflows() == null) {
+        if (workflowService.getWorkflows() == null) {
             workflows = new ArrayList<Workflow>();
         } else {
-            workflows = workflowDao.getWorkflows();
+            workflows = workflowService.getWorkflows();
         }
         IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
             @Override
             public List<Project> getObject() {
                 
-                return projectDao.getProjects();
+                return projectService.getProjects();
             }
         };
         add(new FeedbackPanel("feedbackPanel"));
         insertWorkflowForm = new Form<Workflow>("insertWorkflowForm") {
             @Override
             protected void onSubmit() {
-                workflowDao.insert(workflow);
+                workflowService.insert(workflow);
                 project.setWorkflow(workflow);
-                projectDao.update(project);
+                projectService.update(project);
                 workflow = new Workflow();
             }
         };
@@ -67,7 +69,7 @@ public class CreateWorkflow extends PageLayout {
         IModel<List<Workflow>> compoModel = new CompoundPropertyModel<List<Workflow>>(workflows) {
             @Override
             public List<Workflow> getObject() {
-                return workflowDao.getWorkflows(); //To change body of generated methods, choose Tools | Templates.
+                return workflowService.getWorkflows(); //To change body of generated methods, choose Tools | Templates.
             }
         };
 

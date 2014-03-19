@@ -1,11 +1,13 @@
 package com.issuetracker.pages.component.component;
 
-import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.ComponentService;
+import com.issuetracker.service.api.ProjectService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -22,9 +24,9 @@ import org.apache.wicket.model.PropertyModel;
 public class ComponentListView<T extends Component> extends Panel {
 
     @Inject
-    private ComponentDao componentDao;
+    private ComponentService componentService;
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     private final ListView<Component> componentsListView;
     private List<Component> componentList;
 
@@ -43,9 +45,9 @@ public class ComponentListView<T extends Component> extends Panel {
                     public void onClick() {
                         componentList.remove(component);
                         if (projectModel != null) {
-                            Project project = projectDao.getProjectById(projectModel.getObject().getId());
+                            Project project = projectService.getProjectById(projectModel.getObject().getId());
                             project.setComponents(componentList);
-                            projectDao.update(project);
+                            projectService.update(project);
                         }
                     }
                 });

@@ -8,6 +8,8 @@ import com.issuetracker.dao.api.CustomFieldDao;
 import com.issuetracker.model.CustomField;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.CustomFieldService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -22,7 +24,7 @@ import org.apache.wicket.model.IModel;
 public class CustomFieldListView<T extends CustomField> extends Panel {
 
     @Inject
-    private CustomFieldDao customFieldDao;
+    private CustomFieldService customFieldService;
     private ListView listViewCustomFields;
 
     public CustomFieldListView(String id, IModel<List<CustomField>> customFieldModel) {

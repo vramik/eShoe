@@ -1,9 +1,5 @@
 package com.issuetracker.pages.createIssue;
 
-import com.issuetracker.dao.api.ComponentDao;
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.IssueTypeDao;
-import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.CustomField;
@@ -24,6 +20,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -49,15 +47,15 @@ import org.apache.wicket.util.lang.Bytes;
 public class CreateIssue extends PageLayout {
 
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private IssueTypeDao issueTypeDao;
+    private IssueTypeService issueTypeService;
     @Inject
-    private ComponentDao componentDao;
+    private ComponentService componentService;
     private Form<Issue> insertIssueForm;
     private DropDownChoice<Project> projectList;
     private DropDownChoice<IssueType> issueTypeList;
@@ -75,7 +73,7 @@ public class CreateIssue extends PageLayout {
 
     public CreateIssue() {
         issueList = new ArrayList<Issue>();
-        List<Project> projects = projectDao.getProjects();
+        List<Project> projects = projectService.getProjects();
         for (Project p : projects) {
             modelsProjectMap.put(p, p.getComponents());
         }
@@ -163,25 +161,25 @@ public class CreateIssue extends PageLayout {
                     }
                     issue.setFileLocation(file.getAbsolutePath());
                 }
-                if(issueDao.getIssues().isEmpty()) {
-                    if (statusDao.getStatusByName("New")== null){
+                if(issueService.getIssues().isEmpty()) {
+                    if (statusService.getStatusByName("New")== null){
                     Status newStatus = new Status("New");
-                    statusDao.insert(newStatus);
+                    statusService.insert(newStatus);
                     }
-                    if (statusDao.getStatusByName("Modified")== null){
+                    if (statusService.getStatusByName("Modified")== null){
                     Status modifiedStatus = new Status("Modified");
-                    statusDao.insert(modifiedStatus);
+                    statusService.insert(modifiedStatus);
                     }
-                    if (statusDao.getStatusByName("Closed")==null){
+                    if (statusService.getStatusByName("Closed")==null){
                     Status closedStatus = new Status("Closed");                    
-                    statusDao.insert(closedStatus);
+                    statusService.insert(closedStatus);
                     }
                 }
-                issue.setStatus(statusDao.getStatusByName("New"));
+                issue.setStatus(statusService.getStatusByName("New"));
                 issue.setProject(selectedProject);
                 issue.setCustomFields(cfIssueValues);
-                issueDao.insert(issue);
-                issueList = issueDao.getIssues();
+                issueService.insert(issue);
+                issueList = issueService.getIssues();
                 PageParameters pageParameters = new PageParameters();
                 pageParameters.add("issue", issue.getIssueId());
                 setResponsePage(IssueDetail.class, pageParameters);
@@ -213,7 +211,7 @@ public class CreateIssue extends PageLayout {
         insertIssueForm.add(new RequiredTextField("issueName", new PropertyModel<String>(this, "issue.name")));
         insertIssueForm.add(new RequiredTextField("issueSummary", new PropertyModel<String>(this, "issue.summary")));
         insertIssueForm.add(new TextArea<String>("description", new PropertyModel<String>(this, "issue.description")));
-        issueTypeList = new DropDownChoice<IssueType>("issueTypes", new PropertyModel<IssueType>(this, "issue.issueType"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
+        issueTypeList = new DropDownChoice<IssueType>("issueTypes", new PropertyModel<IssueType>(this, "issue.issueType"), issueTypeService.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         issueTypeList.setRequired(true);
         insertIssueForm.add(issueTypeList);
         fileUploadField = new FileUploadField("fileUploadField");

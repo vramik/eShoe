@@ -1,6 +1,5 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Status;
 //import com.issuetracker.model.Transition;
@@ -10,6 +9,9 @@ import com.issuetracker.pages.component.workflow.WorkflowTransitionsListView;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.StatusService;
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -25,9 +27,9 @@ public class WorkflowDetail extends PageLayout{
     
     private Workflow workflow;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
 //    private List<Transition> transitionsList;
 //    private Transition transition;
     private Status status;
@@ -38,10 +40,10 @@ public class WorkflowDetail extends PageLayout{
     
     public WorkflowDetail(PageParameters parameters) {
         Long workflowId = parameters.get("workflow").toLong();
-        workflow = workflowDao.getWorkflowById(workflowId);
+        workflow = workflowService.getWorkflowById(workflowId);
         status = new Status();
         
-        statuses = statusDao.getStatuses();
+        statuses = statusService.getStatuses();
         if (statuses == null) {
             statuses = new ArrayList<Status>();
         }
@@ -55,7 +57,7 @@ public class WorkflowDetail extends PageLayout{
         IModel<List<Status>> statusesModel = new CompoundPropertyModel<List<Status>>(statuses) {
             @Override
             public List<Status> getObject() {
-                return statusDao.getStatuses(); 
+                return statusService.getStatuses();
             }            
          };
               

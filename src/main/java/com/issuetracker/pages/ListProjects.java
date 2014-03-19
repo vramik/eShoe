@@ -5,6 +5,8 @@ import com.issuetracker.model.Project;
 import com.issuetracker.model.User;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.ProjectService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -19,12 +21,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class ListProjects extends PageLayout {
 
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     private ListView listViewProjects;
     private List<Project> projects;
 
     public ListProjects() {
-        projects = projectDao.getProjects();
+        projects = projectService.getProjects();
 
         listViewProjects = new ListView<Project>("projectList", new PropertyModel<List<Project>>(this, "projects")) {
             @Override

@@ -1,7 +1,5 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.StatusDao;
-import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.Transition;
@@ -10,6 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.StatusService;
+import com.issuetracker.service.api.TransitionService;
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -31,11 +33,11 @@ public class AddTransition extends PageLayout {
     private Transition transition;
     private Workflow workflow;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     @Inject
-    private TransitionDao transitionDao;
+    private TransitionService transitionService;
 //    private List<Transition> transitionsList;
 //    private Transition transition;
     private DropDownChoice<Status> dropDownStatusTo;
@@ -45,8 +47,8 @@ public class AddTransition extends PageLayout {
     public AddTransition(PageParameters parameters) {
         Long statusId = parameters.get("status").toLong();
         Long workflowId = parameters.get("workflow").toLong();
-        status = statusDao.getStatusById(statusId);
-        workflow = workflowDao.getWorkflowById(workflowId);
+        status = statusService.getStatusById(statusId);
+        workflow = workflowService.getWorkflowById(workflowId);
         statusList = new ArrayList<Status>();
 
         transition = new Transition();
@@ -54,7 +56,7 @@ public class AddTransition extends PageLayout {
         IModel<List<Status>> statusesModel = new AbstractReadOnlyModel<List<Status>>() {
             @Override
             public List<Status> getObject() {
-                List<Status> models = statusDao.getStatuses();
+                List<Status> models = statusService.getStatuses();
                 if (models == null) {
                     models = Collections.emptyList();
                 }
@@ -69,7 +71,7 @@ public class AddTransition extends PageLayout {
             protected void onSubmit() {
                 transition.setFromStatus(status);
                 transition.setWorkflow(workflow);
-                transitionDao.insert(transition);
+                transitionService.insert(transition);
                 transition = new Transition();
                 PageParameters pageParameters = new PageParameters();
                 pageParameters.add("workflow", workflow.getId());

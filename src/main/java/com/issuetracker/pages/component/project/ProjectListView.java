@@ -5,6 +5,9 @@ import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Project;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.ProjectService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -19,9 +22,9 @@ import org.apache.wicket.model.IModel;
 public class ProjectListView<T extends Project> extends Panel {
 
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     private List<Project> projects;
     private ListView listViewProjects;
 

@@ -1,6 +1,7 @@
 package com.issuetracker.pages;
 
 import com.issuetracker.dao.api.UserDao;
+import com.issuetracker.service.api.UserService;
 import com.issuetracker.web.security.TrackerAuthSession;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class HomePage extends PageLayout {
     private DropDownChoice<Link> projectChoice;
     private DropDownChoice<String> issueChioce;
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     private Map<String, WebPage> pagesMap;
     private String selected = "Create Project";
 
@@ -82,7 +83,7 @@ public class HomePage extends PageLayout {
 //        add(form);
 //        Model<User> listModel = new Model<User>();
 //        ChoiceRenderer<User> personRender = new ChoiceRenderer<User>("name");
-//        personsList = new DropDownChoice<User>("persons", listModel, userDao.getUsers),
+//        personsList = new DropDownChoice<User>("persons", listModel, userService.getUsers),
 //                personRender) {
 //            @Override
 //            protected boolean wantOnSelectionChangedNotifications() {

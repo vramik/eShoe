@@ -1,7 +1,5 @@
 package com.issuetracker.pages.component.issue;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssuesRelationship;
@@ -16,6 +14,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.StatusService;
+import com.issuetracker.service.api.TransitionService;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -33,11 +35,11 @@ import org.apache.wicket.model.PropertyModel;
 public class SetIssueStateForm extends Panel {
 
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     @Inject
-    private TransitionDao transitionDao;
+    private TransitionService transitionService;
     private Form<Issue> updateIssueForm;
     private Issue issue;
     private Project project;
@@ -65,14 +67,14 @@ public class SetIssueStateForm extends Panel {
         }
 
         IModel<List<Status>> statusModelChoices;
-        if (workflow != null && !transitionDao.getTransitionsByWorkflow(workflow).isEmpty()) {
+        if (workflow != null && !transitionService.getTransitionsByWorkflow(workflow).isEmpty()) {
             Logger.getLogger(SetIssueStateForm.class.getName()).log(Level.SEVERE, workflow.getTransitions().toString());
 
             statusModelChoices = new AbstractReadOnlyModel<List<Status>>() {
                 @Override
                 public List<Status> getObject() {
                     Status currentStatus = issue.getStatus();
-                    List<Transition> projectWorkflowTransitions = transitionDao.getTransitionsByWorkflow(workflow);
+                    List<Transition> projectWorkflowTransitions = transitionService.getTransitionsByWorkflow(workflow);
                     List<Status> possibelStatuses = new ArrayList<Status>();
                     possibelStatuses.add(currentStatus);
                     for (Transition transition : projectWorkflowTransitions) {
@@ -90,9 +92,9 @@ public class SetIssueStateForm extends Panel {
                 @Override
                 public List<Status> getObject() {
                     List<Status> statuses = new ArrayList<Status>();
-                    statuses.add(statusDao.getStatusByName("New"));
-                    statuses.add(statusDao.getStatusByName("Modified"));
-                    statuses.add(statusDao.getStatusByName("Closed"));
+                    statuses.add(statusService.getStatusByName("New"));
+                    statuses.add(statusService.getStatusByName("Modified"));
+                    statuses.add(statusService.getStatusByName("Closed"));
                     return statuses;
                 }
             };
@@ -111,8 +113,8 @@ public class SetIssueStateForm extends Panel {
             @Override
             protected void onSubmit() {
                 
-                if (issueRelatesToId != null && !issueRelatesToId.equals("") && issueRelatesToId.matches("[0-9]+") && issueDao.getIssueById(Long.valueOf(issueRelatesToId))!=null) {
-                    issueRelatesTo = issueDao.getIssueById(Long.valueOf(issueRelatesToId));
+                if (issueRelatesToId != null && !issueRelatesToId.equals("") && issueRelatesToId.matches("[0-9]+") && issueService.getIssueById(Long.valueOf(issueRelatesToId))!=null) {
+                    issueRelatesTo = issueService.getIssueById(Long.valueOf(issueRelatesToId));
 
                     issuesRelationship.setIsRelatedIssue(issue);
                     issuesRelationship.setRelatesToIssue(issueRelatesTo);                    
@@ -122,7 +124,7 @@ public class SetIssueStateForm extends Panel {
                     issuesRelationship = new IssuesRelationship();
                     issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
                 }
-                issueDao.update(issue);
+                issueService.update(issue);
 
 
             }

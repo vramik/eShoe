@@ -2,6 +2,8 @@ package com.issuetracker.pages.validator;
 
 import com.issuetracker.dao.api.ProjectDao;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.ProjectService;
 import net.ftlines.wicket.cdi.CdiContainer;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
@@ -15,7 +17,7 @@ import org.apache.wicket.validation.ValidationError;
 public class ProjectNameValidator implements IValidator<String>{
 
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     
     public ProjectNameValidator() {
         CdiContainer.get().getNonContextualManager().inject(this);
@@ -23,7 +25,7 @@ public class ProjectNameValidator implements IValidator<String>{
     
         public void validate(IValidatable<String> iv) {
         String projectName = iv.getValue(); 
-        Boolean b = projectDao.isProjectNameInUse(projectName);
+        Boolean b = projectService.isProjectNameInUse(projectName);
 //        Logger.getLogger(UsernameValidator.class.getName()).log(Level.SEVERE, b.toString());
         if (b) {
             error(iv, "usernameAlreadyExists");

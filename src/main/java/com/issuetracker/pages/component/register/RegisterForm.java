@@ -5,6 +5,8 @@ import com.issuetracker.model.User;
 import com.issuetracker.pages.Login;
 import com.issuetracker.pages.validator.UsernameValidator;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.UserService;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -22,7 +24,7 @@ public class RegisterForm extends Panel {
 
     private User user;
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     private Form<User> insertForm;
 
     public RegisterForm(String id) {
@@ -34,7 +36,7 @@ public class RegisterForm extends Panel {
             @Override
             protected void onSubmit() {
                 //  user = new User();
-                userDao.insert(user);
+                userService.insert(user);
                 setResponsePage(Login.class);
             }
         };

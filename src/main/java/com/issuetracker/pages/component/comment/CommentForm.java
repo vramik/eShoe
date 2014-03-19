@@ -1,12 +1,14 @@
 package com.issuetracker.pages.component.comment;
 
-import com.issuetracker.dao.api.CommentDao;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.CommentService;
+import com.issuetracker.service.api.IssueService;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -21,9 +23,9 @@ import org.apache.wicket.model.PropertyModel;
 public class CommentForm extends Panel {
 
     @Inject
-    private CommentDao commentDao;
+    private CommentService commentService;
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     private Form<Comment> commentForm;
     private Comment comment;
     private List<Comment> comments;
@@ -47,7 +49,7 @@ public class CommentForm extends Panel {
                 }
                 comments.add(comment);
                 issue.setComments(comments);
-                issueDao.update(issue);
+                issueService.update(issue);
                 comment = new Comment();
             }
         };

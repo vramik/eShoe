@@ -6,9 +6,9 @@ import com.issuetracker.model.Status;
 import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.component.status.StatusListView;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.StatusService;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -24,7 +24,7 @@ public class CreateStatuses extends PageLayout {
 
     private Workflow workflow;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     private Status status;
     private List<Status> statuses;
     private Form<Status> insertStatusForm;
@@ -34,18 +34,18 @@ public class CreateStatuses extends PageLayout {
     public CreateStatuses() {
 
         status = new Status();
-        statuses = statusDao.getStatuses();
+        statuses = statusService.getStatuses();
         feedbackPanel = new FeedbackPanel("feedbackPanel");
         add(feedbackPanel);
         insertStatusForm = new Form<Status>("insertStatusForm") {
             @Override
             protected void onSubmit() {
-                if (statusDao.getStatusByName(status.getName()) != null) {
+                if (statusService.getStatusByName(status.getName()) != null) {
                     nameField.clearInput();
 
                 } else {
-                    statusDao.insert(status);
-                    statuses = statusDao.getStatuses();
+                    statusService.insert(status);
+                    statuses = statusService.getStatuses();
                 }
                 status = new Status();
 
@@ -61,7 +61,7 @@ public class CreateStatuses extends PageLayout {
         IModel<List<Status>> statusesModel = new CompoundPropertyModel<List<Status>>(statuses) {
             @Override
             public List<Status> getObject() {
-                return statusDao.getStatuses();
+                return statusService.getStatuses();
             }
         };
 

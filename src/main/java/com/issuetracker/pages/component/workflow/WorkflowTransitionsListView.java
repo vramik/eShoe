@@ -1,12 +1,14 @@
 package com.issuetracker.pages.component.workflow;
 
-import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.TransitionService;
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -23,9 +25,9 @@ import org.apache.wicket.model.PropertyModel;
 public class WorkflowTransitionsListView extends Panel {
 
     @Inject
-    private TransitionDao tranitionDao;   
+    private TransitionService transitionService;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
     
     private ListView transitionsListView;
     private List<Transition> transitionList;
@@ -36,7 +38,7 @@ public class WorkflowTransitionsListView extends Panel {
  
         workflow = workflowModel.getObject();
         try {
-            transitionList = tranitionDao.getTransitionsByWorkflow(workflow);
+            transitionList = transitionService.getTransitionsByWorkflow(workflow);
         } catch (NullPointerException e) {
             transitionList = new ArrayList<Transition>();
         }
@@ -54,7 +56,7 @@ public class WorkflowTransitionsListView extends Panel {
                         transitionList.remove(transition);
                         // transitionList.setObject(transitions);
                         workflow.setTransitions(transitionList);
-                        workflowDao.update(workflow);
+                        workflowService.update(workflow);
 
                     }
                 });

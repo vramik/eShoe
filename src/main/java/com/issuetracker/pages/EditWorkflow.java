@@ -5,6 +5,8 @@ import com.issuetracker.model.Project;
 import com.issuetracker.model.Workflow;
 import java.util.List;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -24,7 +26,7 @@ public class EditWorkflow extends PageLayout {
     private DropDownChoice<Workflow> workflowDropDownChoice;
     private Workflow workflow;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
 
     public EditWorkflow() {
         searchWorkflowForm = new Form("form") {
@@ -38,7 +40,7 @@ public class EditWorkflow extends PageLayout {
         IModel<List<Workflow>> workflowsModel = new AbstractReadOnlyModel<List<Workflow>>() {
             @Override
             public List<Workflow> getObject() {
-                return workflowDao.getWorkflows();
+                return workflowService.getWorkflows();
             }
         };
         workflowDropDownChoice = new DropDownChoice<Workflow>("workflowDropDownChoice", new PropertyModel<Workflow>(this, "workflow"), workflowsModel, new ChoiceRenderer<Workflow>("name"));

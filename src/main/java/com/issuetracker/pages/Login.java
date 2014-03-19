@@ -6,6 +6,8 @@ import com.issuetracker.pages.component.login.ForgotPasswordLink;
 import com.issuetracker.pages.component.login.SignUpLink;
 import javax.inject.Inject;
 import javax.persistence.NoResultException;
+
+import com.issuetracker.service.api.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
@@ -25,7 +27,7 @@ public class Login extends PageLayout {
     private SignUpLink signUpLink;
     private ForgotPasswordLink forgotPasswordLink;
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     private static final String COOKIE_LAST_LOGGING_USER = "lastLoggingUser";
 
     private Form<User> form;
@@ -56,7 +58,7 @@ public class Login extends PageLayout {
                     getPage().get("form:user").error("Please fill the username and password.");
                     return;
                 }
-                if (userDao.getUserByName(user.getName())==null) {
+                if (userService.getUserByName(user.getName())==null) {
                     getPage().get("form:user").error("User doesn't exist.");
                     return;
                 }

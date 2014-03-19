@@ -13,6 +13,8 @@ import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueVa
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.UserService;
 import com.issuetracker.web.security.TrackerAuthSession;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,9 +38,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class IssueDetail extends PageLayout {
 
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     private IndicatingAjaxLink addWatcherLink;
     private final Label watchersCountLabel;
     private final ModalWindow modal2;
@@ -54,7 +56,7 @@ public class IssueDetail extends PageLayout {
 
     public IssueDetail(PageParameters parameters) {
         Long issueId = parameters.get("issue").toLong();
-        issue = issueDao.getIssueById(issueId);
+        issue = issueService.getIssueById(issueId);
         customField = new CustomField();
         PropertyModel<Issue> defaultModel = new PropertyModel<Issue>(this, "issue");
         setDefaultModel(defaultModel);
@@ -92,7 +94,7 @@ public class IssueDetail extends PageLayout {
         watchersModel = new PropertyModel<List<User>>(this, "watchersList") {
             @Override
             public List<User> getObject() {
-                List<User> list = new ArrayList<User>(issueDao.getIssueWatchers(issue));
+                List<User> list = new ArrayList<User>(issueService.getIssueWatchers(issue));
                 return list;
             }
         };
@@ -101,7 +103,7 @@ public class IssueDetail extends PageLayout {
             @Override
             public void onClick(AjaxRequestTarget target) {                
                 target.add(watchersCountLabel);
-                watchersList = issueDao.getIssueWatchers(issue);
+                watchersList = issueService.getIssueWatchers(issue);
                 if (watchersList == null) {
                     watchersList = new ArrayList<User>();
                 }
@@ -114,7 +116,7 @@ public class IssueDetail extends PageLayout {
                     }
                     issue.setWatches(watchersList);
                 }
-                issueDao.update(issue);
+                issueService.update(issue);
 
 //                target.add(modal2);
                 modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));

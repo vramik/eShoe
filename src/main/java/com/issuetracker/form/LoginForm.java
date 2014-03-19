@@ -4,6 +4,8 @@ import com.issuetracker.dao.api.UserDao;
 //import com.issuetracker.model.Credentials;
 import com.issuetracker.model.User;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.UserService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -23,7 +25,7 @@ public class LoginForm extends Form {
 //    private Credentials credentials;
     
     @Inject
-    private UserDao userDao;
+    private UserService userService;
 
     public LoginForm(String id) {
         super(id);
@@ -37,7 +39,7 @@ public class LoginForm extends Form {
 
     @Override
     public final void onSubmit() {
-        User user = userDao.getUserByUsername(username);
+        User user = userService.getUserByUsername(username);
         if (user != null && user.getPassword().equals(password)) {
             loginStatus = "Congratulations!";
 //            credentials = new Credentials();

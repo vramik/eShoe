@@ -1,8 +1,5 @@
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.IssueTypeDao;
-import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.dao.api.StatusDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Issue;
@@ -16,6 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.IssueTypeService;
+import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.StatusService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -40,13 +42,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class SearchIssues extends PageLayout {
 
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueDao;
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private IssueTypeDao issueTypeDao;
+    private IssueTypeService issueTypeService;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     private Form<List<Issue>> listIssuesForm;
     private final DropDownChoice<ProjectVersion> versionDropDownChoice;
     private final DropDownChoice<Component> componentsDropDownChoice;
@@ -69,7 +71,7 @@ public class SearchIssues extends PageLayout {
     public SearchIssues() {
         issues = new ArrayList<Issue>();
 
-        List<Project> projects = projectDao.getProjects();
+        List<Project> projects = projectService.getProjects();
         for (Project p : projects) {
             modelsProjectComponentsMap.put(p, p.getComponents());
         }
@@ -122,9 +124,9 @@ public class SearchIssues extends PageLayout {
         componentsDropDownChoice.setOutputMarkupId(true);
         componentsDropDownChoice.setRequired(true);
         form.add(componentsDropDownChoice);
-        listMultipleStatuses = new ListMultipleChoice<Status>("statusLMC", new PropertyModel<List<Status>>(this, "statusList"), statusDao.getStatuses(), new ChoiceRenderer<Status>("name"));
+        listMultipleStatuses = new ListMultipleChoice<Status>("statusLMC", new PropertyModel<List<Status>>(this, "statusList"), statusService.getStatuses(), new ChoiceRenderer<Status>("name"));
         form.add(listMultipleStatuses);
-        listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
+        listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeService.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         form.add(listMultipleIssueTypes);
 
 

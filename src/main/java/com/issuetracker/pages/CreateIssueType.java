@@ -3,6 +3,8 @@ package com.issuetracker.pages;
 import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.model.IssueType;
 import javax.inject.Inject;
+
+import com.issuetracker.service.api.IssueTypeService;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.PropertyModel;
@@ -15,14 +17,14 @@ public class CreateIssueType extends PageLayout {
 
     private IssueType issueType;
     @Inject
-    private IssueTypeDao issueTypeDao;
+    private IssueTypeService issueTypeService;
     private Form<IssueType> insertIssueTypeForm;
 
     public CreateIssueType() {
         insertIssueTypeForm = new Form<IssueType>("insertIssueTypeForm") {
             @Override
             protected void onSubmit() {
-                issueTypeDao.insert(issueType);
+                issueTypeService.insert(issueType);
                 issueType = new IssueType();
             }
         };
