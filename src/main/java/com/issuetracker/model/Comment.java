@@ -5,6 +5,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -17,6 +18,8 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String content;
+    private Date created;
+    private Date updated;
     
 
     public Long getId() {
@@ -35,10 +38,22 @@ public class Comment implements Serializable {
         this.content = content;
     }
 
-  
+    public Date getCreated() {
+        return created;
+    }
 
-    
-    
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

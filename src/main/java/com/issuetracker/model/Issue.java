@@ -5,6 +5,7 @@ import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,6 +25,9 @@ public class Issue implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
     private Priority priority;
+    private Date created;
+    private Date updated;
+
     @ManyToOne
 //    private Status status;
     private Status status;
@@ -227,8 +231,22 @@ public class Issue implements Serializable {
     public void setRelatesTo(List<IssuesRelationship> relatesTo) {
         this.relatesTo = relatesTo;
     }
-    
-    
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
+    }
 
     //</editor-fold>
 
