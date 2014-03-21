@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5">
+
+    <display-name>IShoe</display-name>
+
+    <!-- Enable Wicket -->
+    <filter>
+        <filter-name>Wicket</filter-name>
+        <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
+        <init-param>
+            <!-- Specify the "entry point" for Wicket to configure itself 
+            from -->
+            <param-name>applicationClassName</param-name>
+            <param-value>com.issuetracker.web.IssueWeb</param-value>
+        </init-param>
+    </filter>
+
+    <!-- Have wicket manage the context root -->
+    <filter-mapping>
+        <filter-name>Wicket</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- A message displayed on the page, externalized into web.xml -->
+    <env-entry>
+        <env-entry-name>welcomeMessage</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>Welcome to the IShoe - Issue tracking system</env-entry-value>
+    </env-entry>
+    
+    <context-param>
+        <param-name>configuration</param-name>
+        <param-value>development</param-value>
+    </context-param>
+
+</web-app>
+
