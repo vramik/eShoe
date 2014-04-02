@@ -283,8 +283,8 @@
 
     <!-- Dependencies. -->
     <dependencies>
-        
-        <dependency>
+    
+<dependency>
             <groupId>org.jboss.spec</groupId>
             <artifactId>jboss-javaee-6.0</artifactId>
             <version>1.0.0.Final</version>
@@ -436,24 +436,5 @@
         
     </dependencies>
     
-    <repositories>
-        <repository> 
-            <id>eap</id>
-            <url>http://maven.repository.redhat.com/techpreview/all</url>
-            <snapshots> 
-                <enabled>true</enabled> 
-            </snapshots>
-        </repository>
-    </repositories>
-    
-    <pluginRepositories>
-        <pluginRepository> 
-            <id>eap</id>
-            <url>http://maven.repository.redhat.com/techpreview/all</url>
-            <snapshots> 
-                <enabled>true</enabled> 
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>
