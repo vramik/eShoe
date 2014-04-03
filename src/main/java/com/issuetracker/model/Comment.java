@@ -1,9 +1,6 @@
 package com.issuetracker.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -42,16 +39,26 @@ public class Comment implements Serializable {
         return created;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public Date getUpdated() {
         return updated;
     }
 
-    public void setUpdated(Date updated) {
-        this.updated = updated;
+    public void setCreated(Date date) {
+        this.created = new Date(date.getTime());
+    }
+
+    @PrePersist
+    public void setCreationDate() {
+        this.created = new Date();
+    }
+
+    @PreUpdate
+    public void setUpdatedDate() {
+        this.updated = new Date();
+    }
+
+    public void setUpdated(Date date) {
+        this.updated = new Date(date.getTime());
     }
 
     @Override

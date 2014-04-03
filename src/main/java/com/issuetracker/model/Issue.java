@@ -25,7 +25,7 @@ public class Issue implements Serializable {
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
     private Priority priority;
-    private Date created;
+    private Date created = new Date();
     private Date updated;
 
     @ManyToOne
@@ -236,16 +236,26 @@ public class Issue implements Serializable {
         return created;
     }
 
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
     public Date getUpdated() {
         return updated;
     }
 
-    public void setUpdated(Date updated) {
-        this.updated = updated;
+    public void setCreated(Date date) {
+        this.created = new Date(date.getTime());
+    }
+
+    @PrePersist
+    public void setCreationDate() {
+        this.created = new Date();
+    }
+
+    @PreUpdate
+    public void setUpdatedDate() {
+        this.updated = new Date();
+    }
+
+    public void setUpdated(Date date) {
+        this.updated = new Date(date.getTime());
     }
 
     //</editor-fold>

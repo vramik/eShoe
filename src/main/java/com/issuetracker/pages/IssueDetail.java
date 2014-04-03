@@ -76,6 +76,12 @@ public class IssueDetail extends PageLayout {
         add(new Label("type", new PropertyModel(this, "issue.issueType.name")));
         add(new Label("affectsVersions", new PropertyModel(this, "issue.projectVersion.name")));
         add(new Label("priority", new PropertyModel(this, "issue.priority")));
+
+        String created = issue.getCreated().toString();
+        String updated = issue.getUpdated() != null ? issue.getUpdated().toString() : created;
+        add(new Label("created", created));
+        add(new Label("updated", updated));
+
 //        add(new RequiredTextField("description"));
 //        add(new RequiredTextField("project.name"));
         add(new Label("componentName", new PropertyModel(this, "issue.component.name")));
