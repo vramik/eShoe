@@ -3,6 +3,7 @@ package com.issuetracker.importer.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,35 +14,25 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BugzillaBug {
 
-<<<<<<< HEAD
-=======
     private String id;
-
     @JsonProperty("alias")
     private List<String> name;
-
     private String priority;
-
->>>>>>> 1536a02... Importer finalization
     private String creator;
     @JsonProperty("assigned_to")
     private String owner;
     @JsonProperty("cf_type")
     private String issueType;
     private String summary;
-<<<<<<< HEAD
-=======
-
     @JsonProperty("product")
     private String project;
-
->>>>>>> 8d73390... Importer functionality improved
     private List<String> component;
     private List<String> version;
-
-<<<<<<< HEAD
-=======
     private String status;
+    @JsonProperty("creation_time")
+    private Date created;
+    @JsonProperty("last_change_time")
+    private Date updated;
 
     public List<String> getName() {
         return name;
@@ -51,7 +42,6 @@ public class BugzillaBug {
         this.name = name;
     }
 
->>>>>>> 1536a02... Importer finalization
     public String getCreator() {
         return creator;
     }
@@ -130,6 +120,22 @@ public class BugzillaBug {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(Date updated) {
+        this.updated = updated;
     }
 
     @Override

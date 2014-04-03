@@ -142,7 +142,7 @@ public class ImporterServlet extends HttpServlet {
             issue.setStatus(status);
             issue.setProjectVersion(projectVersion);
 
-            issueDao.updateIssue(issue);
+            issueDao.update(issue);
         }
     }
 
@@ -168,7 +168,7 @@ public class ImporterServlet extends HttpServlet {
 
         Component component = new Component();
         component.setName(bug.getComponent().get(0));
-        componentDao.insertComponent(component);
+        componentDao.insert(component);
 
         return component;
     }
@@ -179,7 +179,7 @@ public class ImporterServlet extends HttpServlet {
         if(user == null) {
             user = new User();
             user.setName(bug.getCreator());
-            userDao.addUser(user);
+            userDao.insert(user);
         }
 
         return user;
@@ -191,7 +191,7 @@ public class ImporterServlet extends HttpServlet {
         if(user == null) {
             user = new User();
             user.setName(bug.getOwner());
-            userDao.addUser(user);
+            userDao.insert(user);
         }
 
         return user;
@@ -210,11 +210,14 @@ public class ImporterServlet extends HttpServlet {
 
         //first comment of Bugzilla's bug is the description of the bug
         issue.setDescription(comments.get(bug.getId()).remove(0).getText());
+        issue.setCreated(bug.getCreated());
+        issue.setUpdated(bug.getUpdated());
 
         List<Comment> issueComments = new ArrayList<Comment>();
         for(BugzillaComment bugzillaComment: comments.get(bug.getId())) {
             Comment comment = new Comment();
             comment.setContent(bugzillaComment.getText());
+            comment.setCreated(bugzillaComment.getCreated());
             issueComments.add(comment);
         }
 
@@ -234,7 +237,7 @@ public class ImporterServlet extends HttpServlet {
 
         IssueType issueType = new IssueType();
         issueType.setName(bug.getIssueType());
-        issueTypeDao.insertIssueType(issueType);
+        issueTypeDao.insert(issueType);
 
         return issueType;
     }
@@ -263,7 +266,7 @@ public class ImporterServlet extends HttpServlet {
 
         ProjectVersion projectVersion = new ProjectVersion();
         projectVersion.setName(bug.getVersion().get(0));
-        projectVersionDao.insertProjectVersion(projectVersion);
+        projectVersionDao.insert(projectVersion);
 
         return projectVersion;
     }
