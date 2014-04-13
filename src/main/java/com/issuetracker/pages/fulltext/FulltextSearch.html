@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fulltext search</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+    <wicket:extend>
+        <div wicket:id="feedbackPanel"></div>
+
+        <div id="fulltext_search">
+            <form wicket:id="searchForm" class="fulltext">
+                <input type="text" wicket:id="queryInput" />
+                <input type="submit" value="Search" />
+
+                <span id="advancedSearchHeader">Advanced search</span>
+                <table>
+                    <tr>
+                        <td>Project</td>
+                        <td><select wicket:id="projectsSelect"></select></td>
+
+                        <td>Type</td>
+                        <td><select wicket:id="issueTypesSelect"></select></td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td><select wicket:id="statusesSelect"></select></td>
+
+                        <td>Date from</td>
+                        <td><input type="text" wicket:id="dateFromField" /></td>
+                    </tr>
+                    <tr>
+                        <td>Date to</td>
+                        <td><input type="text" wicket:id="dateToField" /></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </wicket:extend>
+</body>
+</html>

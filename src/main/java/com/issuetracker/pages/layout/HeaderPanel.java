@@ -3,6 +3,7 @@ package com.issuetracker.pages.layout;
 import com.issuetracker.model.User;
 import com.issuetracker.pages.*;
 import com.issuetracker.pages.createIssue.CreateIssue;
+import com.issuetracker.pages.fulltext.FulltextSearch;
 import com.issuetracker.web.security.TrackerAuthSession;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -81,7 +82,8 @@ public class HeaderPanel extends Panel {
         List<String> optsIssue = new ArrayList<String>();
         optsIssue.add("Create Issue");
         optsIssue.add("Insert Types of Issue");
-        optsIssue.add("Search Issue");
+        optsIssue.add("List Issues");
+        optsIssue.add("Issue Fulltext Search");
 
         List<String> optsWorkflow = new ArrayList<String>();
         optsWorkflow.add("Create Statuses");
@@ -120,8 +122,11 @@ public class HeaderPanel extends Panel {
                         if (selected.equals("Create Issue")) {
                             setResponsePage(CreateIssue.class);
                         }
-                        if (selected.equals("Search Issue")) {
+                        if (selected.equals("List Issues")) {
                             setResponsePage(SearchIssues.class);
+                        }
+                        if (selected.equals("Issue Fulltext Search")) {
+                            setResponsePage(FulltextSearch.class);
                         }
                         if (selected.equals("Insert Types of Issue")) {
                             setResponsePage(CreateIssueType.class);
