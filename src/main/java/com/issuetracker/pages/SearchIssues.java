@@ -28,7 +28,7 @@ import java.util.*;
 public class SearchIssues extends PageLayout {
 
     @Inject
-    private IssueService issueDao;
+    private IssueService issueService;
     @Inject
     private ProjectService projectService;
     @Inject
@@ -95,7 +95,7 @@ public class SearchIssues extends PageLayout {
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-                issues = issueDao.getIssuesBySearch(project, version, component, issueTypes, statusList, containsText);
+                issues = issueService.getIssuesBySearch(project, version, component, issueTypes, statusList, containsText);
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
@@ -145,7 +145,7 @@ public class SearchIssues extends PageLayout {
 //                item.add(new Link<Issue>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
-//                        issueDao.remove(item.getModelObject());
+//                        issueService.remove(item.getModelObject());
 //                    }
 //                });
             }
