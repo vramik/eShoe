@@ -20,7 +20,7 @@
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!-- Properties for Hibernate -->
-      <property name="hibernate.hbm2ddl.auto" value="create"/>
+      <!--<property name="hibernate.hbm2ddl.auto" value="create"/>-->
       <property name="hibernate.show_sql" value="false"/>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/Issue_Tracker"/>
       <property name="javax.persistence.jdbc.user" value="root"/>
