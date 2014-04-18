@@ -1,4 +1,4 @@
-package com.issuetracker.importer;
+package com.issuetracker.service;
 
 import com.issuetracker.dao.api.*;
 import com.issuetracker.importer.loader.IdFileLoader;
@@ -10,29 +10,22 @@ import com.issuetracker.importer.parser.JsonParser;
 import com.issuetracker.importer.parser.Parser;
 import com.issuetracker.importer.reader.RestReader;
 import com.issuetracker.model.*;
+import com.issuetracker.service.api.CommentService;
+import com.issuetracker.service.api.ImporterService;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Main importing servlet accessible from /importer URL. Reads ID's of bugs to
- * be imported from file "importer-bugzilla-ids.txt", reads all information
- * about them from Red Hat Bugzilla. Them maps the Bugzilla bugs into our
- * data model and saves them into database and index search.
  *
- * @author
+ * @author Jiri Holusa
  */
-@WebServlet("/importer")
-public class ImporterServlet extends HttpServlet {
+@Stateless
+public class ImporterServiceBean implements ImporterService {
 
     private static final String BUGZILLA_URL = "https://bugzilla.redhat.com/";
     private static final String IDS_FILENAME = "importer-bugzilla-ids.txt";
@@ -54,25 +47,14 @@ public class ImporterServlet extends HttpServlet {
     private UserDao userDao;
     @Inject
     private StatusDao statusDao;
+    @Inject
+    private CommentDao commentDao;
 
     private List<IssueType> issueTypeList = new ArrayList<IssueType>();
     private List<Component> componentList = new ArrayList<Component>();
     private List<ProjectVersion> projectVersionList = new ArrayList<ProjectVersion>();
 
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        PrintWriter out = response.getWriter();
-        out.println("<html>");
-        out.println("<body>");
-        out.println("<h1>Importer servlet</h1>");
-        run();
-        out.println("</body>");
-        out.println("</html>");
-    }
-
-    private void run() {
-        System.out.println("Import running");
+    public void doImport() {System.out.println("Import running");
         reader = new RestReader();
         parser = new JsonParser();
 
@@ -95,12 +77,12 @@ public class ImporterServlet extends HttpServlet {
             if(components == null) {
                 components = new ArrayList<Component>();
             }
-            
+
             Component component = mapComponent(bug);
             if(!components.contains(component)) {
                 components.add(component);
-            }            
-                        
+            }
+
             List<ProjectVersion> projectVersions = project.getVersions();
             if(projectVersions == null) {
                 projectVersions = new ArrayList<ProjectVersion>();
@@ -113,6 +95,7 @@ public class ImporterServlet extends HttpServlet {
 
             project.setComponents(components);
             project.setVersions(projectVersions);
+            projectDao.insert(project);
 
             IssueType issueType = mapIssueType(bug);
 
@@ -122,14 +105,6 @@ public class ImporterServlet extends HttpServlet {
             Issue.Priority priority = mapPriority(bug);
 
             Issue issue = mapIssue(bug, comments);
-
-            List<Issue> createdIssues = new ArrayList<Issue>();
-            createdIssues.add(issue);
-            creator.setCreated(createdIssues);
-
-            List<Issue> ownedIssues = new ArrayList<Issue>();
-            ownedIssues.add(issue);
-            owner.setOwned(ownedIssues);
 
             Status status = mapStatus(bug);
 
@@ -142,7 +117,22 @@ public class ImporterServlet extends HttpServlet {
             issue.setStatus(status);
             issue.setProjectVersion(projectVersion);
 
+            issueDao.insert(issue);
+
+            List<Comment> issuesComments = mapComments(bug, comments);
+            issue.setComments(issuesComments);
+
             issueDao.update(issue);
+
+            /*List<Issue> createdIssues = new ArrayList<Issue>();
+            createdIssues.add(issue);
+            creator.setCreated(createdIssues);
+            userDao.update(creator);
+
+            List<Issue> ownedIssues = new ArrayList<Issue>();
+            ownedIssues.add(issue);
+            owner.setOwned(ownedIssues);
+            userDao.update(owner);*/
         }
     }
 
@@ -168,7 +158,6 @@ public class ImporterServlet extends HttpServlet {
 
         Component component = new Component();
         component.setName(bug.getComponent().get(0));
-        componentDao.insert(component);
 
         return component;
     }
@@ -213,6 +202,10 @@ public class ImporterServlet extends HttpServlet {
         issue.setCreated(bug.getCreated());
         issue.setUpdated(bug.getUpdated());
 
+        return issue;
+    }
+
+    private List<Comment> mapComments(BugzillaBug bug, Map<String, List<BugzillaComment>> comments) {
         List<Comment> issueComments = new ArrayList<Comment>();
         for(BugzillaComment bugzillaComment: comments.get(bug.getId())) {
             Comment comment = new Comment();
@@ -221,9 +214,7 @@ public class ImporterServlet extends HttpServlet {
             issueComments.add(comment);
         }
 
-        issue.setComments(issueComments);
-
-        return issue;
+        return issueComments;
     }
 
     private IssueType mapIssueType(BugzillaBug bug) {
@@ -255,7 +246,7 @@ public class ImporterServlet extends HttpServlet {
 
     private ProjectVersion mapProjectVersion(BugzillaBug bug) {
         projectVersionList = projectVersionDao.getProjectVersions();
-        
+
         if(projectVersionList != null) {
             for(ProjectVersion projectVersion: projectVersionList) {
                 if(projectVersion.getName().equals(bug.getVersion().get(0))) {
@@ -266,11 +257,10 @@ public class ImporterServlet extends HttpServlet {
 
         ProjectVersion projectVersion = new ProjectVersion();
         projectVersion.setName(bug.getVersion().get(0));
-        projectVersionDao.insert(projectVersion);
 
         return projectVersion;
     }
-    
+
     private Status mapStatus(BugzillaBug bug) {
         Status status = statusDao.getStatusByName(bug.getStatus());
 
@@ -282,6 +272,4 @@ public class ImporterServlet extends HttpServlet {
 
         return status;
     }
-    
-    
 }

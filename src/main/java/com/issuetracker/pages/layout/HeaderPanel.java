@@ -156,6 +156,12 @@ public class HeaderPanel extends Panel {
             }
         });
 
+        add(new Link("importerLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(Importer.class);
+            }
+        });
     }
 
     public String getSelected() {
