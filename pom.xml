@@ -152,9 +152,24 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- ANTLR maven plugin -->
+            <plugin>
+                <groupid>org.antlr</groupid>
+                <artifactid>antlr3-maven-plugin</artifactid>
+                <version>3.3</version>
+                <executions>
+                    <execution>
+                        <id>run antlr</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>antlr</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    
     
     <profiles>
         <profile>
@@ -474,6 +489,15 @@
             <groupId>com.github.holmistr</groupId>
             <artifactId>elasticsearch-annotations</artifactId>
             <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- ANTLR -->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>3.3</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         
         <!--junit test-->
