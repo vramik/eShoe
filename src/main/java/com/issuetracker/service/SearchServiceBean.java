@@ -17,6 +17,7 @@ import java.util.List;
 public class SearchServiceBean implements SearchService{
 
     public List<Issue> search(String query) {
+        System.out.println(query);
 
         return null;
     }

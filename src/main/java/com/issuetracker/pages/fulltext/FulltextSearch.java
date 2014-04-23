@@ -3,10 +3,8 @@ package com.issuetracker.pages.fulltext;
 import com.issuetracker.model.*;
 import com.issuetracker.pages.IssueDetail;
 import com.issuetracker.pages.PageLayout;
-import com.issuetracker.service.api.IssueService;
-import com.issuetracker.service.api.IssueTypeService;
-import com.issuetracker.service.api.ProjectService;
-import com.issuetracker.service.api.StatusService;
+import com.issuetracker.search.ql.QueryLanguageBuilder;
+import com.issuetracker.service.api.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
@@ -40,6 +38,8 @@ public class FulltextSearch extends PageLayout {
     private IssueTypeService issueTypeService;
     @Inject
     private StatusService statusService;
+    @Inject
+    private SearchService searchService;
 
     private String queryInput;
 
@@ -55,13 +55,18 @@ public class FulltextSearch extends PageLayout {
     private Date dateFrom;
     private Date dateTo;
 
+    private List<Issue> issues;
+
+    private QueryLanguageBuilder queryBuilder = new QueryLanguageBuilder();
+
     public FulltextSearch() {
         add(new FeedbackPanel("feedbackPanel"));
 
         Form form = new Form("searchForm") {
             @Override
             protected void onSubmit() {
-                //issues = issueService.getIssuesBySearch(project, version, component, issueTypes, statusList, containsText);
+                computeQuery();
+                issues = searchService.search(queryBuilder.getQuery());
             }
         };
 
@@ -85,6 +90,8 @@ public class FulltextSearch extends PageLayout {
         dateFromField.add(new DatePicker());
         dateToField.add(new DatePicker());
 
+        addAjaxEvents();
+
         form.add(projectsSelect);
         form.add(issueTypesSelect);
         form.add(statusesSelect);
@@ -94,6 +101,117 @@ public class FulltextSearch extends PageLayout {
         form.add(new TextField("queryInput", new PropertyModel<String>(this, "queryInput")));
 
         add(form);
+    }
+
+    private void addAjaxEvents() {
+        projectsSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                if(projects.contains(null)) { //if "All" selected, unselect everything else
+                    projects.clear();
+                    projects.add(null);
+
+                    target.add(projectsSelect);
+                }
+
+                computeQuery();
+            }
+        });
+
+        issueTypesSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                if(issueTypes.contains(null)) { //if "All" selected, unselect everything else
+                    issueTypes.clear();
+                    issueTypes.add(null);
+
+                    target.add(issueTypesSelect);
+                }
+
+                computeQuery();
+            }
+        });
+
+        statusesSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                if(statuses.contains(null)) { //if "All" selected, unselect everything else
+                    statuses.clear();
+                    statuses.add(null);
+
+                    target.add(statusesSelect);
+                }
+
+                computeQuery();
+            }
+        });
+
+        dateFromField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                computeQuery();
+            }
+        });
+
+        dateToField.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                computeQuery();
+            }
+        });
+    }
+
+    private void computeQuery() {
+        queryBuilder.clear();
+
+        if(queryInput != null && queryInput.length() != 0) {
+            queryBuilder.tilda("text", queryInput);
+        }
+
+        if(projects != null) {
+            if(projects.size() == 1) {
+                if(projects.get(0) != null) {
+                    queryBuilder.equality("project", projects.get(0).getName());
+                }
+            }
+            else if(!projects.isEmpty()) {
+                List<String> names = new ArrayList<String>();
+                for(Project project: projects) {
+                    names.add(project.getName());
+                }
+                queryBuilder.in("project", names);
+            }
+        }
+
+        if(issueTypes != null) {
+            if(issueTypes.size() == 1) {
+                if(issueTypes.get(0) != null) {
+                    queryBuilder.equality("issue_type", issueTypes.get(0).getName());
+                }
+            }
+            else if(!issueTypes.isEmpty()) {
+                List<String> names = new ArrayList<String>();
+                for(IssueType issueType: issueTypes) {
+                    names.add(issueType.getName());
+                }
+                queryBuilder.in("issue_type", names);
+            }
+        }
+
+        if(statuses != null) {
+            if(statuses.size() == 1) {
+                if(statuses.get(0) != null) {
+                    queryBuilder.equality("status", statuses.get(0).getName());
+                }
+            }
+            else if(!statuses.isEmpty()) {
+                List<String> names = new ArrayList<String>();
+                for(Status status: statuses) {
+                    names.add(status.getName());
+                }
+                queryBuilder.in("status", names);
+            }
+        }
     }
 
     public String getQueryInput() {
