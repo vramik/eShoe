@@ -5,6 +5,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.*;
+
+import com.github.holmistr.esannotations.indexing.annotations.DocumentId;
+import com.github.holmistr.esannotations.indexing.annotations.Field;
+import com.github.holmistr.esannotations.indexing.annotations.IndexEmbedded;
+import com.github.holmistr.esannotations.indexing.annotations.Indexed;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -18,16 +23,23 @@ import java.util.List;
  * @author mgottval
  */
 @Entity
+@Indexed
 public class Issue implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @DocumentId
+    @Field(name = "id")
     private Long issueId;
+    @Field
     private String name;
+    @Field
     private String summary;
     @Lob
+    @Field
     private String description;
+    @IndexEmbedded
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
     private Priority priority;
