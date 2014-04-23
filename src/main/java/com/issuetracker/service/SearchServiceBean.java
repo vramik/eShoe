@@ -13,13 +13,16 @@ import org.antlr.runtime.TokenStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 import org.elasticsearch.action.search.SearchRequestBuilder;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.*;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -29,6 +32,14 @@ import java.util.List;
  */
 @Stateless
 public class SearchServiceBean implements SearchService {
+
+    //hash map of attributes that can be searched by with they corresponding name in index
+    private final Map<String, String> ALLOWED_SEARCH_PROPERTIES = new HashMap<String, String>(){{
+        put("project", "project.name");
+        put("status", "status.name");
+        put("issue_type", "issue_type.name");
+        put("text", ""); // value never used since its QueryString type query
+    }};
 
     @Inject
     @TransportClient
@@ -44,8 +55,10 @@ public class SearchServiceBean implements SearchService {
         searchRequestBuilder = esClient.prepareSearch("issues").setTypes("issue");
 
         parseQuery(query);
+        System.out.println(searchRequestBuilder.toString());
 
-        List<Issue> issues = searchManager.search(searchRequestBuilder.execute().actionGet(), Issue.class);
+        SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
+        List<Issue> issues = searchManager.search(searchResponse, Issue.class);
 
         return issues;
     }
@@ -70,8 +83,16 @@ public class SearchServiceBean implements SearchService {
         AndFilterBuilder andFilterBuilder = FilterBuilders.andFilter();
         for(Object item: root.getChildren()) {
             Tree child = (Tree) item;
+            if(!root.isNil()) { //can only happen when there is simple query like field = value and we want to always have dummy root
+                child = root;
+            }
+
             String operator = child.getText();
             String fieldName = child.getChild(0).getText();
+            if(!ALLOWED_SEARCH_PROPERTIES.containsKey(fieldName)) {
+                continue;
+            }
+            fieldName = ALLOWED_SEARCH_PROPERTIES.get(fieldName);
 
             if(operator.equals("~") && child.getChild(0).getText().equals("text")) {
                 QueryBuilder queryBuilder = QueryBuilders.queryString(trimQuotes(child.getChild(1).getText()));
@@ -88,6 +109,10 @@ public class SearchServiceBean implements SearchService {
                 }
 
                 andFilterBuilder.add(FilterBuilders.termsFilter(fieldName, fieldValues));
+            }
+
+            if(!root.isNil()) { //we already processed it, correction of flow
+                break;
             }
         }
 

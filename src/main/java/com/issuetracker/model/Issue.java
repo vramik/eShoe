@@ -23,7 +23,7 @@ import java.util.List;
  * @author mgottval
  */
 @Entity
-@Indexed
+@Indexed(index = "issues", type = "issue")
 public class Issue implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -39,7 +39,7 @@ public class Issue implements Serializable {
     @Lob
     @Field
     private String description;
-    @IndexEmbedded
+    @IndexEmbedded(name = "issue_type")
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
     private Priority priority;

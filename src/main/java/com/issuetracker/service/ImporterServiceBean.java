@@ -1,6 +1,6 @@
 package com.issuetracker.service;
 
-import com.issuetracker.dao.api.*;
+import com.issuetracker.service.api.*;
 import com.issuetracker.importer.loader.IdFileLoader;
 import com.issuetracker.importer.model.BugzillaBug;
 import com.issuetracker.importer.model.BugzillaBugResponse;
@@ -34,21 +34,21 @@ public class ImporterServiceBean implements ImporterService {
     private Parser parser;
 
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     @Inject
-    private ComponentDao componentDao;
+    private ComponentService componentService;
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private IssueTypeDao issueTypeDao;
+    private IssueTypeService issueTypeService;
     @Inject
-    private ProjectVersionDao projectVersionDao;
+    private ProjectVersionService projectVersionService;
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     @Inject
-    private CommentDao commentDao;
+    private CommentService commentService;
 
     private List<IssueType> issueTypeList = new ArrayList<IssueType>();
     private List<Component> componentList = new ArrayList<Component>();
@@ -95,7 +95,7 @@ public class ImporterServiceBean implements ImporterService {
 
             project.setComponents(components);
             project.setVersions(projectVersions);
-            projectDao.insert(project);
+            projectService.insert(project);
 
             IssueType issueType = mapIssueType(bug);
 
@@ -117,22 +117,22 @@ public class ImporterServiceBean implements ImporterService {
             issue.setStatus(status);
             issue.setProjectVersion(projectVersion);
 
-            issueDao.insert(issue);
+            issueService.insert(issue);
 
             List<Comment> issuesComments = mapComments(bug, comments);
             issue.setComments(issuesComments);
 
-            issueDao.update(issue);
+            issueService.update(issue);
 
             /*List<Issue> createdIssues = new ArrayList<Issue>();
             createdIssues.add(issue);
             creator.setCreated(createdIssues);
-            userDao.update(creator);
+            userService.update(creator);
 
             List<Issue> ownedIssues = new ArrayList<Issue>();
             ownedIssues.add(issue);
             owner.setOwned(ownedIssues);
-            userDao.update(owner);*/
+            userService.update(owner);*/
         }
     }
 
@@ -146,7 +146,7 @@ public class ImporterServiceBean implements ImporterService {
     }
 
     private Component mapComponent(BugzillaBug bug) {
-        componentList = componentDao.getComponents();
+        componentList = componentService.getComponents();
 
         if(componentList != null) {
             for(Component component: componentList) {
@@ -163,24 +163,24 @@ public class ImporterServiceBean implements ImporterService {
     }
 
     private User mapCreator(BugzillaBug bug) {
-        User user = userDao.getUserByName(bug.getCreator());
+        User user = userService.getUserByName(bug.getCreator());
 
         if(user == null) {
             user = new User();
             user.setName(bug.getCreator());
-            userDao.insert(user);
+            userService.insert(user);
         }
 
         return user;
     }
 
     private User mapOwner(BugzillaBug bug) {
-        User user = userDao.getUserByName(bug.getOwner());
+        User user = userService.getUserByName(bug.getOwner());
 
         if(user == null) {
             user = new User();
             user.setName(bug.getOwner());
-            userDao.insert(user);
+            userService.insert(user);
         }
 
         return user;
@@ -218,7 +218,7 @@ public class ImporterServiceBean implements ImporterService {
     }
 
     private IssueType mapIssueType(BugzillaBug bug) {
-        issueTypeList = issueTypeDao.getIssueTypes();
+        issueTypeList = issueTypeService.getIssueTypes();
 
         for(IssueType issueType: issueTypeList) {
             if(issueType.getName().equals(bug.getIssueType())) {
@@ -228,13 +228,13 @@ public class ImporterServiceBean implements ImporterService {
 
         IssueType issueType = new IssueType();
         issueType.setName(bug.getIssueType());
-        issueTypeDao.insert(issueType);
+        issueTypeService.insert(issueType);
 
         return issueType;
     }
 
     private Project mapProject(BugzillaBug bug) {
-        Project project = projectDao.getProjectByName(bug.getProject());
+        Project project = projectService.getProjectByName(bug.getProject());
 
         if(project == null) {
             project = new Project();
@@ -245,7 +245,7 @@ public class ImporterServiceBean implements ImporterService {
     }
 
     private ProjectVersion mapProjectVersion(BugzillaBug bug) {
-        projectVersionList = projectVersionDao.getProjectVersions();
+        projectVersionList = projectVersionService.getProjectVersions();
 
         if(projectVersionList != null) {
             for(ProjectVersion projectVersion: projectVersionList) {
@@ -262,12 +262,12 @@ public class ImporterServiceBean implements ImporterService {
     }
 
     private Status mapStatus(BugzillaBug bug) {
-        Status status = statusDao.getStatusByName(bug.getStatus());
+        Status status = statusService.getStatusByName(bug.getStatus());
 
         if(status == null) {
             status = new Status();
             status.setName(bug.getStatus());
-            statusDao.insert(status);
+            statusService.insert(status);
         }
 
         return status;

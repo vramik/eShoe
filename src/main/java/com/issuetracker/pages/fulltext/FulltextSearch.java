@@ -42,6 +42,7 @@ public class FulltextSearch extends PageLayout {
     private SearchService searchService;
 
     private String queryInput;
+    private boolean isQueryLanguageUsed = false;
 
     private ListMultipleChoice<IssueType> issueTypesSelect;
     private ListMultipleChoice<Status> statusesSelect;
@@ -66,7 +67,9 @@ public class FulltextSearch extends PageLayout {
             @Override
             protected void onSubmit() {
                 computeQuery();
-                issues = searchService.search(queryBuilder.getQuery());
+
+                String query = queryBuilder.getQuery();
+                issues = searchService.search(query);
             }
         };
 
@@ -300,6 +303,14 @@ public class FulltextSearch extends PageLayout {
 
     public void setDateToField(DateTextField dateToField) {
         this.dateToField = dateToField;
+    }
+
+    public boolean isQueryLanguageUsed() {
+        return isQueryLanguageUsed;
+    }
+
+    public void setQueryLanguageUsed(boolean queryLanguageUsed) {
+        isQueryLanguageUsed = queryLanguageUsed;
     }
 
     public class NullAsAllChoiceRenderer<T> extends ChoiceRenderer<T> {

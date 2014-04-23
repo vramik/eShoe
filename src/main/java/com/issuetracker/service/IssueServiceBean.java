@@ -1,5 +1,6 @@
 package com.issuetracker.service;
 
+import com.github.holmistr.esannotations.indexing.AnnotationIndexManager;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.*;
 import com.issuetracker.service.api.IssueService;
@@ -17,6 +18,9 @@ public class IssueServiceBean implements IssueService {
 
     @Inject
     private IssueDao issueDao;
+
+    @Inject
+    private AnnotationIndexManager indexManager;
 
     @Override
     public List<Issue> getIssues() {
@@ -41,11 +45,13 @@ public class IssueServiceBean implements IssueService {
     @Override
     public void insert(Issue issue) {
         issueDao.insert(issue);
+        indexManager.index(issue);
     }
 
     @Override
     public void update(Issue issue) {
         issueDao.update(issue);
+        indexManager.index(issue);
     }
 
     @Override
