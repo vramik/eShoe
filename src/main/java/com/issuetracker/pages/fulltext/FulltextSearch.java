@@ -49,6 +49,7 @@ public class FulltextSearch extends PageLayout {
     private ListMultipleChoice<Project> projectsSelect;
     private DateTextField dateFromField;
     private DateTextField dateToField;
+    private ListView<Issue> issuesListView;
 
     private List<Project> projects;
     private List<Status> statuses;
@@ -93,6 +94,8 @@ public class FulltextSearch extends PageLayout {
         dateFromField.add(new DatePicker());
         dateToField.add(new DatePicker());
 
+        createIssuesListView();
+
         addAjaxEvents();
 
         form.add(projectsSelect);
@@ -104,6 +107,7 @@ public class FulltextSearch extends PageLayout {
         form.add(new TextField("queryInput", new PropertyModel<String>(this, "queryInput")));
 
         add(form);
+        add(issuesListView);
     }
 
     private void addAjaxEvents() {
@@ -162,6 +166,26 @@ public class FulltextSearch extends PageLayout {
                 computeQuery();
             }
         });
+    }
+
+    private void createIssuesListView() {
+        issuesListView = new ListView<Issue>("issues", new PropertyModel<List<Issue>>(this, "issues")) {
+            @Override
+            protected void populateItem(final ListItem<Issue> item) {
+                Issue issue = item.getModelObject();
+                Link nameLink = new Link<Issue>("showIssue", item.getModel()) {
+                    @Override
+                    public void onClick() {
+                        PageParameters pageParameters = new PageParameters();
+                        pageParameters.add("issue", (item.getModelObject()).getIssueId());
+                        setResponsePage(IssueDetail.class, pageParameters);
+                    }
+                };
+                nameLink.add(new Label("issue.name", issue.getName()));
+                item.add(nameLink);
+                item.add(new Label("issue.description", issue.getDescription()));
+            }
+        };
     }
 
     private void computeQuery() {
@@ -271,6 +295,14 @@ public class FulltextSearch extends PageLayout {
 
     public void setIssueTypes(List<IssueType> issueTypes) {
         this.issueTypes = issueTypes;
+    }
+
+    public ListView<Issue> getIssuesListView() {
+        return issuesListView;
+    }
+
+    public void setIssuesListView(ListView<Issue> issuesListView) {
+        this.issuesListView = issuesListView;
     }
 
     public Date getDateFrom() {
