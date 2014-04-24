@@ -1,11 +1,6 @@
 package com.issuetracker.model;
 
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.*;
-
 import com.github.holmistr.esannotations.indexing.annotations.DocumentId;
 import com.github.holmistr.esannotations.indexing.annotations.Field;
 import com.github.holmistr.esannotations.indexing.annotations.IndexEmbedded;

@@ -1,6 +1,5 @@
 package com.issuetracker.service;
 
-import com.issuetracker.service.api.*;
 import com.issuetracker.importer.loader.IdFileLoader;
 import com.issuetracker.importer.model.BugzillaBug;
 import com.issuetracker.importer.model.BugzillaBugResponse;
@@ -10,8 +9,7 @@ import com.issuetracker.importer.parser.JsonParser;
 import com.issuetracker.importer.parser.Parser;
 import com.issuetracker.importer.reader.RestReader;
 import com.issuetracker.model.*;
-import com.issuetracker.service.api.CommentService;
-import com.issuetracker.service.api.ImporterService;
+import com.issuetracker.service.api.*;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.ejb.Stateless;

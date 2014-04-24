@@ -1,6 +1,9 @@
 package com.issuetracker.pages.fulltext;
 
-import com.issuetracker.model.*;
+import com.issuetracker.model.Issue;
+import com.issuetracker.model.IssueType;
+import com.issuetracker.model.Project;
+import com.issuetracker.model.Status;
 import com.issuetracker.pages.IssueDetail;
 import com.issuetracker.pages.PageLayout;
 import com.issuetracker.search.ql.QueryLanguageBuilder;
@@ -10,21 +13,24 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.AbstractReadOnlyModel;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
- * TODO: document this
+ * Controller of fulltext search page.
  *
  * @author Jiri Holusa
  */

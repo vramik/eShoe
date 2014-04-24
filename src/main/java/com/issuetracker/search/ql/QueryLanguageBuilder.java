@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * //TODO: document this
+ * Helper builder for creating string queries based on SearchQueryLanguage.g grammar.
  *
  * @author Jiří Holuša
  */
@@ -12,6 +12,12 @@ public class QueryLanguageBuilder implements Serializable{
 
     private StringBuilder query = new StringBuilder();
 
+    /**
+     * Expresses single match against certain value.
+     *
+     * @param property name of the property that should match value
+     * @param value
+     */
     public void equality(String property, String value) {
         and();
 
@@ -22,6 +28,13 @@ public class QueryLanguageBuilder implements Serializable{
         query.append("\"");
     }
 
+    /**
+     * Expresses that property should match at least one of the values
+     * provided in value list.
+     *
+     * @param property property to be matched
+     * @param values
+     */
     public void in(String property, List<String> values) {
         and();
 
@@ -42,6 +55,12 @@ public class QueryLanguageBuilder implements Serializable{
         query.append(")");
     }
 
+    /**
+     * Expresses fuzzy search.
+     *
+     * @param property property to be matched
+     * @param value
+     */
     public void tilda(String property, String value) {
         and();
 

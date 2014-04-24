@@ -7,7 +7,8 @@ import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import javax.enterprise.inject.Produces;
 
 /**
- * //TODO: document this
+ * Producer for Elasticsearch client so it can be injected into
+ * any bean.
  *
  * @author Jiří Holuša
  */
@@ -15,6 +16,11 @@ public class EsTransportClientProducer {
 
     private Client client;
 
+    /**
+     * Returns properly configured TransportClient ready to use.
+     *
+     * @return
+     */
     @Produces
     @com.issuetracker.search.TransportClient
     public Client getTransportClient() {
@@ -25,5 +31,4 @@ public class EsTransportClientProducer {
 
         return client;
     }
-
 }

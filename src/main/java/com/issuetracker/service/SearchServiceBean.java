@@ -15,7 +15,10 @@ import org.antlr.runtime.tree.Tree;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.AndFilterBuilder;
+import org.elasticsearch.index.query.FilterBuilders;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -25,8 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * TODO: document this
+ * Implementation of SearchService.
  *
  * @author Jiri Holusa
  */
@@ -49,13 +51,12 @@ public class SearchServiceBean implements SearchService {
 
     private SearchManager searchManager;
 
+    @Override
     public List<Issue> search(String query) {
-        System.out.println(query);
         searchManager = new SearchManager(esClient);
         searchRequestBuilder = esClient.prepareSearch("issues").setTypes("issue");
 
         parseQuery(query);
-        System.out.println(searchRequestBuilder.toString());
 
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
         List<Issue> issues = searchManager.search(searchResponse, Issue.class);
@@ -74,7 +75,7 @@ public class SearchServiceBean implements SearchService {
             parser = new SearchQueryLanguageParser(tokens);
             parserReturn = parser.query();
         } catch (RecognitionException ex) {
-            //TODO: handle this properly
+            throw new IllegalStateException("Unreachable state was reached!");
         }
 
         //acquire parse result

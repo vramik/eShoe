@@ -2,14 +2,13 @@ package com.issuetracker.search;
 
 import com.github.holmistr.esannotations.indexing.AnnotationIndexManager;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.common.transport.InetSocketTransportAddress;
 
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 /**
- * //TODO: document this
+ * Producer of search index manager so it can be injected
+ * in any bean.
  *
  * @author Jiří Holuša
  */
@@ -21,6 +20,11 @@ public class IndexManagerProducer {
 
     private AnnotationIndexManager manager;
 
+    /**
+     * Returns instance of AnnotationIndexManager ready to use.
+     *
+     * @return
+     */
     @Produces
     public AnnotationIndexManager getIndexManager() {
         if(manager == null) {

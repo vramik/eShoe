@@ -7,7 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * //TODO: document this
+ * Marks the injection point that instance of TransportClient should be
+ * injected. Points to EsTransportClientProducer.getTransportClient.
  *
  * @author Jiří Holuša
  */
