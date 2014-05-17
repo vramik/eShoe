@@ -10,6 +10,7 @@ import com.issuetracker.search.ql.QueryLanguageBuilder;
 import com.issuetracker.service.api.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.extensions.yui.calendar.DatePicker;
 import org.apache.wicket.markup.html.basic.Label;
@@ -25,6 +26,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,12 +52,16 @@ public class FulltextSearch extends PageLayout {
     private String queryInput;
     private boolean isQueryLanguageUsed = false;
 
+    private Form form;
+    private TextField queryInputText;
     private ListMultipleChoice<IssueType> issueTypesSelect;
     private ListMultipleChoice<Status> statusesSelect;
     private ListMultipleChoice<Project> projectsSelect;
     private DateTextField dateFromField;
     private DateTextField dateToField;
     private ListView<Issue> issuesListView;
+    private AjaxLink advancedSearchLink;
+    private Label advancedSearchLabel;
 
     private List<Project> projects;
     private List<Status> statuses;
@@ -65,17 +71,20 @@ public class FulltextSearch extends PageLayout {
 
     private List<Issue> issues;
 
+    private String advancedSearchIndicator = "Switch to search by inserting query";
+    private boolean advancedSearchEnabled = false;
+
     private QueryLanguageBuilder queryBuilder = new QueryLanguageBuilder();
 
     public FulltextSearch() {
         add(new FeedbackPanel("feedbackPanel"));
 
-        Form form = new Form("searchForm") {
+        form = new Form("searchForm") {
             @Override
             protected void onSubmit() {
                 computeQuery();
 
-                String query = queryBuilder.getQuery();
+                String query = advancedSearchEnabled ? queryInput : queryBuilder.getQuery();
                 issues = searchService.search(query);
             }
         };
@@ -92,13 +101,38 @@ public class FulltextSearch extends PageLayout {
         statusesModel.add(null);
         statusesModel.addAll(statusService.getStatuses());
 
+        queryInputText = new TextField("queryInput", new PropertyModel<String>(this, "queryInput"));
+        queryInputText.setOutputMarkupId(true);
         projectsSelect = new ListMultipleChoice<Project>("projectsSelect", new PropertyModel<List<Project>>(this, "projects"), projectsModel, new NullAsAllChoiceRenderer<Project>("name"));
         issueTypesSelect = new ListMultipleChoice<IssueType>("issueTypesSelect", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypesModel, new NullAsAllChoiceRenderer<IssueType>("name"));
         statusesSelect = new ListMultipleChoice<Status>("statusesSelect", new PropertyModel<List<Status>>(this, "statuses"), statusesModel, new NullAsAllChoiceRenderer<Status>("name"));
-        dateFromField = new DateTextField("dateFromField", new PropertyModel<Date>(this, "dateFrom"), "dd.MM.yyyy");
-        dateToField = new DateTextField("dateToField", new PropertyModel<Date>(this, "dateTo"), "dd.MM.yyyy");
+        dateFromField = new DateTextField("dateFromField", new PropertyModel<Date>(this, "dateFrom"), "yyyy-MM-dd");
+        dateToField = new DateTextField("dateToField", new PropertyModel<Date>(this, "dateTo"), "yyyy-MM-dd");
         dateFromField.add(new DatePicker());
         dateToField.add(new DatePicker());
+        advancedSearchLabel = new Label("advancedSearchLabel", new PropertyModel<String>(this, "advancedSearchIndicator"));
+        advancedSearchLabel.setOutputMarkupId(true);
+        advancedSearchLink = new AjaxLink("advancedSearchSwitch")
+                                    {
+                                        @Override
+                                        public void onClick(AjaxRequestTarget target)
+                                        {
+                                            computeQuery();
+
+                                            advancedSearchEnabled = !advancedSearchEnabled;
+                                            if(advancedSearchEnabled) {
+                                                queryInput = queryBuilder.getQuery();
+                                                advancedSearchIndicator = "Now inserting via query language";
+                                            }
+                                            else {
+                                                queryInput = "";
+                                                advancedSearchIndicator = "Now basic inserting via GUI";
+                                            }
+
+                                            target.add(queryInputText);
+                                            target.add(advancedSearchLabel);
+                                        }
+                                    };
 
         createIssuesListView();
 
@@ -109,8 +143,10 @@ public class FulltextSearch extends PageLayout {
         form.add(statusesSelect);
         form.add(dateFromField);
         form.add(dateToField);
+        form.add(advancedSearchLink);
+        form.add(advancedSearchLabel);
 
-        form.add(new TextField("queryInput", new PropertyModel<String>(this, "queryInput")));
+        form.add(queryInputText);
 
         add(form);
         add(issuesListView);
@@ -128,6 +164,10 @@ public class FulltextSearch extends PageLayout {
                 }
 
                 computeQuery();
+                if(advancedSearchEnabled) {
+                    queryInput = queryBuilder.getQuery();
+                }
+                target.add(queryInputText);
             }
         });
 
@@ -142,6 +182,10 @@ public class FulltextSearch extends PageLayout {
                 }
 
                 computeQuery();
+                if(advancedSearchEnabled) {
+                    queryInput = queryBuilder.getQuery();
+                }
+                target.add(queryInputText);
             }
         });
 
@@ -156,6 +200,10 @@ public class FulltextSearch extends PageLayout {
                 }
 
                 computeQuery();
+                if(advancedSearchEnabled) {
+                    queryInput = queryBuilder.getQuery();
+                }
+                target.add(queryInputText);
             }
         });
 
@@ -163,6 +211,10 @@ public class FulltextSearch extends PageLayout {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 computeQuery();
+                if(advancedSearchEnabled) {
+                    queryInput = queryBuilder.getQuery();
+                }
+                target.add(queryInputText);
             }
         });
 
@@ -170,6 +222,10 @@ public class FulltextSearch extends PageLayout {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 computeQuery();
+                if(advancedSearchEnabled) {
+                    queryInput = queryBuilder.getQuery();
+                }
+                target.add(queryInputText);
             }
         });
     }
@@ -197,7 +253,7 @@ public class FulltextSearch extends PageLayout {
     private void computeQuery() {
         queryBuilder.clear();
 
-        if(queryInput != null && queryInput.length() != 0) {
+        if(!advancedSearchEnabled && queryInput != null && queryInput.length() != 0) {
             queryBuilder.tilda("text", queryInput);
         }
 
@@ -244,6 +300,15 @@ public class FulltextSearch extends PageLayout {
                 }
                 queryBuilder.in("status", names);
             }
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("YYYY-MM-dd");
+        if(dateFrom != null) {
+            queryBuilder.gte("created", simpleDateFormat.format(dateFrom));
+        }
+
+        if(dateTo != null) {
+            queryBuilder.lte("created", simpleDateFormat.format(dateTo));
         }
     }
 
@@ -341,14 +406,6 @@ public class FulltextSearch extends PageLayout {
 
     public void setDateToField(DateTextField dateToField) {
         this.dateToField = dateToField;
-    }
-
-    public boolean isQueryLanguageUsed() {
-        return isQueryLanguageUsed;
-    }
-
-    public void setQueryLanguageUsed(boolean queryLanguageUsed) {
-        isQueryLanguageUsed = queryLanguageUsed;
     }
 
     public class NullAsAllChoiceRenderer<T> extends ChoiceRenderer<T> {

@@ -1,5 +1,7 @@
 package com.issuetracker.model;
 
+import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
+import com.github.holmistr.esannotations.indexing.annotations.Field;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -19,6 +21,8 @@ public class Project implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 //    @Column(unique = true, nullable = false)
+    @Field
+    @Analyzer(name = "projectNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private String name;
     private String summary;
     @ManyToOne

@@ -1,10 +1,7 @@
 package com.issuetracker.model;
 
 
-import com.github.holmistr.esannotations.indexing.annotations.DocumentId;
-import com.github.holmistr.esannotations.indexing.annotations.Field;
-import com.github.holmistr.esannotations.indexing.annotations.IndexEmbedded;
-import com.github.holmistr.esannotations.indexing.annotations.Indexed;
+import com.github.holmistr.esannotations.indexing.annotations.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -34,22 +31,32 @@ public class Issue implements Serializable {
     @Lob
     @Field
     private String description;
-    @IndexEmbedded(name = "issue_type")
+    @IndexEmbedded(name = "issue_type", depth = 1)
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
+    @Field
+    @Analyzer(name = "issueTypeNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private Priority priority;
+    @Field
+    @com.github.holmistr.esannotations.indexing.annotations.Date
     private Date created = new Date();
+    @Field
+    @com.github.holmistr.esannotations.indexing.annotations.Date
     private Date updated;
 
+    @IndexEmbedded(depth = 1)
     @ManyToOne
 //    private Status status;
     private Status status;
     @ManyToOne
     private Resolution resolution;
+    @IndexEmbedded(depth = 1)
     @ManyToOne
     private User creator;
+    @IndexEmbedded(depth = 1)
     @ManyToOne
     private User owner;
+    @IndexEmbedded(depth = 1)
     @ManyToOne(cascade = CascadeType.MERGE)
     private Project project;
     private String fileLocation;
@@ -65,6 +72,7 @@ public class Issue implements Serializable {
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
+    @IndexEmbedded(depth = 1)
     private List<Comment> comments;
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

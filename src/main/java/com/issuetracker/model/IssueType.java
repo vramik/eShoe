@@ -1,5 +1,6 @@
 package com.issuetracker.model;
 
+import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
 import com.github.holmistr.esannotations.indexing.annotations.Field;
 
 import javax.persistence.*;
@@ -16,6 +17,7 @@ public class IssueType implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Field
+    @Analyzer(name = "issueTypeNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     @Column(unique = true)
     private String name;
 

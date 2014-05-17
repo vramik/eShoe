@@ -1,5 +1,7 @@
 package com.issuetracker.model;
 
+import com.github.holmistr.esannotations.indexing.annotations.Field;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -15,6 +17,7 @@ public class Comment implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob
+    @Field
     private String content;
     private Date created;
     private Date updated;

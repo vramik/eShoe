@@ -52,7 +52,8 @@ public class ImporterServiceBean implements ImporterService {
     private List<Component> componentList = new ArrayList<Component>();
     private List<ProjectVersion> projectVersionList = new ArrayList<ProjectVersion>();
 
-    public void doImport() {System.out.println("Import running");
+    public void doImport() {
+        System.out.println("Import running");
         reader = new RestReader();
         parser = new JsonParser();
 

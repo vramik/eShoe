@@ -71,6 +71,46 @@ public class QueryLanguageBuilder implements Serializable{
         query.append("\"");
     }
 
+    public void gt(String property, String value) {
+        and();
+
+        query.append(property);
+        query.append(" > ");
+        query.append("\"");
+        query.append(value);
+        query.append("\"");
+    }
+
+    public void lt(String property, String value) {
+        and();
+
+        query.append(property);
+        query.append(" < ");
+        query.append("\"");
+        query.append(value);
+        query.append("\"");
+    }
+
+    public void gte(String property, String value) {
+        and();
+
+        query.append(property);
+        query.append(" >= ");
+        query.append("\"");
+        query.append(value);
+        query.append("\"");
+    }
+
+    public void lte(String property, String value) {
+        and();
+
+        query.append(property);
+        query.append(" <= ");
+        query.append("\"");
+        query.append(value);
+        query.append("\"");
+    }
+
     public String getQuery() {
         return query.toString();
     }

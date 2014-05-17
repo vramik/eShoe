@@ -10,28 +10,31 @@
 
         <div id="fulltext_search">
             <form wicket:id="searchForm" class="fulltext">
-                <input type="text" wicket:id="queryInput" />
+                <input type="text" wicket:id="queryInput" style="width: 250px;" />
                 <input type="submit" value="Search" />
 
-                <span id="advancedSearchHeader">Advanced search</span>
+                <a href="#" wicket:id="advancedSearchSwitch" id="advancedSearchHeader">Switch inserting query</a>
+                <span wicket:id="advancedSearchLabel"></span>
+                <br />
                 <table>
                     <tr>
                         <td>Project</td>
-                        <td><select wicket:id="projectsSelect"></select></td>
+                        <td><select wicket:id="projectsSelect" style="width:100px"></select></td>
 
-                        <td>Type</td>
-                        <td><select wicket:id="issueTypesSelect"></select></td>
+                        <td>Creation date from</td>
+                        <td><input type="text" wicket:id="dateFromField"  style="width:100px" /></td>
                     </tr>
                     <tr>
                         <td>Status</td>
-                        <td><select wicket:id="statusesSelect"></select></td>
+                        <td><select wicket:id="statusesSelect" style="width:100px"></select></td>
 
-                        <td>Date from</td>
-                        <td><input type="text" wicket:id="dateFromField" /></td>
+                        <td>Creation date to</td>
+                        <td><input type="text" wicket:id="dateToField" style="width:100px" /></td>
                     </tr>
                     <tr>
-                        <td>Date to</td>
-                        <td><input type="text" wicket:id="dateToField" /></td>
+
+                        <td>Type</td>
+                        <td><select wicket:id="issueTypesSelect" style="width:100px"></select></td>
 
                         <td></td>
                         <td></td>

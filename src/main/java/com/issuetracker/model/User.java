@@ -1,5 +1,8 @@
 package com.issuetracker.model;
 
+import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
+import com.github.holmistr.esannotations.indexing.annotations.Field;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -16,6 +19,8 @@ public class User implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
     private String username;
+    @Field
+    @Analyzer(name = "userUsernameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private String name;
     private String lastName;
     private String email;

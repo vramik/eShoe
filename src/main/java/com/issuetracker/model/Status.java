@@ -1,5 +1,8 @@
 package com.issuetracker.model;
 
+import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
+import com.github.holmistr.esannotations.indexing.annotations.Field;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,6 +19,8 @@ public class Status implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Field
+    @Analyzer(name = "statusNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private String name;
 //    @ManyToMany
 //    private List<Status> statuses;

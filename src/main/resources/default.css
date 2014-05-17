@@ -136,3 +136,11 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
+
+#fulltext_search TABLE INPUT {
+    width: 100px;
+}
+
+#fulltext_search TABLE SELECT {
+    width: 100px;
+}
