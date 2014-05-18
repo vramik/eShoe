@@ -3,7 +3,6 @@ package com.issuetracker.dao;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.*;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;

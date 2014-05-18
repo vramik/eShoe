@@ -36,6 +36,7 @@ public class IssueDetail extends PageLayout {
     private IssueService issueService;
     @Inject
     private UserService userService;
+
     private IndicatingAjaxLink addWatcherLink;
     private final Label watchersCountLabel;
     private final ModalWindow modal2;
@@ -81,7 +82,6 @@ public class IssueDetail extends PageLayout {
         String updated = issue.getUpdated() != null ? issue.getUpdated().toString() : created;
         add(new Label("created", created));
         add(new Label("updated", updated));
-
 //        add(new RequiredTextField("description"));
 //        add(new RequiredTextField("project.name"));
         add(new Label("componentName", new PropertyModel(this, "issue.component.name")));

@@ -106,7 +106,6 @@ public class SetIssueStateForm extends Panel {
         updateIssueForm = new Form<Issue>("updateIssueForm") {
             @Override
             protected void onSubmit() {
-                
                 if (issueRelatesToId != null && !issueRelatesToId.equals("") && issueRelatesToId.matches("[0-9]+") && issueService.getIssueById(Long.valueOf(issueRelatesToId))!=null) {
                     issueRelatesTo = issueService.getIssueById(Long.valueOf(issueRelatesToId));
 

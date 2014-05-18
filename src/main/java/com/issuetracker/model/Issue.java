@@ -72,6 +72,7 @@ public class Issue implements Serializable {
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
+
     @IndexEmbedded(depth = 1)
     private List<Comment> comments;
     

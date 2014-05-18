@@ -29,6 +29,7 @@ public class CustomFieldDaoBean implements CustomFieldDao {
     }
 
     @Override
+
     public void remove(CustomField customField) {
         em.remove(em.contains(customField)? customField : em.merge(customField));
     }

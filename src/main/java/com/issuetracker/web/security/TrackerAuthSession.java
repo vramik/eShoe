@@ -56,6 +56,7 @@ public class TrackerAuthSession extends AuthenticatedWebSession {
         }
 
         try {
+
             this.user = userService.loadUserIfPasswordMatches(user_.getName(), user_.getPassword());
             return true;
         } catch (NoResultException ex) {

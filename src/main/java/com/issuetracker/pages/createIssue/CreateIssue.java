@@ -144,6 +144,7 @@ public class CreateIssue extends PageLayout {
                     }
                     issue.setFileLocation(file.getAbsolutePath());
                 }
+
                 if(issueService.getIssues().isEmpty()) {
                     if (statusService.getStatusByName("New")== null){
                     Status newStatus = new Status("New");
@@ -194,6 +195,7 @@ public class CreateIssue extends PageLayout {
         insertIssueForm.add(new RequiredTextField("issueName", new PropertyModel<String>(this, "issue.name")));
         insertIssueForm.add(new RequiredTextField("issueSummary", new PropertyModel<String>(this, "issue.summary")));
         insertIssueForm.add(new TextArea<String>("description", new PropertyModel<String>(this, "issue.description")));
+
         issueTypeList = new DropDownChoice<IssueType>("issueTypes", new PropertyModel<IssueType>(this, "issue.issueType"), issueTypeService.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         issueTypeList.setRequired(true);
         insertIssueForm.add(issueTypeList);

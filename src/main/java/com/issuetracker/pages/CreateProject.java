@@ -1,9 +1,11 @@
 package com.issuetracker.pages;
 
 import com.issuetracker.model.Component;
+import com.issuetracker.model.CustomField;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.pages.component.component.ComponentListView;
+import com.issuetracker.pages.component.customField.CustomFieldListView;
 import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.component.version.VersionListView;
 import com.issuetracker.pages.validator.ProjectNameValidator;

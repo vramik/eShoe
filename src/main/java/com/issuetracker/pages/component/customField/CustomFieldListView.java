@@ -14,7 +14,6 @@ import org.apache.wicket.model.IModel;
 
 import javax.inject.Inject;
 import java.util.List;
-
 /**
  *
  * @author mgottval

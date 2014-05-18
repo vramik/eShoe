@@ -17,6 +17,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -109,7 +110,7 @@ public class ProjectDetail extends PageLayout {
                 return p.getCustomFields();
             }
         };
-        
+
         add(new CustomFieldListView("cfListView", cfModel));
         //CUSTOM F
 

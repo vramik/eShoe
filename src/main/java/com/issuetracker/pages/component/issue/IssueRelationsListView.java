@@ -18,7 +18,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
 import java.util.List;
-
 /**
  *
  * @author mgottval
@@ -39,6 +38,7 @@ public class IssueRelationsListView<I extends IssuesRelationship> extends Panel 
                 final IssuesRelationship issuesRelation = item.getModelObject();
 
                   //  issueRelatesTo = issueService.getIssueById(issuesRelation.getRelatesToIssue().getIssueId());
+
 
                 item.add(new Label("relationName", issuesRelation.getRelationshipType().toString()));
                 item.add(new Link<Issue>("issueRelLink") {

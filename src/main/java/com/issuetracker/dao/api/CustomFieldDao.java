@@ -13,7 +13,7 @@ import com.issuetracker.model.CustomField;
 public interface CustomFieldDao {
     
     void insert(CustomField customField);
-    
+
     void remove(CustomField customField);
     
     void update(CustomField customField);

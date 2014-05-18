@@ -125,6 +125,7 @@ public class HeaderPanel extends Panel {
                         if (selected.equals("List Issues")) {
                             setResponsePage(SearchIssues.class);
                         }
+
                         if (selected.equals("Issue Fulltext Search")) {
                             setResponsePage(FulltextSearch.class);
                         }
