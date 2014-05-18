@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * //TODO: document this
+ * Helper class for testing fulltext search capabilites.
  *
  * @author Jiří Holuša
  */
