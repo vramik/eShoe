@@ -52,6 +52,10 @@ public class ImporterServiceBean implements ImporterService {
     private List<Component> componentList = new ArrayList<Component>();
     private List<ProjectVersion> projectVersionList = new ArrayList<ProjectVersion>();
 
+    private int importedCounter;
+
+    private static final int IMPORT_ITERATION_SIZE = 30;
+
     public void doImport() {
         System.out.println("Import running");
         reader = new RestReader();
@@ -59,10 +63,33 @@ public class ImporterServiceBean implements ImporterService {
 
         IdFileLoader idLoader = new IdFileLoader();
         List<String> ids = idLoader.loadIdsFromFile(IDS_FILENAME);
-        String joinedIds = StringUtils.join(ids, ",");
+        System.out.println("Importing " + ids.size() + " issues.");
+        importedCounter = 0;
 
-        String bugReadResult = reader.read(BUGZILLA_URL + "jsonrpc.cgi?method=Bug.get&params=[ { \"ids\": [" + joinedIds + "] } ]");
-        String commentReadResult = reader.read(BUGZILLA_URL + "jsonrpc.cgi?method=Bug.comments&params=[ { \"ids\": [" + joinedIds + "] } ]");
+        int i;
+        for(i = 0; i < ids.size()/IMPORT_ITERATION_SIZE; i++) {
+            List<String> idsPart = new ArrayList<String>();
+            for(int j = 0; j < IMPORT_ITERATION_SIZE; j++) {
+                idsPart.add(ids.get((i * IMPORT_ITERATION_SIZE) + j));
+            }
+
+            String joinedIds = StringUtils.join(idsPart, ",");
+            performImportIteration(joinedIds);
+        }
+
+        if(ids.size() % IMPORT_ITERATION_SIZE != 0) {
+            List<String> idsPart = new ArrayList<String>();
+            for(int j = importedCounter; j < ids.size(); j++) {
+                idsPart.add(ids.get(j));
+            }
+            String joinedIds = StringUtils.join(idsPart, ",");
+            performImportIteration(joinedIds);
+        }
+    }
+
+    private void performImportIteration(String ids) {
+        String bugReadResult = reader.read(BUGZILLA_URL + "jsonrpc.cgi?method=Bug.get&params=[ { \"ids\": [" + ids + "] } ]");
+        String commentReadResult = reader.read(BUGZILLA_URL + "jsonrpc.cgi?method=Bug.comments&params=[ { \"ids\": [" + ids + "] } ]");
 
         BugzillaBugResponse bugResponse = parser.parse(bugReadResult, BugzillaBugResponse.class);
         BugzillaCommentResponse response = parser.parse(commentReadResult, BugzillaCommentResponse.class);
@@ -123,15 +150,7 @@ public class ImporterServiceBean implements ImporterService {
 
             issueService.update(issue);
 
-            /*List<Issue> createdIssues = new ArrayList<Issue>();
-            createdIssues.add(issue);
-            creator.setCreated(createdIssues);
-            userService.update(creator);
-
-            List<Issue> ownedIssues = new ArrayList<Issue>();
-            ownedIssues.add(issue);
-            owner.setOwned(ownedIssues);
-            userService.update(owner);*/
+            System.out.println(++importedCounter + " issues imported.");
         }
     }
 
@@ -197,7 +216,9 @@ public class ImporterServiceBean implements ImporterService {
         }
 
         //first comment of Bugzilla's bug is the description of the bug
-        issue.setDescription(comments.get(bug.getId()).remove(0).getText());
+        if(!comments.get(bug.getId()).isEmpty()) {
+            issue.setDescription(comments.get(bug.getId()).remove(0).getText());
+        }
         issue.setCreated(bug.getCreated());
         issue.setUpdated(bug.getUpdated());
 
