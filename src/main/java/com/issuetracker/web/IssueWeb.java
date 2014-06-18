@@ -8,6 +8,8 @@ import com.issuetracker.model.User;
 import com.issuetracker.pages.createIssue.CreateIssue;
 import com.issuetracker.pages.CreateIssueType;
 import com.issuetracker.pages.CreateProject;
+import com.issuetracker.pages.CreateStatuses;
+import com.issuetracker.pages.CreateWorkflow;
 import com.issuetracker.pages.ForgotPassword;
 import com.issuetracker.pages.HomePage;
 import com.issuetracker.pages.ListProjects;
@@ -34,7 +36,7 @@ import org.apache.wicket.request.Response;
  *
  * @author mgottval
  */
-public class IssueWeb extends WebApplication{
+public class IssueWeb extends WebApplication {
 
     @Override
     public Class<? extends Page> getHomePage() {
@@ -68,21 +70,23 @@ public class IssueWeb extends WebApplication{
         mountPage("/issueDetail", IssueDetail.class);
         mountPage("/searchIssues", SearchIssues.class);
         mountPage("/newIssueType", CreateIssueType.class);
+        mountPage("/createStatus", CreateStatuses.class);
+        mountPage("/createWorkflow", CreateWorkflow.class);
         
         
         
     }
-    @Override
-    public Session newSession( Request request, Response response ) {
-        return new TrackerAuthSession( request );
-    }
-    
-    @Produces @LoggedIn User getCurrentUser(){
-        return ((TrackerAuthSession) Session.get()).getUser();
-    }
-
-    @Produces @CurrentSession TrackerAuthSession getCurrentSession(){
-        return (TrackerAuthSession) Session.get();
-    }
+//    @Override
+//    public Session newSession( Request request, Response response ) {
+//        return new TrackerAuthSession( request );
+//    }
+//    
+//    @Produces @LoggedIn User getCurrentUser(){
+//        return ((TrackerAuthSession) Session.get()).getUser();
+//    }
+//
+//    @Produces @CurrentSession TrackerAuthSession getCurrentSession(){
+//        return (TrackerAuthSession) Session.get();
+//    }
     
 }

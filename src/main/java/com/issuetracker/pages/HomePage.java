@@ -5,7 +5,7 @@
 package com.issuetracker.pages;
 
 import com.issuetracker.dao.api.UserDao;
-import com.issuetracker.web.security.TrackerAuthSession;
+//import com.issuetracker.web.security.TrackerAuthSession;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -33,17 +33,18 @@ public class HomePage extends PageLayout {
 
     public HomePage() {
 
-        final Link loginLink = new Link("loginLink") {
-            @Override
-            public void onClick() {                      
-                setResponsePage(Login.class);
-            }
-        };
-        loginLink.add(new Label("name", "Log In"));
-        add(loginLink);
+        
+//        final Link loginLink = new Link("loginLink") {
+//            @Override
+//            public void onClick() {                      
+//                setResponsePage(Login.class);
+//            }
+//        };
+//        loginLink.add(new Label("name", "Log In"));
+//        add(loginLink);
 
       
-((TrackerAuthSession)getSession()).getAttribute("session");
+//((TrackerAuthSession)getSession()).getAttribute("session");
 
 //        ListView listview = new ListView<Issue>("issues", new PropertyModel<List<Issue>>(this, "issues")) {
 //            @Override

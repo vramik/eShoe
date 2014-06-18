@@ -433,7 +433,18 @@
             <scope>test</scope>
         </dependency>
         
-        
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-core</artifactId>
+            <version>1.0-beta-2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-adapter-core</artifactId>
+            <version>1.0-beta-2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     
     <repositories>

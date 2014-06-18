@@ -26,14 +26,15 @@ public class PageLayout extends WebPage {
 
     public PageLayout() {
 
+        add(new Label("title", "Issue Tracking system"));
         add(headerPanel = new HeaderPanel("headerPanel"));
 //        add(menuPanel = new MenuPanel("menuPanel"));
         add(footerPanel = new FooterPanel("footerPanel"));
     }
-     @Override
-        public TrackerAuthSession getSession(){
-        return (TrackerAuthSession) Session.get();
-        }
+//     @Override
+//        public TrackerAuthSession getSession(){
+//        return (TrackerAuthSession) Session.get();
+//        }
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
     public Component getHeaderPanel() {
