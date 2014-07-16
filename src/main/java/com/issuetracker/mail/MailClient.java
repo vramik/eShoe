@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.mail;
 
 /**
@@ -11,7 +7,6 @@ package com.issuetracker.mail;
 import javax.mail.*;
 import javax.mail.internet.*;
 import java.util.Properties;
-import javax.annotation.Resource;
 
 public class MailClient {
 
@@ -24,11 +19,11 @@ public class MailClient {
 
         // Get a mail session 
         Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-                        @Override
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("mgott@gmail.com", "");
-			}
-		  });
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("mgott@gmail.com", "");
+            }
+        });
 
         // Define a new mail message 
         Message message = new MimeMessage(session);
@@ -48,13 +43,11 @@ public class MailClient {
 
         // add any file attachments to the message 
         //  addAtachments(attachments, multipart);
-
         // Put all message parts in the message 
         message.setContent(multipart);
 
         // Send the message 
         Transport.send(message);
-
 
     }
 }

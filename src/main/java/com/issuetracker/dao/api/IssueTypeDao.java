@@ -1,10 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao.api;
 
 import com.issuetracker.model.IssueType;
+
 import java.util.List;
 
 /**
@@ -13,7 +10,7 @@ import java.util.List;
  */
 public interface IssueTypeDao {
     
-    void insertIssueType(IssueType issueType);
+    void insert(IssueType issueType);
     
     List<IssueType> getIssueTypes();
 }

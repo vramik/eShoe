@@ -1,22 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages.component.workflow;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.TransitionDao;
-import com.issuetracker.dao.api.WorkflowDao;
-import com.issuetracker.model.Transition;
-import com.issuetracker.model.Issue;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
-import javax.transaction.Transaction;
+import com.issuetracker.service.api.TransitionService;
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -26,6 +13,10 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author mgottval
@@ -33,9 +24,9 @@ import org.apache.wicket.model.PropertyModel;
 public class WorkflowTransitionsListView extends Panel {
 
     @Inject
-    private TransitionDao tranitionDao;   
+    private TransitionService transitionService;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
     
     private ListView transitionsListView;
     private List<Transition> transitionList;
@@ -46,7 +37,7 @@ public class WorkflowTransitionsListView extends Panel {
  
         workflow = workflowModel.getObject();
         try {
-            transitionList = tranitionDao.getTransitionsByWorkflow(workflow);
+            transitionList = transitionService.getTransitionsByWorkflow(workflow);
         } catch (NullPointerException e) {
             transitionList = new ArrayList<Transition>();
         }
@@ -64,7 +55,7 @@ public class WorkflowTransitionsListView extends Panel {
                         transitionList.remove(transition);
                         // transitionList.setObject(transitions);
                         workflow.setTransitions(transitionList);
-                        workflowDao.update(workflow);
+                        workflowService.update(workflow);
 
                     }
                 });

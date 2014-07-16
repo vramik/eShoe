@@ -1,15 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.model.IssueType;
-import javax.inject.Inject;
+import com.issuetracker.service.api.IssueTypeService;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
 
 /**
  *
@@ -19,14 +16,14 @@ public class CreateIssueType extends PageLayout {
 
     private IssueType issueType;
     @Inject
-    private IssueTypeDao issueTypeDao;
+    private IssueTypeService issueTypeService;
     private Form<IssueType> insertIssueTypeForm;
 
     public CreateIssueType() {
         insertIssueTypeForm = new Form<IssueType>("insertIssueTypeForm") {
             @Override
             protected void onSubmit() {
-                issueTypeDao.insertIssueType(issueType);
+                issueTypeService.insert(issueType);
                 issueType = new IssueType();
             }
         };

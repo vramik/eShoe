@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Fulltext search</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+    <wicket:extend>
+        <div wicket:id="feedbackPanel"></div>
+
+        <div id="fulltext_search">
+            <form wicket:id="searchForm" class="fulltext">
+                <input type="text" wicket:id="queryInput" style="width: 250px;" />
+                <input type="submit" value="Search" />
+
+                <a href="#" wicket:id="advancedSearchSwitch" id="advancedSearchHeader">Switch inserting query</a>
+                <span wicket:id="advancedSearchLabel"></span>
+                <br />
+                <table>
+                    <tr>
+                        <td>Project</td>
+                        <td><select wicket:id="projectsSelect" style="width:200px" size="5"></select></td>
+
+                        <td>Creation date from</td>
+                        <td><input type="text" wicket:id="dateFromField"  style="width:100px" /></td>
+                    </tr>
+                    <tr>
+                        <td>Status</td>
+                        <td><select wicket:id="statusesSelect" style="width:200px" size="5"></select></td>
+
+                        <td>Creation date to</td>
+                        <td><input type="text" wicket:id="dateToField" style="width:100px" /></td>
+                    </tr>
+                    <tr>
+
+                        <td>Type</td>
+                        <td><select wicket:id="issueTypesSelect" style="width:200px" size="5"></select></td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+            </form>
+
+            <hr />
+
+            <div id="result">
+                <div wicket:id="issues">
+                    <a href="#" wicket:id="showIssue"><h2 wicket:id="issue.name"></h2></a>
+
+                    <p wicket:id="issue.description"></p>
+                </div>
+            </div>
+        </div>
+    </wicket:extend>
+</body>
+</html>

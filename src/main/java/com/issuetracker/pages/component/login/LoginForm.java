@@ -1,19 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages.component.login;
 
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.User;
 import com.issuetracker.pages.HomePage;
-import javax.inject.Inject;
+import com.issuetracker.service.api.UserService;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
 
 /**
  *
@@ -22,7 +18,7 @@ import org.apache.wicket.model.PropertyModel;
 public class LoginForm extends Panel {
 
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     private Form<User> insertForm;
 //    private String email;
 //    private String password;
@@ -34,7 +30,7 @@ public class LoginForm extends Panel {
         insertForm = new Form<User>("insertForm", new CompoundPropertyModel<User>(user)) {
             @Override
             protected void onSubmit() {
-                user = userDao.getUserByEmail(user.getEmail());
+                user = userService.getUserByEmail(user.getEmail());
                 if (user != null && user.getPassword().equals(user.getPassword())) {
                     setResponsePage(HomePage.class);
                 }

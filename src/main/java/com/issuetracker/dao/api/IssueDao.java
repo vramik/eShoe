@@ -1,18 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao.api;
 
-import com.issuetracker.model.Comment;
-import com.issuetracker.model.Component;
-import com.issuetracker.model.Issue;
+import com.issuetracker.model.*;
 import com.issuetracker.model.Issue.Priority;
-import com.issuetracker.model.IssueType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.Status;
-import com.issuetracker.model.User;
+
 import java.util.List;
 
 /**
@@ -27,11 +17,11 @@ public interface IssueDao {
     
     Issue getIssueByName(String name);
     
-    void addIssue(Issue issue);
+    void insert(Issue issue);
     
-    void updateIssue(Issue issue);
+    void update(Issue issue);
     
-    void removeIssue(Issue issue);
+    void remove(Issue issue);
     
     List<Issue> getIssuesByProject(Project project);
     

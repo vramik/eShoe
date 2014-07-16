@@ -1,33 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.IssueTypeDao;
-import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.dao.api.StatusDao;
-import com.issuetracker.model.Component;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssueType;
-import com.issuetracker.model.Project;
-import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.Status;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
+import com.issuetracker.model.*;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.IssueTypeService;
+import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.StatusService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -37,6 +18,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import javax.inject.Inject;
+import java.util.*;
+
 /**
  *
  * @author Monika
@@ -44,13 +28,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class SearchIssues extends PageLayout {
 
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private IssueTypeDao issueTypeDao;
+    private IssueTypeService issueTypeService;
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     private Form<List<Issue>> listIssuesForm;
     private final DropDownChoice<ProjectVersion> versionDropDownChoice;
     private final DropDownChoice<Component> componentsDropDownChoice;
@@ -73,7 +57,7 @@ public class SearchIssues extends PageLayout {
     public SearchIssues() {
         issues = new ArrayList<Issue>();
 
-        List<Project> projects = projectDao.getProjects();
+        List<Project> projects = projectService.getProjects();
         for (Project p : projects) {
             modelsProjectComponentsMap.put(p, p.getComponents());
         }
@@ -111,7 +95,7 @@ public class SearchIssues extends PageLayout {
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-                issues = issueDao.getIssuesBySearch(project, version, component, issueTypes, statusList, containsText);
+                issues = issueService.getIssuesBySearch(project, version, component, issueTypes, statusList, containsText);
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
@@ -126,9 +110,9 @@ public class SearchIssues extends PageLayout {
         componentsDropDownChoice.setOutputMarkupId(true);
         componentsDropDownChoice.setRequired(true);
         form.add(componentsDropDownChoice);
-        listMultipleStatuses = new ListMultipleChoice<Status>("statusLMC", new PropertyModel<List<Status>>(this, "statusList"), statusDao.getStatuses(), new ChoiceRenderer<Status>("name"));
+        listMultipleStatuses = new ListMultipleChoice<Status>("statusLMC", new PropertyModel<List<Status>>(this, "statusList"), statusService.getStatuses(), new ChoiceRenderer<Status>("name"));
         form.add(listMultipleStatuses);
-        listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeDao.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
+        listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeService.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         form.add(listMultipleIssueTypes);
 
 
@@ -158,10 +142,10 @@ public class SearchIssues extends PageLayout {
                 nameLink.add(new Label("name", issue.getName()));
                 item.add(nameLink);
                 item.add(new Label("description", issue.getDescription()));
-//                item.add(new Link<Issue>("delete", item.getModel()) {
+//                item.add(new Link<Issue>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
-//                        issueDao.removeIssue(item.getModelObject());
+//                        issueService.remove(item.getModelObject());
 //                    }
 //                });
             }

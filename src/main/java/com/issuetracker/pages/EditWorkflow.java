@@ -1,15 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.Workflow;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -17,6 +10,9 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *
@@ -29,7 +25,7 @@ public class EditWorkflow extends PageLayout {
     private DropDownChoice<Workflow> workflowDropDownChoice;
     private Workflow workflow;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
 
     public EditWorkflow() {
         searchWorkflowForm = new Form("form") {
@@ -43,7 +39,7 @@ public class EditWorkflow extends PageLayout {
         IModel<List<Workflow>> workflowsModel = new AbstractReadOnlyModel<List<Workflow>>() {
             @Override
             public List<Workflow> getObject() {
-                return workflowDao.getWorkflows();
+                return workflowService.getWorkflows();
             }
         };
         workflowDropDownChoice = new DropDownChoice<Workflow>("workflowDropDownChoice", new PropertyModel<Workflow>(this, "workflow"), workflowsModel, new ChoiceRenderer<Workflow>("name"));

@@ -1,20 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.model.Component;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 
 /**
@@ -22,14 +18,14 @@ import javax.persistence.criteria.Root;
  * @author mgottval
  */
 @Stateless
-public class ComponentDaoBean implements ComponentDao{
+public class ComponentDaoBean implements ComponentDao {
     
-    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
+    @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
 
     @Override
-    public void insertComponent(Component component) {
+    public void insert(Component component) {
         em.persist(component);
     }
 

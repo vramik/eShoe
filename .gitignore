@@ -3,3 +3,5 @@ target
 .~lock*
 
 /nbactions.xml
+/docs/sql/model.mwb.bak
+/nb-configuration.xml

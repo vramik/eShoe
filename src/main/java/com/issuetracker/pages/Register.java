@@ -1,11 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
 import com.issuetracker.pages.component.register.RegisterForm;
-import org.apache.wicket.markup.html.link.Link;
 
 /**
  *
@@ -14,7 +9,7 @@ import org.apache.wicket.markup.html.link.Link;
 @SuppressWarnings("serial")
 public class Register extends PageLayout {
 
-    private RegisterForm registerForm;
+    private final RegisterForm registerForm;
 
     public Register() {
         registerForm = new RegisterForm("registerForm");

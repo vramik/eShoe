@@ -1,16 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.model;
 
-import java.io.Serializable;
-import java.util.List;
+import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
+import com.github.holmistr.esannotations.indexing.annotations.Field;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import java.io.Serializable;
 
 /**
  *
@@ -22,6 +19,8 @@ public class Status implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Field
+    @Analyzer(name = "statusNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private String name;
 //    @ManyToMany
 //    private List<Status> statuses;
@@ -64,10 +63,7 @@ public class Status implements Serializable {
             return false;
         }
         Status other = (Status) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override

@@ -1,19 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages.component.status;
 
-import com.issuetracker.dao.api.StatusDao;
-import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.AddTransition;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
+import com.issuetracker.service.api.StatusService;
+import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -21,6 +12,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -30,9 +25,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class StatusListView<T extends Status> extends Panel {
 
     @Inject
-    private StatusDao statusDao;
+    private StatusService statusService;
     @Inject
-    private WorkflowDao workflowDao;
+    private WorkflowService workflowService;
     private List<Status> statuses;
     private ListView listViewStatus;
     private Workflow workflow;
@@ -40,7 +35,7 @@ public class StatusListView<T extends Status> extends Panel {
     public StatusListView(String id, IModel<List<Status>> statusesModel, final IModel<Workflow> workflowModel) {
         super(id);
         final boolean workflowPresent;
-        statuses = statusDao.getStatuses();
+        statuses = statusService.getStatuses();
         if (statuses == null) {
             statuses = new ArrayList<Status>();
         }
@@ -72,11 +67,11 @@ public class StatusListView<T extends Status> extends Panel {
 
                 item.add(new Label("name", status.getName()).setVisible(!workflowPresent));
 
-//                item.add(new Link<Status>("delete", item.getModel()) {
+//                item.add(new Link<Status>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
 //                        statuses.remove(status);
-//                        statusDao.remove(status);
+//                        statusService.remove(status);
 //                    }
 //                }.setVisible(!workflowPresent));
 

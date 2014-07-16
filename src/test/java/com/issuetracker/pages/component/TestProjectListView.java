@@ -6,9 +6,6 @@ package com.issuetracker.pages.component;
 
 import com.issuetracker.model.Project;
 import com.issuetracker.pages.component.project.ProjectListView;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.util.tester.WicketTester;
@@ -16,6 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author mgottval

@@ -1,24 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.ComponentDao;
-import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.dao.api.ProjectVersionDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.CustomField;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.pages.component.customField.CustomFieldListView;
-import java.util.ArrayList;
-import java.util.List;
-import javax.inject.Inject;
+import com.issuetracker.service.api.ComponentService;
+import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.ProjectVersionService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -27,6 +19,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.logging.Logger;
 
+import javax.inject.Inject;
+import java.util.List;
+
 /**
  *
  * @author mgottval
@@ -34,11 +29,11 @@ import org.jboss.logging.Logger;
 public class ProjectDetail extends PageLayout {
 
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private ProjectVersionDao projectVersionDao;
+    private ProjectVersionService projectVersionService;
     @Inject
-    private ComponentDao componentDao;
+    private ComponentService componentDao;
     private ListView<ProjectVersion> projectVersionListView;
     private ListView<Component> projectComponentListView;
     private List<ProjectVersion> projectVersionList;    
@@ -49,7 +44,7 @@ public class ProjectDetail extends PageLayout {
     
     public ProjectDetail(PageParameters parameters) {
         final Long projectId = parameters.get("project").toLong();
-        final Project project = projectDao.getProjectById(projectId);
+        final Project project = projectService.getProjectById(projectId);
         
         projectVersionList = project.getVersions();
         projectComponentList = project.getComponents();
@@ -77,7 +72,7 @@ public class ProjectDetail extends PageLayout {
 //                    public void onClick() {
 //                        projectComponentList.remove(component);                        
 //                        project.setComponents(projectComponentList);
-//                        projectDao.update(project);
+//                        projectService.update(project);
 //                        componentDao.remove(component);
 //                    }
 //                });
@@ -98,7 +93,7 @@ public class ProjectDetail extends PageLayout {
                 List<CustomField> getF = project.getCustomFields();
                 projectCustomFieldsList.add(customField);
                 project.setCustomFields(projectCustomFieldsList);
-                projectDao.update(project);
+                projectService.update(project);
                 customField = new CustomField();
                 projectCustomFieldsList.clear();
                 
@@ -111,11 +106,11 @@ public class ProjectDetail extends PageLayout {
         IModel<List<CustomField>> cfModel = new CompoundPropertyModel<List<CustomField>>(customFieldsList) {
             @Override
             public List<CustomField> getObject() {
-                Project p = projectDao.getProjectById(projectId);
+                Project p = projectService.getProjectById(projectId);
                 return p.getCustomFields();
             }
         };
-        
+
         add(new CustomFieldListView("cfListView", cfModel));
         //CUSTOM F
 

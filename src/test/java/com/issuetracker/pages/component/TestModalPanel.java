@@ -4,13 +4,8 @@
  */
 package com.issuetracker.pages.component;
 
-import com.issuetracker.model.Status;
 import com.issuetracker.model.User;
-import com.issuetracker.pages.layout.FooterPanel;
 import com.issuetracker.pages.layout.ModalPanel1;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -21,6 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author mgottval

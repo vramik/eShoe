@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.TransitionDao;
 import com.issuetracker.model.Transition;
 import com.issuetracker.model.Workflow;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,6 +12,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -30,7 +27,7 @@ public class TransitionDaoBean implements TransitionDao{
     private CriteriaBuilder qb;
     
     @Override
-    public void insertTransition(Transition transition) {
+    public void insert(Transition transition) {
         em.persist(transition);
     }
 

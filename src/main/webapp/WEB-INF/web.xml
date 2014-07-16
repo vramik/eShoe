@@ -68,10 +68,10 @@ and open the template in the editor.
         </auth-constraint>
     </security-constraint>
     
-    <error-page>
+<!--    <error-page>
         <error-code>404</error-code>
         <location>/home</location>
-    </error-page>
+    </error-page>-->
 
 </web-app>
 

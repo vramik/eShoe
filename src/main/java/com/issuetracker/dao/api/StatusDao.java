@@ -1,10 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao.api;
 
 import com.issuetracker.model.Status;
+
 import java.util.List;
 
 /**

@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueTypeDao;
 import com.issuetracker.model.IssueType;
-import java.util.ArrayList;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,6 +10,8 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,12 +20,12 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class IssueTypeDaoBean implements IssueTypeDao {
 
-    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
+    @PersistenceContext
     private EntityManager em;
-     private CriteriaBuilder qb;
+    private CriteriaBuilder qb;
      
     @Override
-    public void insertIssueType(IssueType issueType) {
+    public void insert(IssueType issueType) {
         em.persist(issueType);
     }
 

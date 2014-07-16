@@ -1,27 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.UserDao;
-import com.issuetracker.model.CustomField;
-import com.issuetracker.model.CustomFieldIssueValue;
-import com.issuetracker.model.Issue;
-import com.issuetracker.model.IssuesRelationship;
-import com.issuetracker.model.User;
-import com.issuetracker.pages.component.comment.CommentListView;
+import com.issuetracker.model.*;
 import com.issuetracker.pages.component.comment.CommentForm;
+import com.issuetracker.pages.component.comment.CommentListView;
 import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueValueListView;
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.UserService;
 import com.issuetracker.web.security.TrackerAuthSession;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -32,7 +20,11 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.jboss.logging.Logger;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -41,9 +33,10 @@ import org.jboss.logging.Logger;
 public class IssueDetail extends PageLayout {
 
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     @Inject
-    private UserDao userDao;
+    private UserService userService;
+
     private IndicatingAjaxLink addWatcherLink;
     private final Label watchersCountLabel;
     private final ModalWindow modal2;
@@ -59,7 +52,7 @@ public class IssueDetail extends PageLayout {
 
     public IssueDetail(PageParameters parameters) {
         Long issueId = parameters.get("issue").toLong();
-        issue = issueDao.getIssueById(issueId);
+        issue = issueService.getIssueById(issueId);
         customField = new CustomField();
         PropertyModel<Issue> defaultModel = new PropertyModel<Issue>(this, "issue");
         setDefaultModel(defaultModel);
@@ -84,6 +77,11 @@ public class IssueDetail extends PageLayout {
         add(new Label("type", new PropertyModel(this, "issue.issueType.name")));
         add(new Label("affectsVersions", new PropertyModel(this, "issue.projectVersion.name")));
         add(new Label("priority", new PropertyModel(this, "issue.priority")));
+
+        String created = issue.getCreated().toString();
+        String updated = issue.getUpdated() != null ? issue.getUpdated().toString() : created;
+        add(new Label("created", created));
+        add(new Label("updated", updated));
 //        add(new RequiredTextField("description"));
 //        add(new RequiredTextField("project.name"));
         add(new Label("componentName", new PropertyModel(this, "issue.component.name")));
@@ -97,7 +95,7 @@ public class IssueDetail extends PageLayout {
         watchersModel = new PropertyModel<List<User>>(this, "watchersList") {
             @Override
             public List<User> getObject() {
-                List<User> list = new ArrayList<User>(issueDao.getIssueWatchers(issue));
+                List<User> list = new ArrayList<User>(issueService.getIssueWatchers(issue));
                 return list;
             }
         };
@@ -106,7 +104,7 @@ public class IssueDetail extends PageLayout {
             @Override
             public void onClick(AjaxRequestTarget target) {                
                 target.add(watchersCountLabel);
-                watchersList = issueDao.getIssueWatchers(issue);
+                watchersList = issueService.getIssueWatchers(issue);
                 if (watchersList == null) {
                     watchersList = new ArrayList<User>();
                 }
@@ -119,7 +117,7 @@ public class IssueDetail extends PageLayout {
                     }
                     issue.setWatches(watchersList);
                 }
-                issueDao.updateIssue(issue);
+                issueService.update(issue);
 
 //                target.add(modal2);
                 modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));

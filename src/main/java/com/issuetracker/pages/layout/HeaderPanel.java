@@ -1,17 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages.layout;
 
-import com.issuetracker.pages.CreateIssueType;
-import com.issuetracker.pages.CreateProject;
-import com.issuetracker.pages.CreateStatuses;
-import com.issuetracker.pages.CreateWorkflow;
-import com.issuetracker.pages.ListProjects;
-import com.issuetracker.pages.Login;
-import com.issuetracker.pages.SearchIssues;
+import com.issuetracker.pages.*;
 import com.issuetracker.pages.createIssue.CreateIssue;
+import com.issuetracker.pages.fulltext.FulltextSearch;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +103,8 @@ public class HeaderPanel extends Panel {
             optsIssue.add("Create Issue");
             optsIssue.add("Insert Types of Issue");
         }
-        optsIssue.add("Search Issue");
+        optsIssue.add("List Issues");
+        optsIssue.add("Issue Fulltext Search");
 
         List<String> optsWorkflow = new ArrayList<String>();
         if (isSignedIn(getWebRequest())) {
@@ -153,8 +145,12 @@ public class HeaderPanel extends Panel {
                         if (selected.equals("Create Issue")) {
                             setResponsePage(CreateIssue.class);
                         }
-                        if (selected.equals("Search Issue")) {
+                        if (selected.equals("List Issues")) {
                             setResponsePage(SearchIssues.class);
+                        }
+
+                        if (selected.equals("Issue Fulltext Search")) {
+                            setResponsePage(FulltextSearch.class);
                         }
                         if (selected.equals("Insert Types of Issue")) {
                             setResponsePage(CreateIssueType.class);
@@ -193,6 +189,12 @@ public class HeaderPanel extends Panel {
         webMarkupContainer.setVisible(isSignedIn(getWebRequest()));
         add(webMarkupContainer);
 
+        add(new Link("importerLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(Importer.class);
+            }
+        });
     }
 
     public String getSelected() {

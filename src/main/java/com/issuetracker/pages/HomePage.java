@@ -1,20 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.UserDao;
-//import com.issuetracker.web.security.TrackerAuthSession;
-import java.util.List;
-import java.util.Map;
-import javax.inject.Inject;
+import com.issuetracker.service.api.UserService;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
-import org.jboss.logging.Logger;
+
+import javax.inject.Inject;
+import java.util.Map;
 
 /**
  *
@@ -27,7 +20,7 @@ public class HomePage extends PageLayout {
     private DropDownChoice<Link> projectChoice;
     private DropDownChoice<String> issueChioce;
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     private Map<String, WebPage> pagesMap;
     private String selected = "Create Project";
 
@@ -63,10 +56,10 @@ public class HomePage extends PageLayout {
 //                // item.add(new Label("name", issue.getName()));
 //                item.add(new Label("description", issue.getDescription()));
 //                item.add(new Label("projectName", issue.getProject().getName()));
-//                item.add(new Link<Issue>("delete", item.getModel()) {
+//                item.add(new Link<Issue>("remove", item.getModel()) {
 //                    @Override
 //                    public void onClick() {
-//                        issueDao.removeIssue(item.getModelObject());
+//                        issueDao.remove(item.getModelObject());
 //                    }
 //                });
 //            }
@@ -87,7 +80,7 @@ public class HomePage extends PageLayout {
 //        add(form);
 //        Model<User> listModel = new Model<User>();
 //        ChoiceRenderer<User> personRender = new ChoiceRenderer<User>("name");
-//        personsList = new DropDownChoice<User>("persons", listModel, userDao.getUsers),
+//        personsList = new DropDownChoice<User>("persons", listModel, userService.getUsers),
 //                personRender) {
 //            @Override
 //            protected boolean wantOnSelectionChangedNotifications() {

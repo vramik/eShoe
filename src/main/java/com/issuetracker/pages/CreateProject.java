@@ -1,28 +1,18 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.ComponentDao;
-import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.dao.api.ProjectVersionDao;
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.CustomField;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
-import com.issuetracker.model.User;
 import com.issuetracker.pages.component.component.ComponentListView;
 import com.issuetracker.pages.component.customField.CustomFieldListView;
 import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.component.version.VersionListView;
 import com.issuetracker.pages.validator.ProjectNameValidator;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
+import com.issuetracker.service.api.ComponentService;
+import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.ProjectVersionService;
+import com.issuetracker.service.api.UserService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,14 +20,14 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.model.ComponentPropertyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -46,13 +36,13 @@ import org.apache.wicket.model.PropertyModel;
 public class CreateProject extends PageLayout {
 
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private ProjectVersionDao projectVersionDao;
+    private ProjectVersionService projectVersionService;
     @Inject
-    private ComponentDao componentDao;
+    private ComponentService componentService;
     private Form<Project> insertProjectForm;
     private TextField<String> textField;
     private TextField<String> componentTextField;
@@ -74,7 +64,7 @@ public class CreateProject extends PageLayout {
 
     public CreateProject() {
         project = new Project();
-        projects = projectDao.getProjects();
+        projects = projectService.getProjects();
         if (projects == null) {
             projects = new ArrayList<Project>();
         }
@@ -89,9 +79,9 @@ public class CreateProject extends PageLayout {
                 project.setVersions(projectVersionList);
                 project.setComponents(componentList);
 
-                projectDao.insertProject(project);
+                projectService.insert(project);
                 project = new Project();
-                projects = projectDao.getProjects();
+                projects = projectService.getProjects();
                 projectVersionList.clear();
                 componentList.clear();
 
@@ -105,7 +95,7 @@ public class CreateProject extends PageLayout {
         textField.setOutputMarkupId(true);
         componentTextField = new TextField<String>("componentName", new PropertyModel<String>(this, "stringComponent"));
         componentTextField.setOutputMarkupId(true);
-//        usersDropDown = new DropDownChoice<User>("ownerDropDown", this, userDao.get)
+//        usersDropDown = new DropDownChoice<User>("ownerDropDown", this, userService.get)
         insertProjectForm.add(componentTextField);
         insertProjectForm.add(textField);
 
@@ -128,7 +118,7 @@ public class CreateProject extends PageLayout {
                 projectVersion.setName(textField.getInput());
                 textField.clearInput();
                 target.add(textField);
-//                projectVersionDao.insertProjectVersion(projectVersion);
+//                projectVersionService.insert(projectVersion);
                 projectVersionList.add(projectVersion);
             }
 
@@ -178,7 +168,7 @@ public class CreateProject extends PageLayout {
 //            protected void onSubmit() {                
 //                customFields.add(customField);
 //                issue.setCustomFields(null);
-//                issueDao.updateIssue(issue);  
+//                issueDao.update(issue);
 //                customField = new CustomField();
 //            }
 //        };
@@ -200,7 +190,7 @@ public class CreateProject extends PageLayout {
         IModel<List<Project>> projectModel = new CompoundPropertyModel<List<Project>>(projects) {
             @Override
             public List<Project> getObject() {
-                List<Project> projectList = projectDao.getProjects();
+                List<Project> projectList = projectService.getProjects();
                 if (projectList == null) {
                     return new ArrayList<Project>();
                 }

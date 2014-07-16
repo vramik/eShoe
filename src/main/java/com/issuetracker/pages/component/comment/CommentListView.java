@@ -1,17 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages.component.comment;
 
-import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
+import com.issuetracker.service.api.IssueService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -20,6 +11,10 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -30,7 +25,7 @@ public class CommentListView extends Panel {
 //    @Inject
 //    private CommentDao commentDao;
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     private ListView commentsListView;
     private List<Comment> commentList;
     private Issue issue;
@@ -57,7 +52,7 @@ public class CommentListView extends Panel {
                         commentList.remove(comment);
                         // commentList.setObject(comments);
                         issue.setComments(commentList);
-                        issueDao.updateIssue(issue);
+                        issueService.update(issue);
 
                     }
                 });

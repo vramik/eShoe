@@ -1,22 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages;
 
-import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.model.Issue;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.User;
-import java.util.List;
-import javax.inject.Inject;
-import org.apache.wicket.markup.html.WebPage;
+import com.issuetracker.service.api.ProjectService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *
@@ -25,12 +20,12 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class ListProjects extends PageLayout {
 
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     private ListView listViewProjects;
     private List<Project> projects;
 
     public ListProjects() {
-        projects = projectDao.getProjects();
+        projects = projectService.getProjects();
 
         listViewProjects = new ListView<Project>("projectList", new PropertyModel<List<Project>>(this, "projects")) {
             @Override

@@ -4,12 +4,10 @@ package com.issuetracker.dao;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.User;
-import java.io.Serializable;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -18,6 +16,10 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -36,17 +38,17 @@ public class UserDaoBean implements UserDao, Serializable {
     }
 
     @Override
-    public void addUser(User user) {
+    public void insert(User user) {
         em.persist(user);
     }
 
     @Override
-    public void updateUser(User user) {
+    public void update(User user) {
         em.merge(user);
     }
 
     @Override
-    public void removeUser(User user) {
+    public void remove(User user) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -101,26 +103,12 @@ public class UserDaoBean implements UserDao, Serializable {
 
     @Override
     public boolean isUsernameInUse(String username) {
-        User user = null;
-
-                user = getUserByUsername(username);
-
-        if (user == null) {
-            return false;
-        }
-        return true;
+        return getUserByUsername(username) != null;
     }
     
     @Override
     public boolean isEmailInUse(String email) {
-        User user = null;
-
-                user = getUserByEmail(email);
-
-        if (user == null) {
-            return false;
-        }
-        return true;
+        return getUserByEmail(email) != null;
     }
 
     @Override

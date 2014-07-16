@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Workflow;
-import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.List;
 
 /**
  *
@@ -23,12 +20,12 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class WorkflowDaoBean implements WorkflowDao {
 
-    @PersistenceContext(unitName = "com_IssueTracker_war_1.0-SNAPSHOTPU2")
+    @PersistenceContext
     private EntityManager em;
-     private CriteriaBuilder qb;
+    private CriteriaBuilder qb;
      
     @Override
-    public void insertWorkflow(Workflow workflow) {
+    public void insert(Workflow workflow) {
         em.persist(workflow);
     }
 

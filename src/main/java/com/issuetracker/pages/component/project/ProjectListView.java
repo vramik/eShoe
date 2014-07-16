@@ -1,21 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages.component.project;
 
-import com.issuetracker.dao.api.IssueDao;
-import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Project;
-import java.util.List;
-import javax.inject.Inject;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.ProjectService;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
+
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  *
@@ -24,9 +19,9 @@ import org.apache.wicket.model.PropertyModel;
 public class ProjectListView<T extends Project> extends Panel {
 
     @Inject
-    private ProjectDao projectDao;
+    private ProjectService projectService;
     @Inject
-    private IssueDao issueDao;
+    private IssueService issueService;
     private List<Project> projects;
     private ListView listViewProjects;
 

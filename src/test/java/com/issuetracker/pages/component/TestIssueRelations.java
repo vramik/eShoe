@@ -7,9 +7,6 @@ package com.issuetracker.pages.component;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssuesRelationship;
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -19,6 +16,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author mgottval

@@ -5,7 +5,6 @@
 package com.issuetracker.pages.component;
 
 import com.issuetracker.pages.layout.FooterPanel;
-import java.util.Date;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Assert;

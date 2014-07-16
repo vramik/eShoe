@@ -1,11 +1,7 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.dao.api;
 
-import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Workflow;
+
 import java.util.List;
 
 /**
@@ -14,7 +10,7 @@ import java.util.List;
  */
 public interface WorkflowDao {
     
-    void insertWorkflow(Workflow workflow);
+    void insert(Workflow workflow);
     
     List<Workflow> getWorkflows();
     

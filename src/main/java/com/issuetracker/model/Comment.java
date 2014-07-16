@@ -1,14 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.model;
 
+import com.github.holmistr.esannotations.indexing.annotations.Field;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  *
@@ -20,8 +17,13 @@ public class Comment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Lob
+    @Field
     private String content;
-    
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date created;
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date updated;
 
     public Long getId() {
         return id;
@@ -39,10 +41,32 @@ public class Comment implements Serializable {
         this.content = content;
     }
 
-  
+    public Date getCreated() {
+        return created;
+    }
 
-    
-    
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setCreated(Date date) {
+        this.created = new Date(date.getTime());
+    }
+
+    @PrePersist
+    public void setCreationDate() {
+        this.created = new Date();
+    }
+
+    @PreUpdate
+    public void setUpdatedDate() {
+        this.updated = new Date();
+    }
+
+    public void setUpdated(Date date) {
+        this.updated = new Date(date.getTime());
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -59,13 +83,10 @@ public class Comment implements Serializable {
             return false;
         }
         final Comment other = (Comment) obj;
-        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+        if (!Objects.equals(this.id, other.id) && (this.id == null || !this.id.equals(other.id))) {
             return false;
         }
-        if ((this.content == null) ? (other.content != null) : !this.content.equals(other.content)) {
-            return false;
-        }
-        return true;
+        return !((this.content == null) ? (other.content != null) : !this.content.equals(other.content));
     }
 
     

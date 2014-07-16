@@ -1,50 +1,64 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.model;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
+import com.github.holmistr.esannotations.indexing.annotations.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
  * @author mgottval
  */
 @Entity
+@Indexed(index = "issues", type = "issue")
 public class Issue implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @DocumentId
+    @Field(name = "id")
     private Long issueId;
+    @Field
     private String name;
+    @Field
     private String summary;
+    @Lob
+    @Field
     private String description;
+    @IndexEmbedded(name = "issue_type", depth = 1)
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
+    @Field
+    @Analyzer(name = "issueTypeNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private Priority priority;
+    @Field
+    @com.github.holmistr.esannotations.indexing.annotations.Date
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date created = new Date();
+    @Field
+    @com.github.holmistr.esannotations.indexing.annotations.Date
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date updated;
+
+    @IndexEmbedded(depth = 1)
     @ManyToOne
 //    private Status status;
     private Status status;
     @ManyToOne
     private Resolution resolution;
+    @IndexEmbedded(depth = 1)
     @ManyToOne
     private User creator;
+    @IndexEmbedded(depth = 1)
     @ManyToOne
     private User owner;
+    @IndexEmbedded(depth = 1)
     @ManyToOne(cascade = CascadeType.MERGE)
     private Project project;
     private String fileLocation;
@@ -60,6 +74,8 @@ public class Issue implements Serializable {
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Fetch(value = FetchMode.SUBSELECT)
+
+    @IndexEmbedded(depth = 1)
     private List<Comment> comments;
     
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -239,8 +255,32 @@ public class Issue implements Serializable {
     public void setRelatesTo(List<IssuesRelationship> relatesTo) {
         this.relatesTo = relatesTo;
     }
-    
-    
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setCreated(Date date) {
+        this.created = new Date(date.getTime());
+    }
+
+    @PrePersist
+    public void setCreationDate() {
+        this.created = new Date();
+    }
+
+    @PreUpdate
+    public void setUpdatedDate() {
+        this.updated = new Date();
+    }
+
+    public void setUpdated(Date date) {
+        this.updated = new Date(date.getTime());
+    }
 
     //</editor-fold>
 
@@ -266,10 +306,7 @@ public class Issue implements Serializable {
             return false;
         }
         Issue other = (Issue) object;
-        if ((this.issueId == null && other.issueId != null) || (this.issueId != null && !this.issueId.equals(other.issueId))) {
-            return false;
-        }
-        return true;
+        return (this.issueId != null || other.issueId == null) && (this.issueId == null || this.issueId.equals(other.issueId));
     }
 
     @Override

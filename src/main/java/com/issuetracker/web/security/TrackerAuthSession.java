@@ -1,17 +1,18 @@
 package com.issuetracker.web.security;
 
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.User;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
+import com.issuetracker.service.api.UserService;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
 
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
+
 public class TrackerAuthSession extends AuthenticatedWebSession {
 
     @Inject
-    private UserDao userDao;
+    private UserService userService;
     private User user;
     private TrackerSettings settings = new TrackerSettings();
 
@@ -55,7 +56,8 @@ public class TrackerAuthSession extends AuthenticatedWebSession {
         }
 
         try {
-            this.user = userDao.loadUserIfPasswordMatches(user_.getName(), user_.getPassword());
+
+            this.user = userService.loadUserIfPasswordMatches(user_.getName(), user_.getPassword());
             return true;
         } catch (NoResultException ex) {
             return false;
