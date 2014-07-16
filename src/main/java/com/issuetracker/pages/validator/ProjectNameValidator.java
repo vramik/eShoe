@@ -8,6 +8,8 @@ import org.apache.wicket.validation.ValidationError;
 
 import javax.inject.Inject;
 
+import javax.inject.Inject;
+
 /**
  *
  * @author mgottval

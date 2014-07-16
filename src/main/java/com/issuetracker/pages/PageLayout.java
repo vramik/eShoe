@@ -4,7 +4,6 @@ import com.issuetracker.pages.layout.FooterPanel;
 import com.issuetracker.pages.layout.HeaderPanel;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.markup.html.basic.Label;
 
 /**
  *
