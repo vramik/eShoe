@@ -3,25 +3,24 @@ package com.issuetracker.pages.component.version;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.service.api.ProjectService;
-import com.issuetracker.service.api.ProjectVersionService;
+import static com.issuetracker.web.security.KeycloakAuthSession.isUserInRole;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-
 import javax.inject.Inject;
 import java.util.List;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 /**
  *
  * @author mgottval
+ * @param <T>
  */
 public class VersionListView<T extends ProjectVersion> extends Panel {
 
-    @Inject
-    private ProjectVersionService projectVersionService;
     @Inject
     private ProjectService projectService;
     private List<ProjectVersion> projectVersionList;
@@ -30,11 +29,14 @@ public class VersionListView<T extends ProjectVersion> extends Panel {
     public VersionListView(String id, IModel<List<ProjectVersion>> versionsModel, final IModel<Project> projectModel) {
         super(id);
         this.projectVersionList = versionsModel.getObject();
+        
         add(new Label("versions", "Versions"));
         versionsListView = new ListView<ProjectVersion>("versionsList", versionsModel) {
             @Override
             protected void populateItem(ListItem<ProjectVersion> item) {
                 final ProjectVersion projectVersion = item.getModelObject();
+                
+                item.add(new Label("name", projectVersion.getName()));
                 item.add(new Link<ProjectVersion>("remove", item.getModel()) {
                     @Override
                     public void onClick() {
@@ -43,11 +45,10 @@ public class VersionListView<T extends ProjectVersion> extends Panel {
                             Project project = projectService.getProjectById(projectModel.getObject().getId());
                             project.setVersions(projectVersionList);
                             projectService.update(project);
+                            projectService.getProjectById(projectModel.getObject().getId());
                         }
-//                        projectVersionService.remove(projectVersion);
                     }
-                });
-                item.add(new Label("name", projectVersion.getName()));
+                }.setVisible(isUserInRole(getWebRequest(), "project.update")));
             }
         };
         add(versionsListView);

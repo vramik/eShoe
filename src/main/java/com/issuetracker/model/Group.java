@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.model;
 
 import javax.persistence.*;
@@ -12,7 +8,7 @@ import java.util.List;
  *
  * @author mgottval
  */
-@Entity
+//@Entity
 public class Group implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

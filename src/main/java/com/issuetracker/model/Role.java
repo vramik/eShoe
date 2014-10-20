@@ -8,7 +8,7 @@ import java.util.List;
  *
  * @author mgottval
  */
-@Entity
+//@Entity
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;

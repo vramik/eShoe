@@ -27,8 +27,8 @@ public class User implements Serializable {
     private String password;
     private String confirmPassword;
     
-    @ManyToMany
-    private List<Group> userGroup;
+//    @ManyToMany
+//    private List<Group> userGroup;
     
     @OneToMany
     private List<Issue> created;
@@ -56,13 +56,13 @@ public class User implements Serializable {
     }
     
     //<editor-fold defaultstate="collapsed" desc="get/set">
-    public List<Group> getUserGroup() {
-        return userGroup;
-    }
-    
-    public void setUserGroup(List<Group> userGroup) {
-        this.userGroup = userGroup;
-    }
+//    public List<Group> getUserGroup() {
+//        return userGroup;
+//    }
+//    
+//    public void setUserGroup(List<Group> userGroup) {
+//        this.userGroup = userGroup;
+//    }
     
     public Long getUserId() {
         return userId;

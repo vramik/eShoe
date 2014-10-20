@@ -27,13 +27,13 @@ import java.util.List;
 @Stateless
 public class ProjectDaoBean implements ProjectDao {
 
-    @Inject
-    private ComponentDao componentDao;
-    @Inject
-    private ProjectVersionDao projectVersionDao;
-    @Inject
-    private UserDao userDao;
-    
+//    @Inject
+//    private ComponentDao componentDao;
+//    @Inject
+//    private ProjectVersionDao projectVersionDao;
+//    @Inject
+//    private UserDao userDao;
+//    
     @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
@@ -70,10 +70,13 @@ public class ProjectDaoBean implements ProjectDao {
         CriteriaQuery<Project> projectQuery = qb.createQuery(Project.class);
         Root<Project> p = projectQuery.from(Project.class);
         Predicate pCondition = qb.equal(p.get("id"), id);
-        projectQuery.where(pCondition);
+        projectQuery = projectQuery.where(pCondition);
         TypedQuery<Project> pQuery = em.createQuery(projectQuery);
         List<Project> projectResults = pQuery.getResultList();
         if (projectResults != null && !projectResults.isEmpty()) {
+            Project project = projectResults.get(0);
+            System.out.println("DAO getVersions: " + project.getVersions());
+            System.out.println("DAO ---------------------------------------------------------------");
             return projectResults.get(0);
         } else {
             return null;
@@ -90,7 +93,7 @@ public class ProjectDaoBean implements ProjectDao {
         if (results != null && !results.isEmpty()) {
             return results;
         } else {
-            return new ArrayList<Project>();
+            return new ArrayList<>();
         }
     }
 
@@ -107,7 +110,7 @@ public class ProjectDaoBean implements ProjectDao {
             List<ProjectVersion> versions = projectResults.get(0).getVersions();
             return versions;
         } else {
-            return new ArrayList<ProjectVersion>();
+            return new ArrayList<>();
         }
     }
 
@@ -124,7 +127,7 @@ public class ProjectDaoBean implements ProjectDao {
             List<Component> components = projectResults.get(0).getComponents();
             return components;
         } else {
-            return new ArrayList<Component>();
+            return new ArrayList<>();
         }
     }
 
@@ -137,11 +140,7 @@ public class ProjectDaoBean implements ProjectDao {
     
     @Override
     public boolean isProjectNameInUse(String projectName) {
-        Project project = null;
-
-                project = getProjectByName(projectName);
-
-        if (project == null) {
+        if (getProjectByName(projectName) == null) {
             return false;
         }
         return true;

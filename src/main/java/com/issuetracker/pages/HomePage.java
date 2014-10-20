@@ -25,7 +25,7 @@ public class HomePage extends PageLayout {
     private String selected = "Create Project";
 
     public HomePage() {
-
+        System.out.println("homePageContructor");
         
 //        final Link loginLink = new Link("loginLink") {
 //            @Override

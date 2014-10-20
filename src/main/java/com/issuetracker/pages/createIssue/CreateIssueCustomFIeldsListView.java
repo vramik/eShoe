@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.issuetracker.pages.createIssue;
 
 import com.issuetracker.model.CustomFieldIssueValue;
@@ -21,7 +17,7 @@ import java.util.List;
  */
 public class CreateIssueCustomFIeldsListView extends Panel {
 
-    private ListView customFormFieldsListView;
+    private final ListView customFormFieldsListView;
 
     public CreateIssueCustomFIeldsListView(String id, final IModel<List<CustomFieldIssueValue>> customFieldModel) {
         super(id);

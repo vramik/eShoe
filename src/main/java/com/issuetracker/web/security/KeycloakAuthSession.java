@@ -1,21 +1,16 @@
 
 package com.issuetracker.web.security;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.servlet.ServletException;
+import com.issuetracker.pages.permissions.AccessDenied;
+import static com.issuetracker.web.Constants.roles;
+import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.wicket.request.http.WebRequest;
-import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.request.Request;
 import org.keycloak.KeycloakSecurityContext;
-import org.keycloak.ServiceUrlConstants;
-import org.keycloak.adapters.HttpClientBuilder;
-import org.keycloak.representations.AccessTokenResponse;
+import org.keycloak.representations.AccessToken.Access;
 import org.keycloak.representations.IDToken;
-import org.keycloak.util.KeycloakUriBuilder;
 
 /**
  *
@@ -28,7 +23,7 @@ public class KeycloakAuthSession {
      * @param req WebRequest
      * @return IDToken or null if user is not signed in
      */
-    public static IDToken getIDToken(WebRequest req) {
+    public static IDToken getIDToken(Request req) {
         if (isSignedIn(req)) {
             return getKeycloakSecurityContext(req).getIdToken();
         } else {
@@ -36,54 +31,51 @@ public class KeycloakAuthSession {
         }
     }
     
-    public static boolean isSignedIn(WebRequest req) {
+    public static Set<String> getUserRhelmRoles(Request req) {
+        if (isSignedIn(req)) {
+            return getKeycloakSecurityContext(req).getToken().getRealmAccess().getRoles();
+        } else {
+            return null;
+        }
+    }
+    
+    public static boolean isUserInRole(Request req, String roleKey) {
+        if (isSignedIn(req)) {
+            String role = roles.getProperty(roleKey);
+            return getKeycloakSecurityContext(req).getToken().getRealmAccess().isUserInRole(role);
+        } else {
+            return false;
+        }
+        
+    }
+    
+    public static Map<String, Access> getResourceAccess(Request req) {
+        return getKeycloakSecurityContext(req).getToken().getResourceAccess();
+    }
+    
+//    public static Set<String> getUserAppRoles(WebRequest req) {
+//        if (isSignedIn(req)) {
+//            AccessToken.Access resourceAccess = getKeycloakSecurityContext(req).getToken().getResourceAccess("issue-tracker");
+//            System.out.println("RESOURCE ACCESS: " + resourceAccess);
+//            return resourceAccess.getRoles();
+//        } else {
+//            return null;
+//        }
+//    }
+    
+    public static boolean isSignedIn(Request req) {
         return getKeycloakSecurityContext(req) != null;
     }
     
-    private static KeycloakSecurityContext getKeycloakSecurityContext(WebRequest req) {
+    public static KeycloakSecurityContext getKeycloakSecurityContext(Request req) {
         HttpServletRequest httpReq = ((HttpServletRequest) req.getContainerRequest());
         return (KeycloakSecurityContext) httpReq.getAttribute(KeycloakSecurityContext.class.getName());
     }
     
-    public static void signOut(WebRequest req, WebResponse res) {
-        HttpServletRequest httpReq = ((HttpServletRequest) req.getContainerRequest());
-//        HttpServletResponse httpRes = ((HttpServletResponse) res.getContainerResponse());
-        try {
-            httpReq.logout();
-            String logoutUri = KeycloakUriBuilder.fromUri("http://localhost:8080/auth").path(ServiceUrlConstants.TOKEN_SERVICE_LOGOUT_PATH)
-            .queryParam("redirect_uri", "http://localhost:8080/IssueTracker/home").build("demo").toString();
-            System.out.println("LOGOUT_URI: " + logoutUri);
-//            httpRes.sendRedirect("http://localhost:8080/auth/realms/demo/tokens/logout?redirect_uri=http%3A%2F%2Flocalhost%3A8080%2FIssueTracker");
-            res.sendRedirect(logoutUri);
-            System.out.println("----LOGOUT----");
-        } catch (Exception ex) {
-            Logger.getLogger(KeycloakAuthSession.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace(System.err);
+    public static void checkPermissions(WebPage page, String roleKey) {
+        System.out.println("--checkPermissions--" + page.toString() + "role: " + roleKey);
+        if (!isUserInRole(page.getRequest(), roleKey)) {
+            page.setResponsePage(AccessDenied.class);
         }
     }
-    
-//    public static void logout(AccessTokenResponse res) throws IOException {
-//
-//        HttpClient client = new HttpClientBuilder()
-//                .disableTrustManager().build();
-//
-//
-//        try {
-//            HttpGet get = new HttpGet(KeycloakUriBuilder.fromUri("http://localhost:8080/auth")
-//                    .path(ServiceUrlConstants.TOKEN_SERVICE_LOGOUT_PATH)
-//                    .queryParam("session_state", res.getSessionState())
-//                    .build("demo"));
-//            HttpResponse response = client.execute(get);
-//            HttpEntity entity = response.getEntity();
-//            if (entity == null) {
-//                return;
-//            }
-//            InputStream is = entity.getContent();
-//            if (is != null) is.close();
-//        } finally {
-//            client.getConnectionManager().shutdown();
-//        }
-//    }
-    
-    
 }

@@ -1,37 +1,51 @@
 package com.issuetracker.pages.component.project;
 
 import com.issuetracker.model.Project;
-import com.issuetracker.service.api.IssueService;
+import com.issuetracker.pages.ProjectDetail;
 import com.issuetracker.service.api.ProjectService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
 
 import javax.inject.Inject;
 import java.util.List;
+import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  *
  * @author mgottval
+ * @param <T>
  */
-public class ProjectListView<T extends Project> extends Panel {
+public class ProjectListView<T extends Project> extends Panel implements IFormModelUpdateListener {
 
     @Inject
     private ProjectService projectService;
-    @Inject
-    private IssueService issueService;
     private List<Project> projects;
-    private ListView listViewProjects;
+    private final ListView listViewProjects;
 
-    public ProjectListView(String id, IModel<List<Project>> projectsModel) {
+    public ProjectListView(String id) {
         super(id);
-        listViewProjects = new ListView<Project>("projectList", projectsModel) {
+        projects = projectService.getProjects();
+
+        listViewProjects = new ListView<Project>("projectList", new PropertyModel<List<Project>>(this, "projects")) {
             @Override
             protected void populateItem(final ListItem<Project> item) {
                 final Project project = item.getModelObject();
-                item.add(new Label("name", project.getName()));
+                Link projectDetailLink = new Link<Project>("showProject", item.getModel()) {
+                    @Override
+                    public void onClick() {
+                        PageParameters pageParameters = new PageParameters();
+                        pageParameters.add("project", project.getId());
+                        setResponsePage(ProjectDetail.class, pageParameters);
+                    }
+                };
+                projectDetailLink.add(new Label("name", project.getName()));
+                item.add(projectDetailLink);
+                item.add(new Label("projectLead", project.getOwner()));
             }
         };
         add(listViewProjects);
@@ -43,5 +57,10 @@ public class ProjectListView<T extends Project> extends Panel {
 
     public void setProjects(List<Project> projects) {
         this.projects = projects;
+    }
+
+    @Override
+    public void updateModel() {
+        projects = projectService.getProjects();
     }
 }

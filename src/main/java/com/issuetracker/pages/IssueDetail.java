@@ -9,7 +9,6 @@ import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.UserService;
-import com.issuetracker.web.security.TrackerAuthSession;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -48,13 +47,13 @@ public class IssueDetail extends PageLayout {
     private List<User> watchersList;
     private List<CustomFieldIssueValue> cfIssueValueList;
     private List<IssuesRelationship> issuesRelationships;
-    private IssueRelationsListView<IssuesRelationship> issueRelationsListView;
+    private final IssueRelationsListView<IssuesRelationship> issueRelationsListView;
 
     public IssueDetail(PageParameters parameters) {
         Long issueId = parameters.get("issue").toLong();
         issue = issueService.getIssueById(issueId);
         customField = new CustomField();
-        PropertyModel<Issue> defaultModel = new PropertyModel<Issue>(this, "issue");
+        PropertyModel<Issue> defaultModel = new PropertyModel<>(this, "issue");
         setDefaultModel(defaultModel);
         watchersCount = issue.getWatches().size();
 
@@ -95,7 +94,7 @@ public class IssueDetail extends PageLayout {
         watchersModel = new PropertyModel<List<User>>(this, "watchersList") {
             @Override
             public List<User> getObject() {
-                List<User> list = new ArrayList<User>(issueService.getIssueWatchers(issue));
+                List<User> list = new ArrayList<>(issueService.getIssueWatchers(issue));
                 return list;
             }
         };
@@ -106,17 +105,17 @@ public class IssueDetail extends PageLayout {
                 target.add(watchersCountLabel);
                 watchersList = issueService.getIssueWatchers(issue);
                 if (watchersList == null) {
-                    watchersList = new ArrayList<User>();
+                    watchersList = new ArrayList<>();
                 }
-                TrackerAuthSession sess = (TrackerAuthSession) getSession();
-                if (sess.isSignedIn()) {
-                    User user = sess.getUser();
-                    if (!watchersList.contains(user)) {
-                        watchersList.add(user);
-                        watchersCount++;
-                    }
-                    issue.setWatches(watchersList);
-                }
+//                TrackerAuthSession sess = (TrackerAuthSession) getSession();
+//                if (sess.isSignedIn()) {
+//                    User user = sess.getUser();
+//                    if (!watchersList.contains(user)) {
+//                        watchersList.add(user);
+//                        watchersCount++;
+//                    }
+//                    issue.setWatches(watchersList);
+//                }
                 issueService.update(issue);
 
 //                target.add(modal2);
@@ -174,12 +173,12 @@ public class IssueDetail extends PageLayout {
             public List<CustomFieldIssueValue> getObject() {
                 List<CustomFieldIssueValue> customFieldIssueValueList = issue.getCustomFields();
                 if (customFieldIssueValueList == null) {
-                    return new ArrayList<CustomFieldIssueValue>();
+                    return new ArrayList<>();
                 }
                 return customFieldIssueValueList;
             }
         };
-        add(new CustomFieldIssueValueListView<CustomFieldIssueValue>("cfListView", cfModel));
+        add(new CustomFieldIssueValueListView<>("cfListView", cfModel));
 
         IModel issueRelModel = new AbstractReadOnlyModel<List<IssuesRelationship>>() {
             @Override
@@ -191,7 +190,7 @@ public class IssueDetail extends PageLayout {
                 return models;
             }
         };
-        issueRelationsListView = new IssueRelationsListView<IssuesRelationship>("issueRelListView", issueRelModel);
+        issueRelationsListView = new IssueRelationsListView<>("issueRelListView", issueRelModel);
         add(issueRelationsListView);
 
     }

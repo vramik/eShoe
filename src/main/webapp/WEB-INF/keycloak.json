@@ -1,10 +1,10 @@
 {
-  "realm": "demo",
-  "realm-public-key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCKFc8UqAQINDc5somIlW60EVjVTY+2ilJvmzkU4Zk7nyCeI7t4kufnbCoOMIpV8jzRQntmAlpnHRZhW7R7NsD2Xhknrq7qOJnxM9n5D/lBAq+P1GPOqkDwfhJd2IZywoP9qvwOS3SuxZmt6Etq/yMPsvhIWHKOBapMIHbWwh0syQIDAQAB",
+  "realm": "issue-tracker",
+  "realm-public-key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/bRw1JxRJiXbiY9bm9PJoHwUztIc2xk6wFLKvFEav37ShmhDlYo7gAvD5ft/DCxGkhPvHCG7rO3Q6Cwe2ghEmTJv0H84klTdWqm+WYL/LGOO+ujQlvD7198BHTNrJx/LiTMIGF0ZdegOsNiy0T8Qn2smvxw6pfK7kIdfYLWXTPQIDAQAB",
   "auth-server-url": "http://localhost:8080/auth",
-  "ssl-not-required": true,
-  "resource": "IssueTracker",
+  "ssl-required": "external",
+  "resource": "issue-tracker",
   "credentials": {
-    "secret": "a8a5ee97-f75a-45d2-9487-6a9e6bdb0314"
+    "secret": "b366b3fa-5c50-4ad2-b3ad-0eaf32f6e8b1"
   }
 }

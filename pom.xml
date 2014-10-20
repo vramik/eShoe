@@ -24,8 +24,8 @@
         <!-- Define the version of JBoss' Java EE 6 APIs we want to import. -->
         <jboss.spec.version>3.0.2.Final</jboss.spec.version>
         <version.wicket>6.11.0</version.wicket>
-        <version.wicket.cdi>1.2</version.wicket.cdi>
-        <version.picketbox>5.0.0.Final</version.picketbox>
+        <version.wicket.cdi>6.0</version.wicket.cdi>
+        <!--<version.picketbox>5.0.0.Final</version.picketbox>-->
 
 
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -172,6 +172,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+                <version>1.9.1</version>
                 <executions>
                     <execution>
                         <id>add-source</id>
@@ -382,7 +383,7 @@
         -->
         
         <!-- PicketBox, PicketLink - for login attempts -->
-        <dependency>
+<!--        <dependency>
             <groupId>org.picketbox</groupId>
             <artifactId>picketbox-core</artifactId>
             <version>${version.picketbox}</version>
@@ -397,7 +398,7 @@
             <artifactId>picketlink-idm-api</artifactId>
             <version>3.0.0.Beta2</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
 
         <!-- Wicket -->
         <dependency>
@@ -431,17 +432,11 @@
             <version>0.7.0</version>
         </dependency>
         -->
-        <!-- Security - instead of PicketBox. -->
-        <dependency>
-            <groupId>org.apache.wicket</groupId>
-            <artifactId>wicket-auth-roles</artifactId>
-            <version>${version.wicket}</version>
-        </dependency>
+
         <!-- Wicket CDI integration. -->
         <dependency>
             <groupId>net.ftlines.wicket-cdi</groupId>
             <artifactId>wicket-cdi</artifactId>
-            <version>6.0</version>
         </dependency>
 
         <!-- RESTEasy -->
@@ -535,13 +530,13 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
-            <version>1.0-beta-2</version>
+            <version>1.0.1.Final</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-core</artifactId>
-            <version>1.0-beta-2</version>
+            <version>1.0.1.Final</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

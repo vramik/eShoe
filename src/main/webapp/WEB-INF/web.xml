@@ -1,9 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
@@ -43,12 +38,9 @@ and open the template in the editor.
     
     <login-config>
         <auth-method>KEYCLOAK</auth-method>
-        <realm-name>demo</realm-name>
+        <realm-name>issue-tracker</realm-name>
     </login-config>
     
-    <security-role>
-        <role-name>admin</role-name>
-    </security-role>
     <security-role>
         <role-name>user</role-name>
     </security-role>
@@ -56,19 +48,24 @@ and open the template in the editor.
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Users</web-resource-name>
+            <!--<url-pattern>/*</url-pattern>-->
             <url-pattern>/login/*</url-pattern>
-            <url-pattern>/newProject/*</url-pattern>
+            <!--            <url-pattern>/newProject/*</url-pattern>
             <url-pattern>/newIssue/*</url-pattern>
             <url-pattern>/newIssueType/*</url-pattern>
             <url-pattern>/createStatus/*</url-pattern>
-            <url-pattern>/createWorkflow/*</url-pattern>
+            <url-pattern>/createWorkflow/*</url-pattern>-->
         </web-resource-collection>
         <auth-constraint>
             <role-name>user</role-name>
         </auth-constraint>
     </security-constraint>
     
-<!--    <error-page>
+    <!--    <error-page>
+        <error-code>400</error-code>
+        <location>/home</location>
+    </error-page>
+    <error-page>
         <error-code>404</error-code>
         <location>/home</location>
     </error-page>-->

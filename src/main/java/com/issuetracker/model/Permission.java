@@ -1,10 +1,14 @@
 package com.issuetracker.model;
 
+import java.io.Serializable;
+import java.util.Set;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.io.Serializable;
 
 /**
  *
@@ -12,11 +16,17 @@ import java.io.Serializable;
  */
 @Entity
 public class Permission implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String permissionName;
+
+    @Enumerated(EnumType.STRING)
+    private PermissionType permissionType;
+    
+    @ElementCollection
+    private Set<String> roles;
 
     public Long getId() {
         return id;
@@ -26,16 +36,24 @@ public class Permission implements Serializable {
         this.id = id;
     }
 
-    public String getPermissionName() {
-        return permissionName;
+    public Set<String> getRoles() {
+        return roles;
     }
 
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
+    public PermissionType getPermissionType() {
+        return permissionType;
+    }
+
+    public void setPermissionType(PermissionType permissionType) {
+        this.permissionType = permissionType;
+    }
     
     
+
     @Override
     public int hashCode() {
         int hash = 0;

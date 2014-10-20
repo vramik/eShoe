@@ -4,23 +4,26 @@ import com.issuetracker.model.Component;
 import com.issuetracker.model.CustomField;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.pages.component.component.ComponentListView;
 import com.issuetracker.pages.component.customField.CustomFieldListView;
-import com.issuetracker.service.api.ComponentService;
+import com.issuetracker.pages.component.version.VersionListView;
 import com.issuetracker.service.api.ProjectService;
-import com.issuetracker.service.api.ProjectVersionService;
+import static com.issuetracker.web.Constants.*;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.jboss.logging.Logger;
 
 import javax.inject.Inject;
 import java.util.List;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.Model;
+import static com.issuetracker.web.security.KeycloakAuthSession.*;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -30,98 +33,162 @@ public class ProjectDetail extends PageLayout {
 
     @Inject
     private ProjectService projectService;
-    @Inject
-    private ProjectVersionService projectVersionService;
-    @Inject
-    private ComponentService componentDao;
-    private ListView<ProjectVersion> projectVersionListView;
-    private ListView<Component> projectComponentListView;
+    
+    private final Form<ProjectVersion> projectVersionForm;
+    private final Form<Component> projectComponentForm;
+    private final Form<CustomField> projectCustomFieldForm;
     private List<ProjectVersion> projectVersionList;    
     private List<Component> projectComponentList;    
     private List<CustomField> projectCustomFieldsList;    
-    private List<CustomField> customFieldsList;    
-    private CustomField customField;
+    private TextField versionTextField;
+    private TextField componentTextField;
+    private TextField customFieldTextField;
+    private Project project = new Project();
+    private String stringVersion;
+    private String stringComponent;
+    private String stringCustomField;
+    
+    @Override
+    public void onConfigure() {
+        super.onConfigure();
+        boolean hasPermissions = isUserInRole(getRequest(), "project.update");
+        
+        projectVersionForm.setVisible(hasPermissions);
+        projectComponentForm.setVisible(hasPermissions);
+        projectCustomFieldForm.setVisible(hasPermissions);
+    }
     
     public ProjectDetail(PageParameters parameters) {
-        final Long projectId = parameters.get("project").toLong();
-        final Project project = projectService.getProjectById(projectId);
+        StringValue projectId = parameters.get("project");
+        if (projectId.equals(StringValue.valueOf((String)null))) {
+            throw new RedirectToUrlException(SERVER_URL + CONTEXT_ROOT + "home");
+        }
+        
+        project = projectService.getProjectById(projectId.toLong());
         
         projectVersionList = project.getVersions();
         projectComponentList = project.getComponents();
         projectCustomFieldsList = project.getCustomFields();
-        customFieldsList = project.getCustomFields();
         
         add(new Label("name", project.getName()));
+        add(new Label("summary", project.getSummary()));
         
-        projectVersionListView = new ListView("projectVersionListView", new PropertyModel<List<ProjectVersion>>(this, "projectVersionList")) {
+//<editor-fold defaultstate="collapsed" desc="versions">
+        IModel<List<ProjectVersion>> versionModel = new CompoundPropertyModel<List<ProjectVersion>>(projectVersionList) {
             @Override
-            protected void populateItem(ListItem item) {
-                final ProjectVersion projectVersion = (ProjectVersion) item.getModelObject();
-                item.add(new Label("versionName", projectVersion.getName()));
+            public List<ProjectVersion> getObject() {
+                return projectVersionList;            
             }
         };
-        add(projectVersionListView);
- 
-        projectComponentListView = new ListView<Component>("projectComponentListView", projectComponentList) {
+        VersionListView<ProjectVersion> versionsListView = new VersionListView<>("versionsList", versionModel, new Model<>(project));
+        final WebMarkupContainer wmcVersion = new WebMarkupContainer("wmcVersion");
+        wmcVersion.add(versionsListView);
+        wmcVersion.setOutputMarkupId(true);
+        add(wmcVersion);
+        
+        versionTextField = new TextField<>("version", new PropertyModel<String>(this, "stringVersion"));
+        versionTextField.setOutputMarkupId(true);
+        projectVersionForm = new Form<ProjectVersion>("projectVersionForm") {
             @Override
-            protected void populateItem(ListItem<Component> item) {
-                final Component component = item.getModelObject();
-                item.add(new Label("componentName", component.getName()));
-//                item.add(new Link<Component>("remove", item.getModel()) {
-//                    @Override
-//                    public void onClick() {
-//                        projectComponentList.remove(component);                        
-//                        project.setComponents(projectComponentList);
-//                        projectService.update(project);
-//                        componentDao.remove(component);
-//                    }
-//                });
+            protected void onSubmit() {
+                ProjectVersion projectVersion = new ProjectVersion();
+                projectVersion.setName(versionTextField.getInput());
+                versionTextField.clearInput();
+                projectVersionList.add(projectVersion);
+                project.setVersions(projectVersionList);
+                projectService.update(project);
+//                project = projectService.getProjectById(project.getId());
             }
         };
-        add(projectComponentListView);
-
-
-
-        //CUSTOM FIELD
-        add(new Label("cfHeader", "Add Custom Field:"));
-//        final List<CustomField> customFields = new ArrayList<CustomField>();
+        projectVersionForm.add(versionTextField);
+        add(projectVersionForm);
+//</editor-fold>
         
-        final Form<CustomField> cfForm;
-        cfForm = new Form("form") {
+//<editor-fold defaultstate="collapsed" desc="components">
+        IModel<List<Component>> componentModel = new CompoundPropertyModel<List<Component>>(projectComponentList) {
             @Override
-            protected void onSubmit() { 
-                List<CustomField> getF = project.getCustomFields();
+            public List<Component> getObject() {
+                return projectComponentList;            
+            }
+        };
+        ComponentListView<Component> componentsListView = new ComponentListView<>("componentsList", componentModel, new Model<>(project));
+        final WebMarkupContainer wmcComponent = new WebMarkupContainer("wmcComponent");
+        wmcComponent.add(componentsListView);
+        wmcComponent.setOutputMarkupId(true);
+        add(wmcComponent);
+        
+        componentTextField = new TextField<>("component", new PropertyModel<String>(this, "stringComponent"));
+        componentTextField.setOutputMarkupId(true);
+        projectComponentForm = new Form<Component>("projectComponentForm") {
+            @Override
+            protected void onSubmit() {
+                Component component = new Component();
+                component.setName(componentTextField.getInput());
+                componentTextField.clearInput();
+                System.out.println("componentTextField: " + componentTextField.getInput());
+                projectComponentList.add(component);
+                project.setComponents(projectComponentList);
+                projectService.update(project);
+            }
+        };
+        projectComponentForm.add(componentTextField);
+        add(projectComponentForm);
+//</editor-fold>
+        
+//<editor-fold defaultstate="collapsed" desc="custom fields">
+        IModel<List<CustomField>> customFieldsModel = new CompoundPropertyModel<List<CustomField>>(projectCustomFieldsList) {
+            @Override
+            public List<CustomField> getObject() {
+                return projectCustomFieldsList;            
+            }
+        };
+        CustomFieldListView<CustomField> customFieldsListView = new CustomFieldListView<>("customFieldsList", customFieldsModel, new Model<>(project));
+        final WebMarkupContainer wmcCustomField = new WebMarkupContainer("wmcCustomField");
+        wmcCustomField.add(customFieldsListView);
+        wmcCustomField.setOutputMarkupId(true);
+        add(wmcCustomField);
+        
+        customFieldTextField = new TextField<>("customField", new PropertyModel<String>(this, "stringCustomField"));
+        customFieldTextField.setOutputMarkupId(true);
+        projectCustomFieldForm = new Form<CustomField>("projectCustomFieldForm") {
+            @Override
+            protected void onSubmit() {
+                CustomField customField = new CustomField();
+                customField.setCfName(customFieldTextField.getInput());
+                customFieldTextField.clearInput();
+System.out.println("customFieldTextField: " + customFieldTextField.getInput());
                 projectCustomFieldsList.add(customField);
                 project.setCustomFields(projectCustomFieldsList);
                 projectService.update(project);
-                customField = new CustomField();
-                projectCustomFieldsList.clear();
-                
             }
         };
-        
-        cfForm.add(new RequiredTextField("cfName", new PropertyModel<String>(this, "customField.cfName")));
-        add(cfForm);
-        
-        IModel<List<CustomField>> cfModel = new CompoundPropertyModel<List<CustomField>>(customFieldsList) {
-            @Override
-            public List<CustomField> getObject() {
-                Project p = projectService.getProjectById(projectId);
-                return p.getCustomFields();
-            }
-        };
-
-        add(new CustomFieldListView("cfListView", cfModel));
-        //CUSTOM F
-
+        projectCustomFieldForm.add(customFieldTextField);
+        add(projectCustomFieldForm);
+//</editor-fold>
         
     }
-    
-    public CustomField getCustomField() {
-        return customField;
+
+    public String getStringVersion() {
+        return stringVersion;
     }
-    
-    public void setCustomField(CustomField customField) {
-        this.customField = customField;
+
+    public void setStringVersion(String stringVersion) {
+        this.stringVersion = stringVersion;
+    }
+
+    public String getStringComponent() {
+        return stringComponent;
+    }
+
+    public void setStringComponent(String stringComponent) {
+        this.stringComponent = stringComponent;
+    }
+
+    public String getStringCustomField() {
+        return stringCustomField;
+    }
+
+    public void setStringCustomField(String stringCustomField) {
+        this.stringCustomField = stringCustomField;
     }
 }

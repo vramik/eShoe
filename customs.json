@@ -1,0 +1,15 @@
+{
+    "attributes": {
+        "wicket:id": {}
+    },
+    "elements": {
+        "wicket:extend": {},
+        "wicket:panel": {},
+        "table": {
+            "attributes": {
+                "cellpadding": {},
+                "border": {}
+            }
+        }
+    }
+}

@@ -2,12 +2,14 @@ package com.issuetracker.model;
 
 import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
 import com.github.holmistr.esannotations.indexing.annotations.Field;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+
+import javax.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  *
@@ -25,19 +27,30 @@ public class Project implements Serializable {
     @Analyzer(name = "projectNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private String name;
     private String summary;
-    @ManyToOne
-    private User owner;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private String owner;
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
+    @NotFound(action = NotFoundAction.IGNORE)  
     private List<ProjectVersion> versions;
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
+    @NotFound(action = NotFoundAction.IGNORE)  
     private List<Component> components;
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
+    @NotFound(action = NotFoundAction.IGNORE)  
     List<CustomField> customFields;
+    
     @OneToOne
     private Workflow workflow;
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @NotFound(action = NotFoundAction.IGNORE)  
+    private List<Permission> permissions;
 
     public Long getId() {
         return id;
@@ -63,11 +76,11 @@ public class Project implements Serializable {
         this.summary = summary;
     }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
@@ -101,6 +114,14 @@ public class Project implements Serializable {
 
     public void setCustomFields(List<CustomField> customFields) {
         this.customFields = customFields;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     @Override

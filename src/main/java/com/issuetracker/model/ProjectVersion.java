@@ -12,6 +12,7 @@ import java.io.Serializable;
  */
 @Entity
 public class ProjectVersion implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,8 +33,6 @@ public class ProjectVersion implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -54,11 +53,10 @@ public class ProjectVersion implements Serializable {
         return !((this.name == null) ? (other.name != null) : !this.name.equals(other.name));
     }
 
-    
-
     @Override
     public String toString() {
-        return "com.issuetracker.model.ProjectVersion[ id=" + id + " ]";
+//        return "com.issuetracker.model.ProjectVersion[ id=" + getId() + ", name=" + getName() + " ]";
+        return "[ id=" + getId() + ", name=" + getName() + " ]";
     }
     
 }

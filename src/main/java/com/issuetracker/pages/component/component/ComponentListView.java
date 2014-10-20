@@ -2,8 +2,8 @@ package com.issuetracker.pages.component.component;
 
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
-import com.issuetracker.service.api.ComponentService;
 import com.issuetracker.service.api.ProjectService;
+import static com.issuetracker.web.security.KeycloakAuthSession.isUserInRole;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,12 +18,11 @@ import java.util.List;
 /**
  *
  * @author mgottval
+ * @param <T>
  *
  */
 public class ComponentListView<T extends Component> extends Panel {
 
-    @Inject
-    private ComponentService componentService;
     @Inject
     private ProjectService projectService;
     private final ListView<Component> componentsListView;
@@ -34,7 +33,7 @@ public class ComponentListView<T extends Component> extends Panel {
         componentList = componentsModel.getObject();
         add(new Label("components", "Components"));
 
-        IModel<List<Component>> compoModel = new PropertyModel<List<Component>>(this, "componentList");
+        IModel<List<Component>> compoModel = new PropertyModel<>(this, "componentList");
         componentsListView = new ListView<Component>("componentsList", compoModel) {
             @Override
             protected void populateItem(final ListItem<Component> item) {
@@ -42,14 +41,16 @@ public class ComponentListView<T extends Component> extends Panel {
                 item.add(new Link("remove", item.getModel()) {
                     @Override
                     public void onClick() {
+                        
                         componentList.remove(component);
                         if (projectModel != null) {
                             Project project = projectService.getProjectById(projectModel.getObject().getId());
                             project.setComponents(componentList);
                             projectService.update(project);
+                            componentList = project.getComponents();
                         }
                     }
-                });
+                }.setVisible(isUserInRole(getWebRequest(), "project.update")));
                 item.add(new Label("name", component.getName()));
             }
         };
