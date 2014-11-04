@@ -19,4 +19,8 @@ public interface WorkflowDao {
     Workflow getWorkflowById(Long id);
     
     void update(Workflow workflow);
+
+    Workflow getWorkflowByName(String name);
+
+    boolean isWorkflowUsed(Workflow workflow);
 }

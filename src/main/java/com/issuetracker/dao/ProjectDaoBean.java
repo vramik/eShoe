@@ -1,15 +1,12 @@
 package com.issuetracker.dao;
 
-import com.issuetracker.dao.api.ComponentDao;
 import com.issuetracker.dao.api.ProjectDao;
-import com.issuetracker.dao.api.ProjectVersionDao;
-import com.issuetracker.dao.api.UserDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Workflow;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -27,13 +24,6 @@ import java.util.List;
 @Stateless
 public class ProjectDaoBean implements ProjectDao {
 
-//    @Inject
-//    private ComponentDao componentDao;
-//    @Inject
-//    private ProjectVersionDao projectVersionDao;
-//    @Inject
-//    private UserDao userDao;
-//    
     @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
@@ -74,9 +64,6 @@ public class ProjectDaoBean implements ProjectDao {
         TypedQuery<Project> pQuery = em.createQuery(projectQuery);
         List<Project> projectResults = pQuery.getResultList();
         if (projectResults != null && !projectResults.isEmpty()) {
-            Project project = projectResults.get(0);
-            System.out.println("DAO getVersions: " + project.getVersions());
-            System.out.println("DAO ---------------------------------------------------------------");
             return projectResults.get(0);
         } else {
             return null;
@@ -115,7 +102,7 @@ public class ProjectDaoBean implements ProjectDao {
     }
 
     @Override
-        public List<Component> getProjectComponents(Project project) {
+    public List<Component> getProjectComponents(Project project) {
         qb = em.getCriteriaBuilder();
         CriteriaQuery<Project> c = qb.createQuery(Project.class);
         Root<Project> p = c.from(Project.class);
@@ -136,13 +123,25 @@ public class ProjectDaoBean implements ProjectDao {
         em.remove(em.merge(project));
     }
 
-    
-    
     @Override
     public boolean isProjectNameInUse(String projectName) {
-        if (getProjectByName(projectName) == null) {
-            return false;
+        return getProjectByName(projectName) != null;
+    }
+
+    @Override
+    public List<Project> getProjectsByWorkflow(Workflow workflow) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> projectQuery = qb.createQuery(Project.class);
+        Root<Project> p = projectQuery.from(Project.class);
+        Predicate pCondition = qb.equal(p.get("workflow"), workflow.getId());
+        projectQuery.where(pCondition);
+        TypedQuery<Project> pQuery = em.createQuery(projectQuery);
+        List<Project> projectResults = pQuery.getResultList();
+        List<Project> results = pQuery.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        } else {
+            return new ArrayList<>();
         }
-        return true;
     }
 }

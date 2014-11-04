@@ -1,7 +1,12 @@
 package com.issuetracker.pages.layout;
 
+import com.issuetracker.pages.workflow.CreateWorkflow;
+import com.issuetracker.pages.project.ListProjects;
+import com.issuetracker.pages.project.CreateProject;
+import com.issuetracker.pages.status.CreateStatus;
+import com.issuetracker.pages.issuetype.CreateIssueType;
 import com.issuetracker.pages.*;
-import com.issuetracker.pages.createIssue.CreateIssue;
+import com.issuetracker.pages.issue.CreateIssue;
 import com.issuetracker.pages.fulltext.FulltextSearch;
 import static com.issuetracker.web.Constants.*;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
@@ -15,6 +20,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PropertyListView;
 import org.apache.wicket.markup.html.pages.RedirectPage;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.keycloak.ServiceUrlConstants;
@@ -49,6 +55,7 @@ public class HeaderPanel extends Panel {
         workflowUl.setVisible(signedIn);
         importUl.setVisible(signedIn);
         permissionsUl.setVisible(signedIn);
+        System.out.println("HeaderPanel: TODO");
     }
     
     //TODO not signed in but roles
@@ -64,6 +71,9 @@ public class HeaderPanel extends Panel {
     
     public HeaderPanel(String id) {
         super(id);
+        
+        add(new FeedbackPanel("feedbackPanel"));
+        
         idToken = getIDToken(getWebRequest());
         Label label = new Label("name", "Issue Tracking system");
         label.add(new AttributeModifier("style", "color:red;font-weight:bold"));
@@ -74,7 +84,7 @@ public class HeaderPanel extends Panel {
             @Override
             public void onClick() {
                 PageParameters parameters = new PageParameters();
-                parameters.add("responsePage", getCurrentContextPath());
+                parameters.add("page", getPage().getClass().getName());
                 setResponsePage(Login.class, parameters);
             }
         };
@@ -195,7 +205,7 @@ public class HeaderPanel extends Panel {
                     public void onClick() {
                         selected = stringLink;
                         if (selected.equals("Create Statuses")) {
-                            setResponsePage(CreateStatuses.class);
+                            setResponsePage(CreateStatus.class);
                         }
                         if (selected.equals("Create Workflow")) {
                             setResponsePage(CreateWorkflow.class);
@@ -259,9 +269,5 @@ public class HeaderPanel extends Panel {
 
     public void setIdToken(IDToken idToken) {
         this.idToken = idToken;
-    }
-    
-    private String getCurrentContextPath() {
-        return getRequestCycle().getRequest().getUrl().toString().split("\\?")[0];
     }
 }

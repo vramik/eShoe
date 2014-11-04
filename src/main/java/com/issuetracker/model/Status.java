@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
+import java.util.Objects;
+import javax.persistence.Column;
 
 /**
  *
@@ -21,6 +23,7 @@ public class Status implements Serializable {
     private Long id;
     @Field
     @Analyzer(name = "statusNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
+    @Column(unique = true)
     private String name;
 //    @ManyToMany
 //    private List<Status> statuses;
@@ -42,33 +45,34 @@ public class Status implements Serializable {
         this.name = name;
     }
 
-    
     public Status(String name) {
         this.name = name;
     }
-    public Status(){
-        
+    
+    public Status() {
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.name);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Status)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Status other = (Status) object;
-        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Status other = (Status) obj;
+        return Objects.equals(this.name, other.name);
     }
 
     @Override
     public String toString() {
-        return "com.issuetracker.StatusName[ id=" + id + " ]";
+        return "Status{" + "id=" + id + ", name=" + name + '}';
     }
-    
 }

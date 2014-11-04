@@ -4,6 +4,7 @@ import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
 import com.github.holmistr.esannotations.indexing.annotations.Field;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.*;
 import org.hibernate.annotations.Fetch;
@@ -50,7 +51,7 @@ public class Project implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
     @NotFound(action = NotFoundAction.IGNORE)  
-    private List<Permission> permissions;
+    private Set<Permission> permissions;
 
     public Long getId() {
         return id;
@@ -116,11 +117,11 @@ public class Project implements Serializable {
         this.customFields = customFields;
     }
 
-    public List<Permission> getPermissions() {
+    public Set<Permission> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<Permission> permissions) {
+    public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
 

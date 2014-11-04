@@ -26,9 +26,7 @@ public class ProjectNameValidator implements IValidator<String> {
     @Override
     public void validate(IValidatable<String> iv) {
         String projectName = iv.getValue();
-        Boolean b = projectService.isProjectNameInUse(projectName);
-        System.out.println("Is Project in use?: " + b);
-        if (b) {
+        if (projectService.isProjectNameInUse(projectName)) {
             error(iv, "projectNameAlreadyExists");
         }
     }

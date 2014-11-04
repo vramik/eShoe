@@ -12,5 +12,13 @@ public interface IssueTypeDao {
     
     void insert(IssueType issueType);
     
+    void remove(IssueType sueType);
+    
     List<IssueType> getIssueTypes();
+
+    boolean isIssueTypeUsed(IssueType issueType);
+
+    IssueType getIssueTypeByName(String name);
+
+    void update(IssueType issueType);
 }

@@ -4,6 +4,7 @@ import com.issuetracker.dao.api.ProjectDao;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Workflow;
 import com.issuetracker.service.api.ProjectService;
 import java.io.Serializable;
 
@@ -64,5 +65,10 @@ public class ProjectServiceBean implements ProjectService, Serializable {
     @Override
     public boolean isProjectNameInUse(String projectName) {
         return projectDao.isProjectNameInUse(projectName);
+    }
+
+    @Override
+    public List<Project> getProjectsByWorkflow(Workflow workflow) {
+        return projectDao.getProjectsByWorkflow(workflow);
     }
 }

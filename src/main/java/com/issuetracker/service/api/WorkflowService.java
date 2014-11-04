@@ -18,5 +18,9 @@ public interface WorkflowService {
     
     Workflow getWorkflowById(Long id);
     
+    Workflow getWorkflowByName(String name);
+    
     void update(Workflow workflow);
+
+    boolean isWorkflowUsed(Workflow workflow);
 }

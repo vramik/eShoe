@@ -1,5 +1,7 @@
 package com.issuetracker.pages;
 
+import com.issuetracker.pages.issue.IssueDetail;
+import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.*;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.IssueTypeService;

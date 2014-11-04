@@ -1,22 +1,21 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
     <wicket:panel>
+        <span>Statuses</span>
         <table cellpadding="8">
             <tr>
                 <td width="200">Name</td>
-                <!--<td width="200">&nbsp;</td>-->
+<!--                <td width="200">&nbsp;</td>-->
             </tr>
             <tr wicket:id="statusList">
-                <td><span wicket:id="name"></span></td>
-                <td><a href="#" wicket:id="showStatus"><span wicket:id="name"></span></a></td>
-                <!--<td><a href="#" wicket:id="remove">[remove]</a></td>-->
+                <td>
+                    <span wicket:id="name"/>
+                    <a href="#" wicket:id="showStatus"><span wicket:id="name"/></a>
+                    
+                </td>
+                <td>
+                    <a href="#" wicket:id="remove">[remove]</a>
+                    <a href="#" wicket:id="edit">[edit]</a>
+                </td>
             </tr>
         </table>
     </wicket:panel>
-</body>
-</html>

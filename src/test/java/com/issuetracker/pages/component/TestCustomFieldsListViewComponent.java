@@ -6,7 +6,7 @@ package com.issuetracker.pages.component;
 
 import com.issuetracker.model.CustomField;
 import com.issuetracker.model.CustomFieldIssueValue;
-import com.issuetracker.pages.createIssue.CreateIssueCustomFIeldsListView;
+import com.issuetracker.pages.component.issue.CreateIssueCustomFIeldsListView;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;

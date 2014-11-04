@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<wicket:extend>
+    <form method="post" action="#" wicket:id="insertStatusForm">
+        <table border="0" cellpadding="5">
+            <tr>
+                <td width="200">Name</td>
+                <td><input type="text" wicket:id="statusName" size="30"/></td>
+            </tr>
+            <tr>
+                <td width="200">&nbsp;</td>
+                <td><input type="submit" value="Create Status"/></td>
+            </tr>
+        </table>
+    </form>
+
+    <div wicket:id="statusListView"/>
+
+</wicket:extend>

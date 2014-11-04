@@ -18,8 +18,6 @@ public class Transition implements Serializable {
     private Status fromStatus;
     @ManyToOne
     private Status toStatus;
-    @ManyToOne
-    private Workflow workflow;
 
     public Long getId() {
         return id;
@@ -52,16 +50,6 @@ public class Transition implements Serializable {
     public void setToStatus(Status toStatus) {
         this.toStatus = toStatus;
     }
-
-    public Workflow getWorkflow() {
-        return workflow;
-    }
-
-    public void setWorkflow(Workflow workflow) {
-        this.workflow = workflow;
-    }
-
-    
     
     @Override
     public int hashCode() {

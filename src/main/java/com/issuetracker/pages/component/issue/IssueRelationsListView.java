@@ -6,7 +6,7 @@ package com.issuetracker.pages.component.issue;
 
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.IssuesRelationship;
-import com.issuetracker.pages.IssueDetail;
+import com.issuetracker.pages.issue.IssueDetail;
 import com.issuetracker.service.api.IssueService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;

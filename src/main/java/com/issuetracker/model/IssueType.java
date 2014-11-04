@@ -55,7 +55,7 @@ public class IssueType implements Serializable {
 
     @Override
     public String toString() {
-        return "com.issuetracker.IssueType[ id=" + id + " ]";
+        return "IssueType{" + "id=" + id + ", name=" + name + '}';
     }
-    
+
 }

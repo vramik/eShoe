@@ -23,9 +23,31 @@ public class IssueTypeServiceBean implements IssueTypeService, Serializable {
     public void insert(IssueType issueType) {
         issueTypeDao.insert(issueType);
     }
+    
+    @Override
+    public void remove(IssueType issueType) {
+        issueTypeDao.remove(issueType);
+    }
 
     @Override
     public List<IssueType> getIssueTypes() {
         return issueTypeDao.getIssueTypes();
     }
+
+    @Override
+    public boolean isIssueTypeUsed(IssueType issueType) {
+        return issueTypeDao.isIssueTypeUsed(issueType);
+    }
+
+    @Override
+    public IssueType getIssueTypeByName(String name) {
+        return issueTypeDao.getIssueTypeByName(name);
+    }
+
+    @Override
+    public void update(IssueType issueType) {
+        issueTypeDao.update(issueType);
+    }
+    
+    
 }

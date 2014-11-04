@@ -43,7 +43,7 @@ public class TransitionDaoBean implements TransitionDao{
         if (results != null && !results.isEmpty()) {
             return results;
         } else {
-            return new ArrayList<Transition>();
+            return new ArrayList<>();
         }
     }
 

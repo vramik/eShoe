@@ -19,4 +19,8 @@ public interface StatusDao {
     Status getStatusById(Long id);
     
     Status getStatusByName(String name);
+
+    boolean isStatusUsed(Status status);
+
+    void update(Status status);
 }

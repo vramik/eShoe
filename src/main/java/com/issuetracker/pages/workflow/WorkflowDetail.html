@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<wicket:extend>
+    <h3><span wicket:id="workflowName"/></h3>
+    <div>
+        <a href="#" wicket:id="back">[back]</a>
+    </div>
+    <form wicket:id="setWorkflowToProjects">
+        <select wicket:id="projectMultipleChoise"/>
+        <input type="submit" value="update"/>
+    </form>
+    <span wicket:id="transitionsHeader"/>
+
+    <div wicket:id="transitionListView"/>
+    <span wicket:id="statusesHeader"/>
+    <div wicket:id="statusListView"/>
+
+</wicket:extend>

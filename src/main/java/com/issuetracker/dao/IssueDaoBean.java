@@ -112,9 +112,8 @@ public class IssueDaoBean implements IssueDao {
         if (results != null && !results.isEmpty()) {
             return results;
         }
-        return new ArrayList<Issue>();
+        return new ArrayList<>();
     }
-//
 
     @Override
     public List<User> getIssueWatchers(Issue issue) {
@@ -161,7 +160,7 @@ public class IssueDaoBean implements IssueDao {
 //            c.where(qb.like(qb.lower(name), "%" + nameContainsText.toLowerCase() + "%"));
 //        
 //        };
-        List<Predicate> predicates = new ArrayList<Predicate>();
+        List<Predicate> predicates = new ArrayList<>();
         predicates.add(qb.equal(i.get("project"), project));
         predicates.add(qb.equal(i.get("projectVersion"), projectVersion));
         predicates.add(qb.equal(i.get("component"), component));
@@ -189,15 +188,12 @@ public class IssueDaoBean implements IssueDao {
             if (results != null && !results.isEmpty()) {
                 return results;
             }
-            return new ArrayList<Issue>();
+            return new ArrayList<>();
         }
 
         @Override
-        public List<Comment> getComments
-        (Issue issue
-        
-            ) {
-        Logger.getLogger(IssueDaoBean.class.getName()).log(Level.SEVERE, issue.getName());
+        public List<Comment> getComments(Issue issue) {
+            Logger.getLogger(IssueDaoBean.class.getName()).log(Level.SEVERE, issue.getName());
             qb = em.getCriteriaBuilder();
             CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
             Root<Issue> i = c.from(Issue.class);

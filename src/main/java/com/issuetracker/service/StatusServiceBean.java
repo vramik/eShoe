@@ -43,4 +43,14 @@ public class StatusServiceBean implements StatusService, Serializable {
     public Status getStatusByName(String name) {
         return statusDao.getStatusByName(name);
     }
+
+    @Override
+    public boolean isStatusUsed(Status status) {
+        return statusDao.isStatusUsed(status);
+    }
+
+    @Override
+    public void update(Status status) {
+        statusDao.update(status);
+    }
 }

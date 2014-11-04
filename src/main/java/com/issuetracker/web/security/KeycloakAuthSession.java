@@ -2,7 +2,9 @@
 package com.issuetracker.web.security;
 
 import com.issuetracker.pages.permissions.AccessDenied;
+import com.issuetracker.web.Constants;
 import static com.issuetracker.web.Constants.roles;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
@@ -35,11 +37,15 @@ public class KeycloakAuthSession {
         if (isSignedIn(req)) {
             return getKeycloakSecurityContext(req).getToken().getRealmAccess().getRoles();
         } else {
-            return null;
+            return new HashSet<>();
         }
     }
     
-    public static boolean isUserInRole(Request req, String roleKey) {
+    public static boolean isSuperUser(Request req) {
+        return isUserInRhelmRole(req, "superuser");
+    }
+    
+    public static boolean isUserInRhelmRole(Request req, String roleKey) {
         if (isSignedIn(req)) {
             String role = roles.getProperty(roleKey);
             return getKeycloakSecurityContext(req).getToken().getRealmAccess().isUserInRole(role);
@@ -49,19 +55,18 @@ public class KeycloakAuthSession {
         
     }
     
+    public static boolean isUserInAppRole(Request req, String roleKey) {
+        if (isSignedIn(req)) {
+            String role = roles.getProperty(roleKey);
+            return getResourceAccess(req).get(Constants.RHELM_NAME).isUserInRole(role);
+        } else {
+            return false;
+        }
+    }
+    
     public static Map<String, Access> getResourceAccess(Request req) {
         return getKeycloakSecurityContext(req).getToken().getResourceAccess();
     }
-    
-//    public static Set<String> getUserAppRoles(WebRequest req) {
-//        if (isSignedIn(req)) {
-//            AccessToken.Access resourceAccess = getKeycloakSecurityContext(req).getToken().getResourceAccess("issue-tracker");
-//            System.out.println("RESOURCE ACCESS: " + resourceAccess);
-//            return resourceAccess.getRoles();
-//        } else {
-//            return null;
-//        }
-//    }
     
     public static boolean isSignedIn(Request req) {
         return getKeycloakSecurityContext(req) != null;
@@ -73,8 +78,8 @@ public class KeycloakAuthSession {
     }
     
     public static void checkPermissions(WebPage page, String roleKey) {
-        System.out.println("--checkPermissions--" + page.toString() + "role: " + roleKey);
-        if (!isUserInRole(page.getRequest(), roleKey)) {
+//        System.out.println("--checkPermissions--" + page.toString() + "role: " + roleKey);
+        if (!isUserInAppRole(page.getRequest(), roleKey)) {
             page.setResponsePage(AccessDenied.class);
         }
     }

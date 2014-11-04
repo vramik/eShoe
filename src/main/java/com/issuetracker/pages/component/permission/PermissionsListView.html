@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+    <wicket:panel>
+        <span wicket:id="permissions"/>
+        <a href="#" wicket:id="reset">[reset permissions]</a>
+        <table cellpadding="8">
+            <tr>
+                <td width="200">Type</td>
+                <td width="200">Roles</td>
+            </tr>
+            <tr wicket:id="permissionList">
+                <td><span wicket:id="type"/></td>
+                <td>
+                    <div wicket:id="roles">
+                        <span wicket:id="role"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </wicket:panel>

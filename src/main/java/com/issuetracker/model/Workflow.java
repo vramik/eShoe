@@ -14,10 +14,9 @@ public class Workflow implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String name;
-    @ManyToMany
-    private List<Status> statuses;
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transition> transitions;
 
     public Long getId() {
@@ -34,14 +33,6 @@ public class Workflow implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Status> getStatuses() {
-        return statuses;
-    }
-
-    public void setStatuses(List<Status> statuses) {
-        this.statuses = statuses;
     }
     
     public List<Transition> getTransitions() {

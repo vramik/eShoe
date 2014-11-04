@@ -1,7 +1,9 @@
 package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.StatusDao;
+import com.issuetracker.model.Issue;
 import com.issuetracker.model.Status;
+import com.issuetracker.model.Transition;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -40,7 +42,7 @@ public class StatusDaoBean implements StatusDao{
         if (results != null && !results.isEmpty()) {
             return results;
         } else {
-            return new ArrayList<Status>();
+            return new ArrayList<>();
         }
     }
 
@@ -80,5 +82,30 @@ public class StatusDaoBean implements StatusDao{
             return null;
         }
     }
-    
+
+    @Override
+    public boolean isStatusUsed(Status status) {
+        qb = em.getCriteriaBuilder();
+        
+        CriteriaQuery query = qb.createQuery();
+        
+        Root<Issue> i = query.from(Issue.class);
+        Root<Transition> t = query.from(Transition.class);
+        
+        query.multiselect(i, t);
+        query.where(
+                qb.or(
+                        qb.equal(i.get("status"), status.getId()), 
+                        qb.equal(t.get("fromStatus"), status.getId()), 
+                        qb.equal(t.get("toStatus"), status.getId())
+                )
+        );
+        TypedQuery createQuery = em.createQuery(query);
+        return !createQuery.getResultList().isEmpty();
+    }
+
+    @Override
+    public void update(Status status) {
+        em.merge(status);
+    }
 }

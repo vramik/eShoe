@@ -1,5 +1,6 @@
 package com.issuetracker.pages;
 
+import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.service.api.ImporterService;
 
 import javax.inject.Inject;

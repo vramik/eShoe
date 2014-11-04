@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<wicket:extend>
+    <h3><span wicket:id="name">[project name]</span>  </h3>      
+    <div wicket:id="summary"/>
+    <div><a href="#" wicket:id="delete">[delete project]</a></div>
+    <hr/>
+    <div>
+        <div wicket:id="wmcVersion">
+            <div wicket:id="versionsList"/>
+        </div>
+        <form wicket:id="projectVersionForm">
+            <input type="text" wicket:id="version" size="25"/>
+            <input type="submit" value="Add Version"/>
+        </form>
+    </div>
+    <hr/>
+    <div>
+        <div wicket:id="wmcComponent">
+            <div wicket:id="componentsList"/>
+        </div>
+        <form wicket:id="projectComponentForm">
+            <input type="text" wicket:id="component" size="25"/>
+            <input type="submit" value="Add Component"/>
+        </form>
+    </div>
+    <hr/>
+    <div>
+        <div wicket:id="wmcCustomField">
+            <div wicket:id="customFieldsList"/>
+        </div>
+        <form wicket:id="projectCustomFieldForm">
+            <input type="text" wicket:id="customField" size="25"/>
+            <input type="submit" value="Add Custom Field"/>
+        </form>
+    </div>
+    <hr/>
+    <div>
+        <div wicket:id="wmcPermission">
+            <div wicket:id="permissionsListView"/>
+        </div>
+        <div wicket:id="permissionForm"/>
+    </div>
+</wicket:extend>

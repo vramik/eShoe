@@ -1,59 +1,53 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
+<wicket:panel>
+    <hr/>
+    <span wicket:id="name"/><br/>
+    <a href="#" align="right" wicket:id="signInLink">Sign in!</a>
+    <span align="right" wicket:id="userName"/>
+    <a href="#" align="right" wicket:id="signOutLink">Sign out!</a>
 
-    <wicket:panel>
-        <hr/>
-        <span wicket:id="name"/><br/>
-        <a href="#" align="right" wicket:id="signInLink">Sign in!</a>
-        <span align="right" wicket:id="userName"/>
-        <a href="#" align="right" wicket:id="signOutLink">Sign out!</a>
+    <ul id="nav">
+        <li>
+            <span wicket:id="projectsLabel"/>
+            <ul wicket:id="projectTasks" >
+                <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
+            </ul>
+        </li>
+    </ul>    
+    <ul id="nav">
+        <li>
+            <span wicket:id="issuesLabel"/>
+            <ul wicket:id="issueTasks" >
+                <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
+            </ul>
+        </li>
+    </ul>
+    <ul id="nav" wicket:id="workflowUl">
+        <li>
+            <span wicket:id="workflowLabel"/>
+            <ul wicket:id="workflowTasks" >
+                <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
+            </ul>
+        </li>
+    </ul>
+    <ul id='nav' wicket:id="importUl">
+        <li>
+            <span wicket:id="importLabel"/>
+            <ul wicket:id="importTasks" >
+                <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
+            </ul>
+        </li>
+    </ul>
+    <ul id='nav' wicket:id="permissionsUl">
+        <li>
+            <span wicket:id="permissionsLabel"/>
+            <ul wicket:id="permissionsTasks" >
+                <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
+            </ul>
+        </li>
+    </ul>
+    <hr/>
+    <div wicket:id="feedbackPanel"/>
+    <hr/>
+</wicket:panel>
 
-        <ul id="nav">
-            <li>
-                <span wicket:id="projectsLabel"/>
-                <ul wicket:id="projectTasks" >
-                    <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
-                </ul>
-            </li>
-        </ul>    
-        <ul id="nav">
-            <li>
-                <span wicket:id="issuesLabel"/>
-                <ul wicket:id="issueTasks" >
-                    <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
-                </ul>
-            </li>
-        </ul>
-        <ul id="nav" wicket:id="workflowUl">
-            <li>
-                <span wicket:id="workflowLabel"/>
-                <ul wicket:id="workflowTasks" >
-                    <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
-                </ul>
-            </li>
-        </ul>
-        <ul id='nav' wicket:id="importUl">
-            <li>
-                <span wicket:id="importLabel"/>
-                <ul wicket:id="importTasks" >
-                    <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
-                </ul>
-            </li>
-        </ul>
-        <ul id='nav' wicket:id="permissionsUl">
-            <li>
-                <span wicket:id="permissionsLabel"/>
-                <ul wicket:id="permissionsTasks" >
-                    <li><a href="#" wicket:id="actionLink"><span wicket:id="name"/></a></li>
-                </ul>
-            </li>
-        </ul>
-        <hr/>
-    </wicket:panel>
-</body>
-</html>

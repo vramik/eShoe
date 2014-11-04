@@ -6,6 +6,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,7 +16,7 @@ import javax.persistence.Id;
  * @author mgottval
  */
 @Entity
-public class Permission implements Serializable {
+public class Permission implements Serializable, Comparable<Permission> {
     
     private static final long serialVersionUID = 1L;
     @Id
@@ -25,7 +26,7 @@ public class Permission implements Serializable {
     @Enumerated(EnumType.STRING)
     private PermissionType permissionType;
     
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<String> roles;
 
     public Long getId() {
@@ -51,28 +52,32 @@ public class Permission implements Serializable {
     public void setPermissionType(PermissionType permissionType) {
         this.permissionType = permissionType;
     }
-    
-    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        if (!(object instanceof Permission)) {
+    public boolean equals(Object obj) {
+        if (obj == null) {
             return false;
         }
-        Permission other = (Permission) object;
-        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Permission other = (Permission) obj;
+        return this.permissionType == other.permissionType;
     }
 
     @Override
     public String toString() {
-        return "com.issuetracker.Permission[ id=" + id + " ]";
+        return "Permission{" + "id=" + id + ", permissionType=" + permissionType + ", roles=" + roles + '}';
     }
-    
+
+    @Override
+    public int compareTo(Permission p) {
+        return getPermissionType().toString().compareTo(p.getPermissionType().toString());
+    }
 }

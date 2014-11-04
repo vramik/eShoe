@@ -2,9 +2,9 @@ package com.issuetracker.pages.component.status;
 
 import com.issuetracker.model.Status;
 import com.issuetracker.model.Workflow;
-import com.issuetracker.pages.AddTransition;
+import com.issuetracker.pages.transition.AddTransition;
+import com.issuetracker.pages.status.EditStatus;
 import com.issuetracker.service.api.StatusService;
-import com.issuetracker.service.api.WorkflowService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -14,31 +14,26 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  *
  * @author mgottval
+ * @param <T>
  */
 public class StatusListView<T extends Status> extends Panel {
 
     @Inject
     private StatusService statusService;
-    @Inject
-    private WorkflowService workflowService;
     private List<Status> statuses;
-    private ListView listViewStatus;
+    private final ListView listViewStatus;
     private Workflow workflow;
 
     public StatusListView(String id, IModel<List<Status>> statusesModel, final IModel<Workflow> workflowModel) {
         super(id);
         final boolean workflowPresent;
         statuses = statusService.getStatuses();
-        if (statuses == null) {
-            statuses = new ArrayList<Status>();
-        }
 
         if (workflowModel != null) {
             workflowPresent = true;
@@ -46,6 +41,7 @@ public class StatusListView<T extends Status> extends Panel {
         } else {
             workflowPresent = false;
         }
+        
         listViewStatus = new ListView<Status>("statusList", statusesModel) {
             @Override
             protected void populateItem(final ListItem<Status> item) {
@@ -67,14 +63,25 @@ public class StatusListView<T extends Status> extends Panel {
 
                 item.add(new Label("name", status.getName()).setVisible(!workflowPresent));
 
-//                item.add(new Link<Status>("remove", item.getModel()) {
-//                    @Override
-//                    public void onClick() {
-//                        statuses.remove(status);
-//                        statusService.remove(status);
-//                    }
-//                }.setVisible(!workflowPresent));
-
+                item.add(new Link<Status>("remove", item.getModel()) {
+                    @Override
+                    public void onClick() {
+                        statuses.remove(status);
+                        statusService.remove(status);
+                    }
+                }.setEnabled(!statusService.isStatusUsed(status)));
+                item.add(new Link("edit") {
+                    @Override
+                    public void onClick() {
+                        PageParameters parameters = new PageParameters();
+                        if (workflowPresent) {
+                            parameters.add("workflow", workflow.getId());
+                        }
+                        parameters.add("statusName", status.getName());
+                        parameters.add("page", getPage().getClass().getName());
+                        setResponsePage(EditStatus.class, parameters);
+                    }
+                });
             }
         };
         add(listViewStatus);

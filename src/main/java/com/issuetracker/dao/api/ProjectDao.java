@@ -3,6 +3,7 @@ package com.issuetracker.dao.api;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Workflow;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface ProjectDao {
     Project getProjectById(Long id);
     
     boolean isProjectNameInUse(String projectName);
+
+    List<Project> getProjectsByWorkflow(Workflow workflow);
 }

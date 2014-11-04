@@ -43,4 +43,14 @@ public class WorkflowServiceBean implements WorkflowService, Serializable {
     public void remove(Workflow workflow) {
         workflowDao.remove(workflow);
     }
+
+    @Override
+    public Workflow getWorkflowByName(String name) {
+        return workflowDao.getWorkflowByName(name);
+    }
+
+    @Override
+    public boolean isWorkflowUsed(Workflow workflow) {
+        return workflowDao.isWorkflowUsed(workflow);
+    }
 }

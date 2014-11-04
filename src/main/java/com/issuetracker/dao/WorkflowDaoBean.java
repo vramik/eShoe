@@ -2,6 +2,7 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.WorkflowDao;
 import com.issuetracker.model.Workflow;
+import java.util.ArrayList;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -39,8 +40,9 @@ public class WorkflowDaoBean implements WorkflowDao {
         List<Workflow> results =  q.getResultList();
         if (results != null && !results.isEmpty()) {
             return results;
+        } else {
+            return new ArrayList<>();
         }
-        return null;
     }
 
     
@@ -69,5 +71,27 @@ public class WorkflowDaoBean implements WorkflowDao {
     @Override
     public void remove(Workflow workflow) {
         em.remove(em.contains(workflow) ? workflow : em.merge(workflow));
+    }
+
+    @Override
+    public Workflow getWorkflowByName(String name) {
+        qb = em.getCriteriaBuilder();
+        CriteriaQuery<Workflow> workflowQuery = qb.createQuery(Workflow.class);
+        Root<Workflow> p = workflowQuery.from(Workflow.class);
+        Predicate pCondition = qb.equal(p.get("name"), name);
+        workflowQuery.where(pCondition);
+        TypedQuery<Workflow> pQuery = em.createQuery(workflowQuery);
+        List<Workflow> workflowResults = pQuery.getResultList();
+        if (workflowResults != null && !workflowResults.isEmpty()) {
+            return workflowResults.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public boolean isWorkflowUsed(Workflow workflow) {
+        System.err.println("WorkflowDaoBean.isWorkflowUsed: TODO");
+        return true;
     }
 }

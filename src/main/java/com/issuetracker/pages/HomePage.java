@@ -1,5 +1,6 @@
 package com.issuetracker.pages;
 
+import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.service.api.UserService;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -25,7 +26,6 @@ public class HomePage extends PageLayout {
     private String selected = "Create Project";
 
     public HomePage() {
-        System.out.println("homePageContructor");
         
 //        final Link loginLink = new Link("loginLink") {
 //            @Override

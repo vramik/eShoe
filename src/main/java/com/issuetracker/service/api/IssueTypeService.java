@@ -12,5 +12,13 @@ public interface IssueTypeService {
     
     void insert(IssueType issueType);
     
+    void remove(IssueType issueType);
+    
+    boolean isIssueTypeUsed(IssueType issueType);
+    
     List<IssueType> getIssueTypes();
+
+    IssueType getIssueTypeByName(String name);
+
+    void update(IssueType issueType);
 }

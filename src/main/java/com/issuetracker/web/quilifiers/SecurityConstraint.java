@@ -10,5 +10,4 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(ElementType.CONSTRUCTOR)
 public @interface SecurityConstraint {
     String allowedRole() default "";
-    String[] allowedRoles() default {};
 }

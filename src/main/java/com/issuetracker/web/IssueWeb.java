@@ -1,18 +1,15 @@
 package com.issuetracker.web;
 
-import com.issuetracker.pages.permissions.AccessDenied;
-import com.issuetracker.pages.createIssue.CreateIssue;
-import com.issuetracker.pages.CreateIssueType;
-import com.issuetracker.pages.CreateProject;
-import com.issuetracker.pages.CreateStatuses;
-import com.issuetracker.pages.CreateWorkflow;
-import com.issuetracker.pages.HomePage;
-import com.issuetracker.pages.ListProjects;
-import com.issuetracker.pages.Login;
-import com.issuetracker.pages.SearchIssues;
-import com.issuetracker.pages.IssueDetail;
-import com.issuetracker.pages.ProjectDetail;
-import com.issuetracker.pages.permissions.Permissions;
+import com.issuetracker.pages.transition.AddTransition;
+import com.issuetracker.pages.workflow.CreateWorkflow;
+import com.issuetracker.pages.*;
+import com.issuetracker.pages.issue.*;
+import com.issuetracker.pages.issuetype.*;
+import com.issuetracker.pages.permissions.*;
+import com.issuetracker.pages.project.*;
+import com.issuetracker.pages.status.*;
+import com.issuetracker.pages.workflow.WorkflowDetail;
+
 import net.ftlines.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
@@ -57,9 +54,12 @@ public class IssueWeb extends WebApplication {
         mountPage("/issueDetail", IssueDetail.class);
         mountPage("/searchIssues", SearchIssues.class);
         mountPage("/newIssueType", CreateIssueType.class);
-        mountPage("/createStatus", CreateStatuses.class);
+        mountPage("/editIssueType", EditIssueType.class);
+        mountPage("/createStatus", CreateStatus.class);
+        mountPage("/editStatus", EditStatus.class);
         mountPage("/createWorkflow", CreateWorkflow.class);
+        mountPage("/workflowDetail", WorkflowDetail.class);
+        mountPage("/addTransition", AddTransition.class);
         mountPage("/accessDenied", AccessDenied.class);
-        mountPage("/admin", Permissions.class);
     }    
 }
