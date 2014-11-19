@@ -30,7 +30,7 @@ public class PageLayout extends WebPage {
                 SecurityConstraint securityConstraint = (SecurityConstraint) constructor.getAnnotation(SecurityConstraint.class);
                 
                 String roleKey = securityConstraint.allowedRole();
-                checkPermissions(this, roleKey);
+                checkPermissions(this, roleKey, getPageParameters());
             }
         }
     }

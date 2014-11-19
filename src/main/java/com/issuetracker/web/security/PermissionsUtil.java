@@ -1,9 +1,11 @@
 package com.issuetracker.web.security;
 
+import com.issuetracker.model.Comment;
 import com.issuetracker.model.Permission;
 import com.issuetracker.model.PermissionType;
 import com.issuetracker.model.Project;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
+import static com.issuetracker.web.security.KeycloakService.getRhelmRoles;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,5 +68,32 @@ public class PermissionsUtil {
             }
         }
         return result;
+    }
+    
+    public static List<String> getAvailableRoles(Request req) {
+        try {
+            return new ArrayList<>(getRhelmRoles(req));
+        } catch (KeycloakService.Failure f) {
+            throw new RuntimeException("Returned status code was: " + f.getStatus(), f);
+        }
+    }
+    
+    public static boolean hasViewPermissionComment(Request req, Comment comment) {
+        if (comment == null || comment.getViewPermission() == null) {
+            return false;
+        }
+        if (isSuperUser(req) || isCommentOwner(req, comment)) {
+            return true;
+        }
+        for (String role : comment.getViewPermission().getRoles()) {
+            if (role.equals("public") || isUserInAppRole(req, role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isCommentOwner(Request req, Comment comment) {
+        return isSignedIn(req) && comment.getAuthor().equals(getIDToken(req).getPreferredUsername());
     }
 }

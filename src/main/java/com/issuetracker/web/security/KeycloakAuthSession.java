@@ -1,6 +1,7 @@
 
 package com.issuetracker.web.security;
 
+import com.issuetracker.pages.Login;
 import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.web.Constants;
 import static com.issuetracker.web.Constants.roles;
@@ -10,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken.Access;
 import org.keycloak.representations.IDToken;
@@ -77,10 +79,15 @@ public class KeycloakAuthSession {
         return (KeycloakSecurityContext) httpReq.getAttribute(KeycloakSecurityContext.class.getName());
     }
     
-    public static void checkPermissions(WebPage page, String roleKey) {
-//        System.out.println("--checkPermissions--" + page.toString() + "role: " + roleKey);
+    public static void checkPermissions(WebPage page, String roleKey, PageParameters params) {
+        System.out.println("--checkPermissions--" + page.toString() + "role: " + roleKey + " params: " + params + "**");
         if (!isUserInAppRole(page.getRequest(), roleKey)) {
-            page.setResponsePage(AccessDenied.class);
+            if (isSignedIn(page.getRequest())) {
+                page.setResponsePage(AccessDenied.class);
+            } else {
+                params.add("page", page.getClass().getName());
+                page.setResponsePage(Login.class, params);
+            }
         }
     }
 }

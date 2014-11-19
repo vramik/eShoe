@@ -42,15 +42,13 @@ public class ImporterServiceBean implements ImporterService, Serializable {
     @Inject
     private ProjectVersionService projectVersionService;
     @Inject
-    private UserService userService;
-    @Inject
     private StatusService statusService;
     @Inject
     private CommentService commentService;
 
-    private List<IssueType> issueTypeList = new ArrayList<IssueType>();
-    private List<Component> componentList = new ArrayList<Component>();
-    private List<ProjectVersion> projectVersionList = new ArrayList<ProjectVersion>();
+    private List<IssueType> issueTypeList = new ArrayList<>();
+    private List<Component> componentList = new ArrayList<>();
+    private List<ProjectVersion> projectVersionList = new ArrayList<>();
 
     private int importedCounter;
 
@@ -69,7 +67,7 @@ public class ImporterServiceBean implements ImporterService, Serializable {
 
         int i;
         for(i = 0; i < ids.size()/IMPORT_ITERATION_SIZE; i++) {
-            List<String> idsPart = new ArrayList<String>();
+            List<String> idsPart = new ArrayList<>();
             for(int j = 0; j < IMPORT_ITERATION_SIZE; j++) {
                 idsPart.add(ids.get((i * IMPORT_ITERATION_SIZE) + j));
             }
@@ -79,7 +77,7 @@ public class ImporterServiceBean implements ImporterService, Serializable {
         }
 
         if(ids.size() % IMPORT_ITERATION_SIZE != 0) {
-            List<String> idsPart = new ArrayList<String>();
+            List<String> idsPart = new ArrayList<>();
             for(int j = importedCounter; j < ids.size(); j++) {
                 idsPart.add(ids.get(j));
             }
@@ -102,7 +100,7 @@ public class ImporterServiceBean implements ImporterService, Serializable {
             Project project = mapProject(bug);
             List<Component> components = project.getComponents();
             if(components == null) {
-                components = new ArrayList<Component>();
+                components = new ArrayList<>();
             }
 
             Component component = mapComponent(bug);
@@ -112,13 +110,12 @@ public class ImporterServiceBean implements ImporterService, Serializable {
 
             List<ProjectVersion> projectVersions = project.getVersions();
             if(projectVersions == null) {
-                projectVersions = new ArrayList<ProjectVersion>();
+                projectVersions = new ArrayList<>();
             }
 
-            ProjectVersion projectVersion = mapProjectVersion(bug);
-            if(!projectVersions.contains(projectVersion)) {
-                projectVersions.add(projectVersion);
-            }
+            List<ProjectVersion> BZProjectVersions = mapProjectVersions(bug);
+            projectVersions.removeAll(BZProjectVersions);
+            projectVersions.addAll(BZProjectVersions);
 
             project.setComponents(components);
             project.setVersions(projectVersions);
@@ -126,8 +123,8 @@ public class ImporterServiceBean implements ImporterService, Serializable {
 
             IssueType issueType = mapIssueType(bug);
 
-            User creator = mapCreator(bug);
-            User owner = mapOwner(bug);
+            String creator = mapCreator(bug);
+            String owner = mapOwner(bug);
 
             Issue.Priority priority = mapPriority(bug);
 
@@ -137,12 +134,12 @@ public class ImporterServiceBean implements ImporterService, Serializable {
 
             issue.setProject(project);
             issue.setCreator(creator);
-            issue.setOwner(owner);
+            issue.setAssignee(owner);
             issue.setPriority(priority);
             issue.setIssueType(issueType);
             issue.setComponent(component);
             issue.setStatus(status);
-            issue.setProjectVersion(projectVersion);
+            issue.setAffectedVersions(BZProjectVersions);
 
             issueService.insert(issue);
 
@@ -181,28 +178,28 @@ public class ImporterServiceBean implements ImporterService, Serializable {
         return component;
     }
 
-    private User mapCreator(BugzillaBug bug) {
-        User user = userService.getUserByName(bug.getCreator());
+    private String mapCreator(BugzillaBug bug) {
+//        User user = userService.getUserByName(bug.getCreator());
+//
+//        if(user == null) {
+//            user = new User();
+//            user.setName(bug.getCreator());
+//            userService.insert(user);
+//        }
 
-        if(user == null) {
-            user = new User();
-            user.setName(bug.getCreator());
-            userService.insert(user);
-        }
-
-        return user;
+        return bug.getCreator();
     }
 
-    private User mapOwner(BugzillaBug bug) {
-        User user = userService.getUserByName(bug.getOwner());
+    private String mapOwner(BugzillaBug bug) {
+//        User user = userService.getUserByName(bug.getOwner());
+//
+//        if(user == null) {
+//            user = new User();
+//            user.setName(bug.getOwner());
+//            userService.insert(user);
+//        }
 
-        if(user == null) {
-            user = new User();
-            user.setName(bug.getOwner());
-            userService.insert(user);
-        }
-
-        return user;
+        return bug.getOwner();
     }
 
     private Issue mapIssue(BugzillaBug bug, Map<String, List<BugzillaComment>> comments) {
@@ -227,7 +224,7 @@ public class ImporterServiceBean implements ImporterService, Serializable {
     }
 
     private List<Comment> mapComments(BugzillaBug bug, Map<String, List<BugzillaComment>> comments) {
-        List<Comment> issueComments = new ArrayList<Comment>();
+        List<Comment> issueComments = new ArrayList<>();
         for(BugzillaComment bugzillaComment: comments.get(bug.getId())) {
             Comment comment = new Comment();
             comment.setContent(bugzillaComment.getText());
@@ -265,21 +262,27 @@ public class ImporterServiceBean implements ImporterService, Serializable {
         return project;
     }
 
-    private ProjectVersion mapProjectVersion(BugzillaBug bug) {
+    private List<ProjectVersion> mapProjectVersions(BugzillaBug bug) {
         projectVersionList = projectVersionService.getProjectVersions();
-
-        if(projectVersionList != null) {
-            for(ProjectVersion projectVersion: projectVersionList) {
-                if(projectVersion.getName().equals(bug.getVersion().get(0))) {
-                    return projectVersion;
+        List<String> BZVersions = bug.getVersion();
+        List<ProjectVersion> result = new ArrayList<>();
+        
+        if (projectVersionList != null) {
+            for (ProjectVersion projectVersion: projectVersionList) {
+                if (BZVersions.contains(projectVersion.getName())) {
+                    result.add(projectVersion);
+                    BZVersions.remove(projectVersion.getName());
                 }
             }
         }
-
-        ProjectVersion projectVersion = new ProjectVersion();
-        projectVersion.setName(bug.getVersion().get(0));
-
-        return projectVersion;
+        
+        for (String BZVersion : BZVersions) {
+            ProjectVersion projectVersion = new ProjectVersion();
+            projectVersion.setName(BZVersion);
+            projectVersionService.insert(projectVersion);
+            result.add(projectVersion);
+        }
+        return result;
     }
 
     private Status mapStatus(BugzillaBug bug) {

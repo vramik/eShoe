@@ -1,7 +1,6 @@
 package com.issuetracker.pages.layout;
 
 import com.issuetracker.model.Issue;
-import com.issuetracker.model.User;
 import com.issuetracker.service.api.IssueService;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,8 +17,8 @@ import java.util.List;
  * @author mgottval
  */
 public class ModalPanel1 extends Panel {
-    private ListView<User> watchersListView;
-    private List<User> watchersList;
+    private ListView<String> watchersListView;
+    private List<String> watchersList;
     
     @Inject
     private IssueService issueService;
@@ -29,21 +28,21 @@ public class ModalPanel1 extends Panel {
     /**
      * @param id
      */
-    public ModalPanel1(String id, IModel<List<User>> watchersModel)
+    public ModalPanel1(String id, IModel<List<String>> watchersModel)
     {
         super(id); 
         this.watchersList = watchersModel.getObject();
 
         if(watchersList == null) {
-            watchersList = new ArrayList<User>();
+            watchersList = new ArrayList<String>();
         }
 
         add(new Label("name", "LABEL"));
-        watchersListView = new ListView<User>("watchersListView", new PropertyModel<List<User>>(this, "watchersList")) {
+        watchersListView = new ListView<String>("watchersListView", new PropertyModel<List<String>>(this, "watchersList")) {
             @Override
-            protected void populateItem(ListItem<User> item) {
-                final User user = item.getModelObject();
-                item.add(new Label("name", user.getUsername()));
+            protected void populateItem(ListItem<String> item) {
+                final String user = item.getModelObject();
+                item.add(new Label("name", user));
             }
         };
 //        watchersListView.setOutputMarkupId(true);
@@ -52,11 +51,11 @@ public class ModalPanel1 extends Panel {
 
     
     
-    public List<User> getWatchersList() {
+    public List<String> getWatchersList() {
         return watchersList;
     }
 
-    public void setWatchersList(List<User> watchersList) {
+    public void setWatchersList(List<String> watchersList) {
         this.watchersList = watchersList;
     }
     

@@ -1,12 +1,12 @@
-package com.issuetracker.pages;
+package com.issuetracker.pages.issue;
 
-import com.issuetracker.pages.issue.IssueDetail;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.*;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.IssueTypeService;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.StatusService;
+import static com.issuetracker.web.security.PermissionsUtil.hasPermissionsProject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -14,7 +14,6 @@ import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -38,38 +37,37 @@ public class SearchIssues extends PageLayout {
     @Inject
     private StatusService statusService;
     private Form<List<Issue>> listIssuesForm;
-    private final DropDownChoice<ProjectVersion> versionDropDownChoice;
+    private final ListMultipleChoice<ProjectVersion> listMultipleVersions;
     private final DropDownChoice<Component> componentsDropDownChoice;
-    private ListMultipleChoice<IssueType> listMultipleIssueTypes;
-    private ListMultipleChoice<Status> listMultipleStatuses;
-    private DropDownChoice<Project> projectDropDownChoice;
-    private ListView issuesListview;
+    private final ListMultipleChoice<IssueType> listMultipleIssueTypes;
+    private final ListMultipleChoice<Status> listMultipleStatuses;
+    private final DropDownChoice<Project> projectDropDownChoice;
+    private final ListView issuesListview;
     private String containsText;
     private Project project;
-    private List<Issue> issues;
-    private ProjectVersion version;
+    private List<Issue> issues = new ArrayList<>();
+    private List<ProjectVersion> affectedVersions;
     private Component component;
     private IssueType issueType;
     private List<Status> statusList;
     private List<Component> components;
     private List<IssueType> issueTypes;
-    private final Map<Project, List<Component>> modelsProjectComponentsMap = new HashMap<Project, List<Component>>();
-    private final Map<Project, List<ProjectVersion>> modelsProjectVersionsMap = new HashMap<Project, List<ProjectVersion>>();
+    private final Map<Project, List<Component>> modelsProjectComponentsMap = new HashMap<>();
+    private final Map<Project, List<ProjectVersion>> modelsProjectVersionsMap = new HashMap<>();
 
     public SearchIssues() {
-        issues = new ArrayList<Issue>();
-
         List<Project> projects = projectService.getProjects();
         for (Project p : projects) {
-            modelsProjectComponentsMap.put(p, p.getComponents());
+            if (hasPermissionsProject(getRequest(), p, PermissionType.view)) {//has project view rights
+                modelsProjectComponentsMap.put(p, p.getComponents());
+                modelsProjectVersionsMap.put(p, p.getVersions());
+            }
         }
-        for (Project p : projects) {
-            modelsProjectVersionsMap.put(p, p.getVersions());
-        }
+        
         IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
             @Override
             public List<Project> getObject() {
-                List<Project> list = new ArrayList<Project>(modelsProjectComponentsMap.keySet());
+                List<Project> list = new ArrayList<>(modelsProjectComponentsMap.keySet());
                 return list;
             }
         };
@@ -93,28 +91,40 @@ public class SearchIssues extends PageLayout {
                 return models;
             }
         };
-        add(new FeedbackPanel("feedbackPanel"));
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-                issues = issueService.getIssuesBySearch(project, version, component, issueTypes, statusList, containsText);
+                issues = issueService.getIssuesByAffectedVersions(affectedVersions);
+//                issues = issueService.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, containsText);
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
-        projectDropDownChoice = new DropDownChoice<Project>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
+        projectDropDownChoice = new DropDownChoice<>("projectDropDownChoice", new PropertyModel<Project>(this, "project"), projectsModel, new ChoiceRenderer<Project>("name"));
         projectDropDownChoice.setRequired(true);
         form.add(projectDropDownChoice);
-        versionDropDownChoice = new DropDownChoice<ProjectVersion>("versionDropDownChoice", new PropertyModel<ProjectVersion>(this, "version"), modelProjectVersionsCoices, new ChoiceRenderer<ProjectVersion>("name"));
-        versionDropDownChoice.setOutputMarkupId(true);
-        versionDropDownChoice.setRequired(true);
-        form.add(versionDropDownChoice);
-        componentsDropDownChoice = new DropDownChoice<Component>("componentsDropDownChoice", new PropertyModel<Component>(this, "component"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
+
+        listMultipleVersions = new ListMultipleChoice<>(
+                "versionDropDownChoice", 
+                new PropertyModel<List<ProjectVersion>>(this, "affectedVersions"), 
+                modelProjectVersionsCoices, 
+                new ChoiceRenderer<ProjectVersion>("name"));
+        
+        listMultipleVersions.setOutputMarkupId(true);
+        listMultipleVersions.setRequired(true);
+        form.add(listMultipleVersions);
+
+        componentsDropDownChoice = new DropDownChoice<>("componentsDropDownChoice", new PropertyModel<Component>(this, "component"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
         componentsDropDownChoice.setOutputMarkupId(true);
         componentsDropDownChoice.setRequired(true);
         form.add(componentsDropDownChoice);
-        listMultipleStatuses = new ListMultipleChoice<Status>("statusLMC", new PropertyModel<List<Status>>(this, "statusList"), statusService.getStatuses(), new ChoiceRenderer<Status>("name"));
+
+        listMultipleStatuses = new ListMultipleChoice<>(
+                "statusLMC", 
+                new PropertyModel<List<Status>>(this, "statusList"), 
+                statusService.getStatuses(), 
+                new ChoiceRenderer<Status>("name"));
         form.add(listMultipleStatuses);
-        listMultipleIssueTypes = new ListMultipleChoice<IssueType>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeService.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
+        listMultipleIssueTypes = new ListMultipleChoice<>("issueTypes", new PropertyModel<List<IssueType>>(this, "issueTypes"), issueTypeService.getIssueTypes(), new ChoiceRenderer<IssueType>("name"));
         form.add(listMultipleIssueTypes);
 
 
@@ -122,7 +132,7 @@ public class SearchIssues extends PageLayout {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 target.add(componentsDropDownChoice);
-                target.add(versionDropDownChoice);
+                target.add(listMultipleVersions);
             }
         });
 
@@ -164,12 +174,12 @@ public class SearchIssues extends PageLayout {
         this.project = project;
     }
 
-    public ProjectVersion getVersion() {
-        return version;
+    public List<ProjectVersion> getAffectedVersions() {
+        return affectedVersions;
     }
 
-    public void setVersion(ProjectVersion version) {
-        this.version = version;
+    public void setAffectedVersions(List<ProjectVersion> affectedVersions) {
+        this.affectedVersions = affectedVersions;
     }
 
     public IssueType getIssueType() {

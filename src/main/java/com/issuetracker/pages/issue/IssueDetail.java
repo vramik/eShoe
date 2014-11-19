@@ -10,7 +10,8 @@ import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
 import com.issuetracker.service.api.IssueService;
-import com.issuetracker.service.api.UserService;
+import static com.issuetracker.web.Constants.HOME_PAGE;
+import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -26,6 +27,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -35,29 +38,32 @@ public class IssueDetail extends PageLayout {
 
     @Inject
     private IssueService issueService;
-    @Inject
-    private UserService userService;
 
     private IndicatingAjaxLink addWatcherLink;
     private final Label watchersCountLabel;
     private final ModalWindow modal2;
-    private final IModel<List<User>> watchersModel;
+    private final IModel<List<String>> watchersModel;
     private Link projectLink;
     private int watchersCount;
     private Issue issue;
     private CustomField customField;
-    private List<User> watchersList;
+    private List<String> watchersList;
     private List<CustomFieldIssueValue> cfIssueValueList;
     private List<IssuesRelationship> issuesRelationships;
     private final IssueRelationsListView<IssuesRelationship> issueRelationsListView;
 
     public IssueDetail(PageParameters parameters) {
-        Long issueId = parameters.get("issue").toLong();
-        issue = issueService.getIssueById(issueId);
+        StringValue issueId = parameters.get("issue");
+        if (issueId.equals(StringValue.valueOf((String)null))) {
+            throw new RedirectToUrlException(HOME_PAGE);
+        }
+        issue = issueService.getIssueById(issueId.toLong());
+        watchersList = issueService.getIssueWatchers(issue);
+        
         customField = new CustomField();
         PropertyModel<Issue> defaultModel = new PropertyModel<>(this, "issue");
         setDefaultModel(defaultModel);
-        watchersCount = issue.getWatches().size();
+        watchersCount = issue.getWatchers().size();
 
 
         projectLink = new Link("link") {
@@ -76,7 +82,13 @@ public class IssueDetail extends PageLayout {
         add(new Label("description", new PropertyModel(this, "issue.description")));
 
         add(new Label("type", new PropertyModel(this, "issue.issueType.name")));
-        add(new Label("affectsVersions", new PropertyModel(this, "issue.projectVersion.name")));
+//        add(new Label("affectsVersions", new PropertyModel(this, "issue.projectVersion.name")));
+        StringBuilder builder = new StringBuilder();
+        for (ProjectVersion version : issue.getAffectedVersions()) {
+            builder.append(version.getName());
+            builder.append(", ");
+        }
+        add(new Label("affectsVersions", builder.toString()));
         add(new Label("priority", new PropertyModel(this, "issue.priority")));
 
         String created = issue.getCreated().toString();
@@ -93,10 +105,10 @@ public class IssueDetail extends PageLayout {
         add(watchersCountLabel);
 
 
-        watchersModel = new PropertyModel<List<User>>(this, "watchersList") {
+        watchersModel = new PropertyModel<List<String>>(this, "watchersList") {
             @Override
-            public List<User> getObject() {
-                List<User> list = new ArrayList<>(issueService.getIssueWatchers(issue));
+            public List<String> getObject() {
+                List<String> list = new ArrayList<>(issueService.getIssueWatchers(issue));
                 return list;
             }
         };
@@ -105,19 +117,9 @@ public class IssueDetail extends PageLayout {
             @Override
             public void onClick(AjaxRequestTarget target) {                
                 target.add(watchersCountLabel);
-                watchersList = issueService.getIssueWatchers(issue);
-                if (watchersList == null) {
-                    watchersList = new ArrayList<>();
-                }
-//                TrackerAuthSession sess = (TrackerAuthSession) getSession();
-//                if (sess.isSignedIn()) {
-//                    User user = sess.getUser();
-//                    if (!watchersList.contains(user)) {
-//                        watchersList.add(user);
-//                        watchersCount++;
-//                    }
-//                    issue.setWatches(watchersList);
-//                }
+                watchersList.add(getIDToken(getRequest()).getPreferredUsername());
+                watchersCount++;
+                issue.setWatchers(watchersList);
                 issueService.update(issue);
 
 //                target.add(modal2);
@@ -128,6 +130,7 @@ public class IssueDetail extends PageLayout {
                 }
             }
         };
+        addWatcherLink.setEnabled(isSignedIn(getRequest()) && !watchersList.contains(getIDToken(getRequest()).getPreferredUsername()));
         add(addWatcherLink);
 
 
@@ -165,7 +168,7 @@ public class IssueDetail extends PageLayout {
 
 
 
-        add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")));
+        add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")).setVisible(isSignedIn(getRequest())));
         add(new CommentListView("commentListView", new PropertyModel<Issue>(this, "issue")));
 
         add(new SetIssueStateForm("setIssueStateForm", new PropertyModel<Issue>(this, "issue")));
@@ -213,11 +216,11 @@ public class IssueDetail extends PageLayout {
         this.watchersCount = watchersCount;
     }
 
-    public List<User> getWatchersList() {
+    public List<String> getWatchersList() {
         return watchersList;
     }
 
-    public void setWatchersList(List<User> watchersList) {
+    public void setWatchersList(List<String> watchersList) {
         this.watchersList = watchersList;
     }
 

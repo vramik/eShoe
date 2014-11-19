@@ -27,8 +27,8 @@ public class SearchTestHelper {
         IssueType issueType = createIssueType("Bug");
         Project project = createProject("Infinispan");
         Status status = createStatus("Open");
-        User owner = createUser("Emmanuel Bernard");
-        User creator = createUser("Jiri Holusa");
+        String owner = "Emmanuel Bernard";
+        String creator = "Jiri Holusa";
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2014, 1, 1);
@@ -43,7 +43,7 @@ public class SearchTestHelper {
         issue.setPriority(Issue.Priority.HIGH);
         issue.setProject(project);
         issue.setStatus(status);
-        issue.setOwner(owner);
+        issue.setAssignee(owner);
         issue.setCreator(creator);
         issue.setCreated(created);
         issue.setUpdated(updated);
@@ -55,8 +55,8 @@ public class SearchTestHelper {
         IssueType issueType = createIssueType("Feature request");
         Project project = createProject("Infinispan");
         Status status = createStatus("Resolved");
-        User owner = createUser("Martin Gencur");
-        User creator = createUser("Tomas Sykora");
+        String owner = "Martin Gencur";
+        String creator = "Tomas Sykora";
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2014, 3, 1);
@@ -71,7 +71,7 @@ public class SearchTestHelper {
         issue.setPriority(Issue.Priority.LOW);
         issue.setProject(project);
         issue.setStatus(status);
-        issue.setOwner(owner);
+        issue.setAssignee(owner);
         issue.setCreator(creator);
         issue.setCreated(created);
         issue.setUpdated(updated);
@@ -83,8 +83,8 @@ public class SearchTestHelper {
         IssueType issueType = createIssueType("Bug");
         Project project = createProject("RichFaces");
         Status status = createStatus("Open");
-        User owner = createUser("Juraj Huska");
-        User creator = createUser("Juraj Huska");
+        String owner = "Juraj Huska";
+        String creator = "Juraj Huska";
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2014, 7, 7);
@@ -99,7 +99,7 @@ public class SearchTestHelper {
         issue.setPriority(Issue.Priority.HIGH);
         issue.setProject(project);
         issue.setStatus(status);
-        issue.setOwner(owner);
+        issue.setAssignee(owner);
         issue.setCreator(creator);
         issue.setCreated(created);
         issue.setUpdated(updated);
@@ -111,8 +111,8 @@ public class SearchTestHelper {
         IssueType issueType = createIssueType("Enhancement");
         Project project = createProject("EAP");
         Status status = createStatus("Coding in progress");
-        User owner = createUser("Pavol Pitonak");
-        User creator = createUser("Brian Leathem");
+        String owner = "Pavol Pitonak";
+        String creator = "Brian Leathem";
 
         Calendar calendar = Calendar.getInstance();
         calendar.set(2014, 7, 7);
@@ -127,7 +127,7 @@ public class SearchTestHelper {
         issue.setPriority(Issue.Priority.LOW);
         issue.setProject(project);
         issue.setStatus(status);
-        issue.setOwner(owner);
+        issue.setAssignee(owner);
         issue.setCreator(creator);
         issue.setCreated(created);
         issue.setUpdated(updated);
@@ -154,12 +154,5 @@ public class SearchTestHelper {
         status.setName(name);
 
         return status;
-    }
-
-    private static User createUser(String name) {
-        User user = new User();
-        user.setName(name);
-
-        return user;
     }
 }

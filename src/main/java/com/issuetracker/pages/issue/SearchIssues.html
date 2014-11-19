@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<wicket:extend>
+    <form wicket:id="searchIssuesForm">
+        <input type="text" wicket:id="containsText" />
+        <select wicket:id="projectDropDownChoice" />
+        <select wicket:id="versionDropDownChoice" />
+        <select wicket:id="componentsDropDownChoice" />
+        <select wicket:id="statusLMC" />
+        <select wicket:id="issueTypes" />
+
+        <input type="submit" value="Search"/>
+    </form>
+
+
+    <table border="1" cellpadding="8">
+        <tr>
+            <td width="200">Name</td>
+            <td width="200">Description</td>
+        </tr>
+        <tr wicket:id="issues">
+            <td>
+                <a href="#" wicket:id="showIssue"><span wicket:id="name">[name]</span>
+                </a>
+            </td>
+            <td><span wicket:id="description"></span></td>
+
+        </tr>
+    </table>
+</wicket:extend>

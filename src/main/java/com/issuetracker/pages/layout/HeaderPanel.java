@@ -1,5 +1,6 @@
 package com.issuetracker.pages.layout;
 
+import com.issuetracker.pages.issue.SearchIssues;
 import com.issuetracker.pages.workflow.CreateWorkflow;
 import com.issuetracker.pages.project.ListProjects;
 import com.issuetracker.pages.project.CreateProject;
@@ -83,7 +84,7 @@ public class HeaderPanel extends Panel {
             
             @Override
             public void onClick() {
-                PageParameters parameters = new PageParameters();
+                PageParameters parameters = getPage().getPageParameters();
                 parameters.add("page", getPage().getClass().getName());
                 setResponsePage(Login.class, parameters);
             }
@@ -131,13 +132,13 @@ public class HeaderPanel extends Panel {
 
         optsIssue = new ArrayList<>();
         optsIssue.add("Create Issue");
-        optsIssue.add("Insert Types of Issue");
+        optsIssue.add("Issue Types");
         optsIssue.add("List Issues");
         optsIssue.add("Issue Fulltext Search");
 
         List<String> optsWorkflow = new ArrayList<>();
-        optsWorkflow.add("Create Statuses");
-        optsWorkflow.add("Create Workflow");
+        optsWorkflow.add("Statuses");
+        optsWorkflow.add("Workflows");
         
         List<String> optsImport = new ArrayList<>();
         optsImport.add("Import");
@@ -184,7 +185,7 @@ public class HeaderPanel extends Panel {
                         if (selected.equals("Issue Fulltext Search")) {
                             setResponsePage(FulltextSearch.class);
                         }
-                        if (selected.equals("Insert Types of Issue")) {
+                        if (selected.equals("Issue Types")) {
                             setResponsePage(CreateIssueType.class);
                         }
                     }
@@ -204,10 +205,10 @@ public class HeaderPanel extends Panel {
                     @Override
                     public void onClick() {
                         selected = stringLink;
-                        if (selected.equals("Create Statuses")) {
+                        if (selected.equals("Statuses")) {
                             setResponsePage(CreateStatus.class);
                         }
-                        if (selected.equals("Create Workflow")) {
+                        if (selected.equals("Workflows")) {
                             setResponsePage(CreateWorkflow.class);
                         }
                     }

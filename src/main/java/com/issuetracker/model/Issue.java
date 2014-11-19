@@ -9,6 +9,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 /**
  *
@@ -19,28 +22,36 @@ import java.util.List;
 public class Issue implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @DocumentId
     @Field(name = "id")
     private Long issueId;
+
     @Field
     private String name;
+
     @Field
     private String summary;
+
     @Lob
     @Field
     private String description;
+
     @IndexEmbedded(name = "issue_type", depth = 1)
     @ManyToOne(cascade = CascadeType.MERGE)
     private IssueType issueType;
+
     @Field
     @Analyzer(name = "issueTypeNameAnalyzer", tokenizer = "keyword", tokenFilters = "lowercase")
     private Priority priority;
+
     @Field
     @com.github.holmistr.esannotations.indexing.annotations.Date
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date created = new Date();
+
     @Field
     @com.github.holmistr.esannotations.indexing.annotations.Date
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -48,33 +59,38 @@ public class Issue implements Serializable {
 
     @IndexEmbedded(depth = 1)
     @ManyToOne
-//    private Status status;
     private Status status;
+
     @ManyToOne
     private Resolution resolution;
-    @IndexEmbedded(depth = 1)
-    @ManyToOne
-    private User creator;
-    @IndexEmbedded(depth = 1)
-    @ManyToOne
-    private User owner;
+
+    @Field
+    private String creator;
+
+    @Field
+    private String assignee;
+
     @IndexEmbedded(depth = 1)
     @ManyToOne(cascade = CascadeType.MERGE)
     private Project project;
+
     private String fileLocation;
-    @ManyToMany(fetch = FetchType.EAGER)
+
+    @ElementCollection(fetch = FetchType.EAGER)
     @Fetch(value = FetchMode.SUBSELECT)
-    private List<User> watches;
+    private List<String> watchers;
+
 //    @ManyToMany()
-//    List<User> votes;
+//    List<String> votes;
+
     @ManyToOne
     private Component component;
-    @ManyToOne
-    private ProjectVersion projectVersion;
     
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    private List<ProjectVersion> affectedVersions;
+    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.SUBSELECT)
-
     @IndexEmbedded(depth = 1)
     private List<Comment> comments;
     
@@ -88,8 +104,11 @@ public class Issue implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     private List<IssuesRelationship> relatesTo;
   
-    
-    
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @NotFound(action = NotFoundAction.IGNORE)  
+    private Set<Permission> permissions;
+
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
     public Long getIssueId() {
@@ -140,20 +159,20 @@ public class Issue implements Serializable {
         this.resolution = resolution;
     }
 
-    public User getCreator() {
+    public String getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(String creator) {
         this.creator = creator;
     }
 
-    public User getOwner() {
-        return owner;
+    public String getAssignee() {
+        return assignee;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setAssignee(String assignee) {
+        this.assignee = assignee;
     }
 
     public Project getProject() {
@@ -164,12 +183,12 @@ public class Issue implements Serializable {
         this.project = project;
     }
 
-    public List<User> getWatches() {
-        return watches;
+    public List<String> getWatchers() {
+        return watchers;
     }
 
-    public void setWatches(List<User> watches) {
-        this.watches = watches;
+    public void setWatchers(List<String> watches) {
+        this.watchers = watches;
     }
 
     public List<Comment> getComments() {
@@ -196,15 +215,11 @@ public class Issue implements Serializable {
         this.summary = summary;
     }
 
-  
-
-    
-
-//    public List<User> getVotes() {
+//    public List<String> getVotes() {
 //        return votes;
 //    }
 //
-//    public void setVotes(List<User> votes) {
+//    public void setVotes(List<String> votes) {
 //        this.votes = votes;
 //    }
 
@@ -224,12 +239,12 @@ public class Issue implements Serializable {
         this.issueType = issueType;
     }
 
-    public ProjectVersion getProjectVersion() {
-        return projectVersion;
+    public List<ProjectVersion> getAffectedVersions() {
+        return affectedVersions;
     }
 
-    public void setProjectVersion(ProjectVersion projectVersion) {
-        this.projectVersion = projectVersion;
+    public void setAffectedVersions(List<ProjectVersion> affectedVersions) {
+        this.affectedVersions = affectedVersions;
     }
 
     public String getFileLocation() {
@@ -280,6 +295,14 @@ public class Issue implements Serializable {
 
     public void setUpdated(Date date) {
         this.updated = new Date(date.getTime());
+    }
+    
+    public Set<Permission> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(Set<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     //</editor-fold>

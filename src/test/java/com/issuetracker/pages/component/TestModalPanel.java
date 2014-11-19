@@ -4,7 +4,6 @@
  */
 package com.issuetracker.pages.component;
 
-import com.issuetracker.model.User;
 import com.issuetracker.pages.layout.ModalPanel1;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListView;
@@ -25,7 +24,7 @@ import java.util.List;
 public class TestModalPanel {
 
     private WicketTester tester = null;
-    private List<User> watchersList;
+    private List<String> watchersList;
 
     @Before
     public void setUp() throws Exception {
@@ -35,12 +34,12 @@ public class TestModalPanel {
 
     @Test
     public void testModalPanelLabel() {
-        final User user1 = new User("Monika", "Gottvaldova", "email@gmail.com", "pass");
-        final User user2 = new User("Lenka", "Gottvaldova", "email2@gmail.com", "pass");
-        IModel<List<User>> usersModel = new AbstractReadOnlyModel<List<User>>() {
+        final String user1 = "Monika Gottvaldova";
+        final String user2 = "Lenka Gottvaldova";
+        IModel<List<String>> usersModel = new AbstractReadOnlyModel<List<String>>() {
             @Override
-            public List<User> getObject() {
-                List<User> models = new ArrayList<User>();
+            public List<String> getObject() {
+                List<String> models = new ArrayList<String>();
                 models.add(user1);
                 models.add(user2);
 
@@ -60,12 +59,12 @@ public class TestModalPanel {
 
     @Test
     public void testModalPanelLIstView() {
-        final User user1 = new User("Monika", "Gottvaldova", "email@gmail.com", "pass");
-        final User user2 = new User("Lenka", "Gottvaldova", "email2@gmail.com", "pass");
-        IModel<List<User>> usersModel = new AbstractReadOnlyModel<List<User>>() {
+        final String user1 = "Monika Gottvaldova";
+        final String user2 = "Lenka Gottvaldova";
+        IModel<List<String>> usersModel = new AbstractReadOnlyModel<List<String>>() {
             @Override
-            public List<User> getObject() {
-                List<User> models = new ArrayList<User>();
+            public List<String> getObject() {
+                List<String> models = new ArrayList<String>();
                 models.add(user1);
                 models.add(user2);
 
@@ -76,10 +75,10 @@ public class TestModalPanel {
         this.watchersList = usersModel.getObject();
 
         ModalPanel1 modal = new ModalPanel1("id", usersModel);
-        IModel imodel = new PropertyModel<List<User>>(this, "watchersList");
-        List<User> userslist = (List<User>) imodel.getObject();
+        IModel imodel = new PropertyModel<List<String>>(this, "watchersList");
+        List<String> userslist = (List<String>) imodel.getObject();
         ListView listView = (ListView) modal.get("watchersListView");
         IModel model = (IModel) listView.getDefaultModel();
-        Assert.assertEquals(userslist, (List<User>) model.getObject());
+        Assert.assertEquals(userslist, (List<String>) model.getObject());
     }
 }

@@ -9,6 +9,7 @@ import com.issuetracker.pages.component.workflow.WorkflowTransitionsListView;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.WorkflowService;
+import static com.issuetracker.web.Constants.HOME_PAGE;
 import com.issuetracker.web.quilifiers.SecurityConstraint;
 import static com.issuetracker.web.security.PermissionsUtil.getProjectWithEditPermissions;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,6 +24,8 @@ import java.util.List;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -41,10 +44,12 @@ public class WorkflowDetail extends PageLayout {
     
     @SecurityConstraint(allowedRole = "workflow")
     public WorkflowDetail(PageParameters parameters) {
-        System.err.println("WorkflowDetail: TODO null params test");
-        Long workflowId = parameters.get("workflow").toLong();
+        StringValue workflowId = parameters.get("workflow");
+        if (workflowId.equals(StringValue.valueOf((String)null))) {
+            throw new RedirectToUrlException(HOME_PAGE);
+        }
         
-        workflow = workflowService.getWorkflowById(workflowId);
+        workflow = workflowService.getWorkflowById(workflowId.toLong());
         selectedProjects = getProjectWithEditPermissions(getRequest(), projectService.getProjectsByWorkflow(workflow));
         
         add(new Label("workflowName", workflow.getName()));

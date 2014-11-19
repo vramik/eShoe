@@ -33,7 +33,7 @@ commentList = new ArrayList<Comment>();
 issue = new Issue();
     }
 
-    @Test
+//    @Test
     public void testCommentLIstView() {
         final Comment comment1 = new Comment();
         comment1.setContent("comment1");
@@ -58,7 +58,7 @@ issue = new Issue();
                   
     }
     
-    @Test
+//    @Test
     public void testCommentLIstViewLabels() {
         final Comment comment1 = new Comment();
         comment1.setContent("comment1");

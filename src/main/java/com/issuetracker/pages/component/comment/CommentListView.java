@@ -3,54 +3,49 @@ package com.issuetracker.pages.component.comment;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import com.issuetracker.service.api.IssueService;
+import static com.issuetracker.web.security.PermissionsUtil.*;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 import java.util.List;
+import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
 
 /**
  *
  * @author mgottval
  */
-public class CommentListView extends Panel {
+public class CommentListView extends Panel implements IFormModelUpdateListener {
 
-//    @Inject
-//    private CommentDao commentDao;
     @Inject
     private IssueService issueService;
-    private ListView commentsListView;
+    private final ListView commentsListView;
     private List<Comment> commentList;
     private Issue issue;
 
     public CommentListView(String id, final IModel<Issue> issueModel) {
         super(id);
         issue = issueModel.getObject();
-        try {
-            commentList = issue.getComments();
-        } catch (NullPointerException e) {
-            commentList = new ArrayList<Comment>();
-        }
+        commentList = issueService.getComments(issue);
 
-
-        add(new FeedbackPanel("feedback"));
         commentsListView = new ListView<Comment>("commentsList", new PropertyModel<List<Comment>>(this, "commentList")) {
             @Override
             protected void populateItem(ListItem<Comment> item) {
                 final Comment comment = item.getModelObject();
-                item.add(new Link<Comment>("remove", item.getModel()) {
+                
+                item.setVisible(hasViewPermissionComment(getRequest(), comment));
+                
+                item.add(new Label("author", comment.getAuthor()));
+                item.add(new Link("remove") {
                     @Override
                     public void onClick() {
 
                         commentList.remove(comment);
-                        // commentList.setObject(comments);
                         issue.setComments(commentList);
                         issueService.update(issue);
 
@@ -69,13 +64,6 @@ public class CommentListView extends Panel {
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
     }
-//    public IModel<List<Comment>> getCommentList() {
-//        return commentList;
-//    }
-//
-//    public void setCommentList(IModel<List<Comment>> commentList) {
-//        this.commentList = commentList;
-//    }
 
     public Issue getIssue() {
         return issue;
@@ -83,5 +71,10 @@ public class CommentListView extends Panel {
 
     public void setIssue(Issue issue) {
         this.issue = issue;
+    }
+
+    @Override
+    public void updateModel() {
+        commentList = issueService.getComments(issue);
     }
 }

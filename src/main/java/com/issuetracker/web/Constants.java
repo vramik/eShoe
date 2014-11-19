@@ -25,7 +25,9 @@ public class Constants {
         fallback.put("key", "default");
         roles = new Properties(fallback);
         
+//        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("roles.properties")) {
         try (InputStream is = PermissionsUtil.class.getResourceAsStream("roles.properties")) {
+            System.out.println("TODO Constants");
             if (is == null) {
                 throw new RuntimeException("PermissionsUtil.class.getResourceAsStream(\"roles.properties\") has returned null.");
             }

@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @author mgottval
  */
 @Entity
-public class ProjectVersion implements Serializable {
+public class ProjectVersion implements Serializable, Comparable<ProjectVersion> {
     
     private static final long serialVersionUID = 1L;
     @Id
@@ -57,6 +57,11 @@ public class ProjectVersion implements Serializable {
     public String toString() {
 //        return "com.issuetracker.model.ProjectVersion[ id=" + getId() + ", name=" + getName() + " ]";
         return "[ id=" + getId() + ", name=" + getName() + " ]";
+    }
+
+    @Override
+    public int compareTo(ProjectVersion p) {
+        return getName().compareTo(p.getName());
     }
     
 }

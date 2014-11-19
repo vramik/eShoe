@@ -8,6 +8,7 @@ import com.issuetracker.pages.workflow.WorkflowDetail;
 import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.TransitionService;
 import com.issuetracker.service.api.WorkflowService;
+import static com.issuetracker.web.Constants.HOME_PAGE;
 import com.issuetracker.web.quilifiers.SecurityConstraint;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -21,6 +22,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
 import java.util.List;
+import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.util.string.StringValue;
 
 /**
  *
@@ -40,12 +43,15 @@ public class AddTransition extends PageLayout {
 
     @SecurityConstraint(allowedRole = "workflow")
     public AddTransition(PageParameters parameters) {
-        System.err.println("AddTransition: TODO null params test");
-        Long statusId = parameters.get("status").toLong();
-        Long workflowId = parameters.get("workflow").toLong();
+        StringValue nullSV = StringValue.valueOf((String)null);
+        StringValue statusId = parameters.get("status");
+        StringValue workflowId = parameters.get("workflow");
+        if (workflowId.equals(nullSV) || statusId.equals(nullSV)) {
+            throw new RedirectToUrlException(HOME_PAGE);
+        }
         
-        fromStatus = statusService.getStatusById(statusId);
-        workflow = workflowService.getWorkflowById(workflowId);
+        fromStatus = statusService.getStatusById(statusId.toLong());
+        workflow = workflowService.getWorkflowById(workflowId.toLong());
 
         add(new Label("workflowName", workflow.getName()));
         add(new Label("statusName", fromStatus.getName()));

@@ -1,32 +1,17 @@
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html>
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-    <wicket:extend>
-        <form wicket:id="form">
-            Name:
-            <input type="text" wicket:id="issueName" />
-            Summary:
-            <input type="text" wicket:id="issueSummary" />
-            <textarea wicket:id="description" rows="6" cols="40"></textarea>
-            <select wicket:id="issueTypes"></select>
-            <select wicket:id="projectDropDown"></select>
-            <select wicket:id="componentDropDown"></select>
-            <select wicket:id="versionsDropDown"></select>
-            <select wicket:id="priorityDropDown"></select>
-            <input type="file" wicket:id="fileUploadField" value="Attach File"/>
-            <div wicket:id="cfListView"/>
-            <input type="submit" value="Create Issue"/>
-        </form>
-        <div wicket:id="feedbackPanel"></div>
-
-    </wicket:extend>
-</body>
-</html>
+<wicket:extend>
+    <form wicket:id="form">
+        Name:
+        <input type="text" wicket:id="issueName" />
+        Summary:
+        <input type="text" wicket:id="issueSummary" />
+        <textarea wicket:id="description" rows="6" cols="40"></textarea>
+        <select wicket:id="issueTypes"></select>
+        <select wicket:id="projectDropDown"></select>
+        <select wicket:id="componentDropDown"></select>
+        <select wicket:id="versionsDropDown"></select>
+        <select wicket:id="priorityDropDown"></select>
+        <input type="file" wicket:id="fileUploadField" value="Attach File"/>
+        <div wicket:id="cfListView"/>
+        <input type="submit" value="Create Issue"/>
+    </form>
+</wicket:extend>

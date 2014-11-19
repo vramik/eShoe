@@ -13,9 +13,10 @@ public class IssueUserRelation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+//    @ManyToOne
     @JoinColumn(name="userId")
-    private User user;
+    @Column(name = "username")//??
+    private String user;
     @ManyToOne
     @JoinColumn(name="issueId")
     private Issue issue;
@@ -30,11 +31,11 @@ public class IssueUserRelation implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
+    public String getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(String user) {
         this.user = user;
     }
 

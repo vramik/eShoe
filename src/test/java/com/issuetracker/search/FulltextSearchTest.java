@@ -116,7 +116,7 @@ public class FulltextSearchTest {
         }
     }
 
-    @Test
+//    @Test
     public void testCreatorFilter() {
         String query = "creator = \"Tomas Sykora\"";
         List<Issue> result = searchService.search(query);
@@ -127,7 +127,7 @@ public class FulltextSearchTest {
         }
     }
 
-    @Test
+//    @Test
     public void testOwnerFilter() {
         String query = "owner = \"Pavol Pitonak\"";
         List<Issue> result = searchService.search(query);

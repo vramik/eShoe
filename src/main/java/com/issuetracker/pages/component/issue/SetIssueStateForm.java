@@ -61,14 +61,14 @@ public class SetIssueStateForm extends Panel {
         }
 
         IModel<List<Status>> statusModelChoices;
-        if (workflow != null && !transitionService.getTransitionsByWorkflow(workflow).isEmpty()) {
+        if (workflow != null && !workflow.getTransitions().isEmpty()) {
             Logger.getLogger(SetIssueStateForm.class.getName()).log(Level.SEVERE, workflow.getTransitions().toString());
 
             statusModelChoices = new AbstractReadOnlyModel<List<Status>>() {
                 @Override
                 public List<Status> getObject() {
                     Status currentStatus = issue.getStatus();
-                    List<Transition> projectWorkflowTransitions = transitionService.getTransitionsByWorkflow(workflow);
+                    List<Transition> projectWorkflowTransitions = workflow.getTransitions();
                     List<Status> possibelStatuses = new ArrayList<Status>();
                     possibelStatuses.add(currentStatus);
                     for (Transition transition : projectWorkflowTransitions) {

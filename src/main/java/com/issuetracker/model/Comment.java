@@ -24,7 +24,12 @@ public class Comment implements Serializable {
     private Date created;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date updated;
-
+    
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private Permission viewPermission;
+    
+    private String author;
+    
     public Long getId() {
         return id;
     }
@@ -66,6 +71,22 @@ public class Comment implements Serializable {
     public void setUpdated(Date date) {
         this.updated = new Date(date.getTime());
     }
+    
+    public Permission getViewPermission() {
+        return viewPermission;
+    }
+
+    public void setViewPermission(Permission viewPermission) {
+        this.viewPermission = viewPermission;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     @Override
     public int hashCode() {
@@ -89,13 +110,8 @@ public class Comment implements Serializable {
         return !((this.content == null) ? (other.content != null) : !this.content.equals(other.content));
     }
 
-    
-
-    
-
     @Override
     public String toString() {
         return "com.issuetracker.model.Comment[ id=" + id + " ]";
     }
-    
 }

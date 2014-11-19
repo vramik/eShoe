@@ -1,9 +1,6 @@
 package com.issuetracker.dao.api;
 
 import com.issuetracker.model.Transition;
-import com.issuetracker.model.Workflow;
-
-import java.util.List;
 
 /**
  *
@@ -12,8 +9,6 @@ import java.util.List;
 public interface TransitionDao {
     
     void insert(Transition transition);
-    
-    List<Transition> getTransitionsByWorkflow(Workflow workflow);
     
     void remove(Transition transition);
 }

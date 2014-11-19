@@ -4,9 +4,7 @@ import com.issuetracker.model.Permission;
 import com.issuetracker.model.PermissionType;
 import com.issuetracker.model.Project;
 import com.issuetracker.service.api.ProjectService;
-import com.issuetracker.web.security.KeycloakService;
-import static com.issuetracker.web.security.KeycloakService.getRhelmRoles;
-import java.util.ArrayList;
+import static com.issuetracker.web.security.PermissionsUtil.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -64,12 +62,7 @@ public class PermissionsForm<T extends Permission> extends Panel {
         permissionTypes.setOutputMarkupId(true);
         insertPermissionForm.add(permissionTypes);
         
-        List<String> availableRoles = null;
-        try {
-            availableRoles = new ArrayList<>(getRhelmRoles(getRequest()));
-        } catch (KeycloakService.Failure f) {
-            throw new RuntimeException("Returned status code was: " + f.getStatus(), f);
-        }
+        List<String> availableRoles = getAvailableRoles(getRequest());
         final ListMultipleChoice<String> roles = new ListMultipleChoice<>("roles", 
                 new PropertyModel<List<String>>(this, "selectedRoles"),
                 availableRoles);

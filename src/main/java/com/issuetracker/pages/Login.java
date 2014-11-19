@@ -11,6 +11,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 public class Login extends PageLayout {
 
     public Login(PageParameters parameters) {
-        setResponsePage(parsePageClassFromPageParams(parameters.get("page")));
+        setResponsePage(parsePageClassFromPageParams(parameters.get("page")), parameters.remove("page"));
     }
 }

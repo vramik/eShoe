@@ -66,7 +66,7 @@ public class IssueServiceBean implements IssueService, Serializable {
     }
 
     @Override
-    public List<User> getIssueWatchers(Issue issue) {
+    public List<String> getIssueWatchers(Issue issue) {
         return issueDao.getIssueWatchers(issue);
     }
 
@@ -76,9 +76,14 @@ public class IssueServiceBean implements IssueService, Serializable {
     }
 
     @Override
-    public List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion,
+    public List<Issue> getIssuesByAffectedVersions(List<ProjectVersion> affectedVersions) {
+        return issueDao.getIssuesByAffectedVersions(affectedVersions);
+    }
+    
+    @Override
+    public List<Issue> getIssuesBySearch(Project project, List<ProjectVersion> affectedVersions,
             Component component, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
-        return issueDao.getIssuesBySearch(project, projectVersion, component, issueTypes, statusList, nameContainsText);
+        return issueDao.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, nameContainsText);
     }
 
     @Override

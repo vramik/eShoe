@@ -1,5 +1,6 @@
 package com.issuetracker.web;
 
+import com.issuetracker.pages.issue.SearchIssues;
 import com.issuetracker.pages.transition.AddTransition;
 import com.issuetracker.pages.workflow.CreateWorkflow;
 import com.issuetracker.pages.*;

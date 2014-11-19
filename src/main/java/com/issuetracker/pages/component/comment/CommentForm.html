@@ -1,27 +1,20 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-    <wicket:panel>
-        <span wicket:id="feedback"></span>
-        <form method="post" action="#" wicket:id="commentForm">
-            <table border="0" cellpadding="5">
-                <tr>
-                    <td width="200">Insert your comment here: </td>
-                    </tr>
-                    <tr>
-                        <td><textarea wicket:id="content" rows="6" cols="40"></textarea></td>
-                </tr>
-               
-                <tr>
-                    <td><input type="submit" value="Comment" /></td>
-                </tr>
-            </table>            
-        </form>
-        
-    </wicket:panel>
-    </body>
-</html>
+<wicket:panel>
+    <form method="post" action="#" wicket:id="commentForm">
+        <table border="0" cellpadding="5">
+            <tr>
+                <td width="200">Insert your comment here: </td>
+            </tr>
+            <tr>
+                <td><textarea wicket:id="content" rows="6" cols="40"/></td>
+            </tr>
+            <tr>
+                <td>
+                    <select wicket:id="roles"/>
+                    <input type="submit" value="Comment"/>
+                </td>
+            </tr>
+        </table>            
+    </form>
+
+</wicket:panel>

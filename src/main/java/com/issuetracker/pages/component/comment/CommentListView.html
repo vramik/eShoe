@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
     <wicket:panel>
-        <span wicket:id="feedback"></span>
         <!--<div wicket:id="wmc">-->
-            <table cellpadding="8">
+            <table cellpadding="8" border="1">
                 <tr wicket:id="commentsList">
-                    <td><span wicket:id="comment"></span></td>
+                    
+                    <td>
+                        <span wicket:id="author"/> wrote: 
+                        <br/>
+                        <span wicket:id="comment"/>
+                    </td>
 
                     <td><a href="#" wicket:id="remove">x</a></td>
                 </tr>
             </table>
         <!--</div>-->
     </wicket:panel>
-</body>
-</html>

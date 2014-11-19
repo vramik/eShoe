@@ -29,10 +29,12 @@ public interface IssueService {
     
     List<Priority> getPriorities();
     
-    List<Issue> getIssuesBySearch(Project project, ProjectVersion projectVersion,
+    List<Issue> getIssuesByAffectedVersions(List<ProjectVersion> affectedVersions);
+    
+    List<Issue> getIssuesBySearch(Project project, List<ProjectVersion> affectedVersions,
                                   Component component, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText);
     
-    List<User> getIssueWatchers(Issue issue);
+    List<String> getIssueWatchers(Issue issue);
     
     List<Comment> getComments(Issue issue);
     
