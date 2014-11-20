@@ -2,6 +2,11 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.*;
+import com.issuetracker.pages.HomePage;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.web.quilifiers.MyNewAnnotation;
+import static com.issuetracker.web.security.KeycloakAuthSession.*;
+import java.lang.reflect.Method;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,9 +15,11 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.persistence.Parameter;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ThreadContext;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -24,6 +31,8 @@ public class IssueDaoBean implements IssueDao {
     @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
+    
+    private static final Logger log = Logger.getLogger(IssueDaoBean.class);
 
     @Override
     public List<Issue> getIssues() {
@@ -81,7 +90,45 @@ public class IssueDaoBean implements IssueDao {
 
     @Override
     public void insert(Issue issue) {
-        em.persist(issue);
+        if (authorized("insert", Issue.class)) {
+            em.persist(issue);
+        }
+    }
+    
+    private boolean authorized(String methodName, Class<?> parameterTypes) {
+        try {
+            Method method = IssueService.class.getMethod(methodName, parameterTypes);
+            if (!method.isAnnotationPresent(MyNewAnnotation.class)) {
+                throw new NoSuchAnnotationException("Specified " + method.getName() + " doesn't have sufficient privileges to perform " 
+                        + MyNewAnnotation.class.getName() + " annotation.");
+            }
+            MyNewAnnotation annotation = method.getAnnotation(MyNewAnnotation.class);
+           
+            Request request = RequestCycle.get().getRequest();
+            if (isUserInAppRole(request, annotation.allowedRole())) {
+                return true;
+            } else {
+                log.warn("User " + getIDToken(request).getPreferredUsername() + "doesn't have  to perform " 
+                        + IssueService.class.getName() + "." + method.getName());
+                ThreadContext.getSession().error("Unsufficient privileges to perform this operation.");
+                return false;
+            }
+        } catch (NoSuchMethodException | NoSuchAnnotationException e) {
+            log.error(e);
+            ThreadContext.getSession().error("Internal Application Error, redirecting to home page.");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                log.warn(ex);
+            }
+            throw new RestartResponseException(HomePage.class);
+        }
+    }
+    
+    private class NoSuchAnnotationException extends Exception {
+        public NoSuchAnnotationException(String message) {
+            super(message);
+        }
     }
 
     @Override
@@ -217,7 +264,7 @@ public class IssueDaoBean implements IssueDao {
 
         @Override
         public List<Comment> getComments(Issue issue) {
-            Logger.getLogger(IssueDaoBean.class.getName()).log(Level.SEVERE, issue.getName());
+            log.error(issue.getName());
             qb = em.getCriteriaBuilder();
             CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
             Root<Issue> i = c.from(Issue.class);

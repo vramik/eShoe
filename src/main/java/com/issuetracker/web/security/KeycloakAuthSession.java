@@ -75,7 +75,7 @@ public class KeycloakAuthSession {
     }
     
     public static KeycloakSecurityContext getKeycloakSecurityContext(Request req) {
-        HttpServletRequest httpReq = ((HttpServletRequest) req.getContainerRequest());
+        HttpServletRequest httpReq = (HttpServletRequest) req.getContainerRequest();
         return (KeycloakSecurityContext) httpReq.getAttribute(KeycloakSecurityContext.class.getName());
     }
     

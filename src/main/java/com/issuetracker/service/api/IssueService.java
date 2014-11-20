@@ -2,6 +2,7 @@ package com.issuetracker.service.api;
 
 import com.issuetracker.model.*;
 import com.issuetracker.model.Issue.Priority;
+import com.issuetracker.web.quilifiers.MyNewAnnotation;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ public interface IssueService {
     
     Issue getIssueByName(String name);
     
+    @MyNewAnnotation(allowedRole = "issue-create")
     void insert(Issue issue);
     
     void update(Issue issue);
