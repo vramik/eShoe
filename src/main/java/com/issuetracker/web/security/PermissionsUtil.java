@@ -4,12 +4,20 @@ import com.issuetracker.model.Comment;
 import com.issuetracker.model.Permission;
 import com.issuetracker.model.PermissionType;
 import com.issuetracker.model.Project;
+import com.issuetracker.pages.HomePage;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.web.quilifiers.ServiceSecurity;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import static com.issuetracker.web.security.KeycloakService.getRhelmRoles;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import org.apache.wicket.RestartResponseException;
+import org.apache.wicket.ThreadContext;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -95,5 +103,41 @@ public class PermissionsUtil {
 
     private static boolean isCommentOwner(Request req, Comment comment) {
         return isSignedIn(req) && comment.getAuthor().equals(getIDToken(req).getPreferredUsername());
+    }
+    
+    public boolean authorized(Logger log, Class<?> serviceClass, String methodName, Class<?>... parameterTypes) {
+        try {
+            Method method = serviceClass.getMethod(methodName, parameterTypes);
+            if (!method.isAnnotationPresent(ServiceSecurity.class)) {
+                throw new NoSuchAnnotationException("Specified " + method.getName() + " doesn't have " 
+                        + ServiceSecurity.class.getName() + " annotation.");
+            }
+            ServiceSecurity annotation = method.getAnnotation(ServiceSecurity.class);
+           
+            Request request = RequestCycle.get().getRequest();
+            if (isUserInAppRole(request, annotation.allowedRole())) {
+                return true;
+            } else {
+                log.warn("User " + getIDToken(request).getPreferredUsername() + "doesn't have sufficient privileges to perform " 
+                        + IssueService.class.getName() + "." + method.getName());
+                ThreadContext.getSession().error("Unsufficient privileges to perform this operation.");
+                return false;
+            }
+        } catch (NoSuchMethodException | NoSuchAnnotationException e) {
+            log.error(e);
+            ThreadContext.getSession().error("Internal Application Error, redirecting to home page.");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException ex) {
+                log.warn(ex);
+            }
+            throw new RestartResponseException(HomePage.class);
+        }
+    }
+    
+    private class NoSuchAnnotationException extends Exception {
+        public NoSuchAnnotationException(String message) {
+            super(message);
+        }
     }
 }

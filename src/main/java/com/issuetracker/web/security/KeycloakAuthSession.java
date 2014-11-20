@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken.Access;
@@ -76,6 +77,11 @@ public class KeycloakAuthSession {
     
     public static KeycloakSecurityContext getKeycloakSecurityContext(Request req) {
         HttpServletRequest httpReq = (HttpServletRequest) req.getContainerRequest();
+        return (KeycloakSecurityContext) httpReq.getAttribute(KeycloakSecurityContext.class.getName());
+    }
+    
+    public static KeycloakSecurityContext getKeycloakSecurityContext() {
+        HttpServletRequest httpReq = (HttpServletRequest) RequestCycle.get().getRequest().getContainerRequest();
         return (KeycloakSecurityContext) httpReq.getAttribute(KeycloakSecurityContext.class.getName());
     }
     
