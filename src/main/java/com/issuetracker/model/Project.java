@@ -52,7 +52,7 @@ public class Project implements Serializable {
     @Fetch(value = FetchMode.SUBSELECT)
     @NotFound(action = NotFoundAction.IGNORE)  
     private Set<Permission> permissions;
-
+    
     public Long getId() {
         return id;
     }

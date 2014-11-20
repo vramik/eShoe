@@ -2,12 +2,6 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.*;
-import com.issuetracker.pages.HomePage;
-import com.issuetracker.service.api.IssueService;
-import com.issuetracker.web.quilifiers.ServiceSecurity;
-import static com.issuetracker.web.security.KeycloakAuthSession.*;
-import com.issuetracker.web.security.PermissionsUtil;
-import java.lang.reflect.Method;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,12 +10,6 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.inject.Inject;
-import org.apache.wicket.RestartResponseException;
-import org.apache.wicket.ThreadContext;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.jboss.logging.Logger;
 
 /**
  *
@@ -30,15 +18,10 @@ import org.jboss.logging.Logger;
 @Stateless
 public class IssueDaoBean implements IssueDao {
 
-    @Inject
-    private PermissionsUtil servicePermission;
     @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
-    private final Class IssueServiceClass = IssueService.class;
     
-    private static final Logger log = Logger.getLogger(IssueDaoBean.class);
-
     @Override
     public List<Issue> getIssues() {
         qb = em.getCriteriaBuilder();
@@ -95,9 +78,7 @@ public class IssueDaoBean implements IssueDao {
 
     @Override
     public void insert(Issue issue) {
-        if (servicePermission.authorized(log, IssueServiceClass, "insert", Issue.class)) {
-            em.persist(issue);
-        }
+        em.persist(issue);
     }
     
     @Override
@@ -233,7 +214,7 @@ public class IssueDaoBean implements IssueDao {
 
         @Override
         public List<Comment> getComments(Issue issue) {
-            log.error(issue.getName());
+//            log.error(issue.getName());
             qb = em.getCriteriaBuilder();
             CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
             Root<Issue> i = c.from(Issue.class);

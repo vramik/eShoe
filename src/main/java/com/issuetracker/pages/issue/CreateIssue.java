@@ -159,14 +159,14 @@ public class CreateIssue extends PageLayout {
                 issue.setProject(selectedProject);
                 issue.setCustomFields(cfIssueValues);
                 issue.setCreator(getIDToken(getWebRequest()).getPreferredUsername());
-                System.out.println("AFFECTED VERSIONS: " + issue.getAffectedVersions());
                 issueService.insert(issue);
 //                issueList = issueService.getIssues();
-                PageParameters pageParameters = new PageParameters();
-                pageParameters.add("issue", issue.getIssueId());
-                setResponsePage(IssueDetail.class, pageParameters);
+                if (issue.getIssueId() != null) { // if insert doesn't happen from any reason: 
+                    PageParameters pageParameters = new PageParameters();
+                    pageParameters.add("issue", issue.getIssueId());
+                    setResponsePage(IssueDetail.class, pageParameters);
+                }
 //                issue = new Issue();
-
             }
         };
         add(insertIssueForm);

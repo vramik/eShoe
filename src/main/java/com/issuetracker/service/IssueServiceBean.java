@@ -4,11 +4,13 @@ import com.github.holmistr.esannotations.indexing.AnnotationIndexManager;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.*;
 import com.issuetracker.service.api.IssueService;
+import com.issuetracker.web.security.PermissionsUtil;
 import java.io.Serializable;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -18,10 +20,15 @@ import java.util.List;
 public class IssueServiceBean implements IssueService, Serializable {
 
     @Inject
+    private PermissionsUtil serviceSecurity;
+    
+    @Inject
     private IssueDao issueDao;
 
     @Inject
     private AnnotationIndexManager indexManager;
+    
+    private static final Logger log = Logger.getLogger(IssueServiceBean.class);
 
     @Override
     public List<Issue> getIssues() {
@@ -45,8 +52,11 @@ public class IssueServiceBean implements IssueService, Serializable {
 
     @Override
     public void insert(Issue issue) {
-        issueDao.insert(issue);
-        indexManager.index(issue);
+        if (serviceSecurity.isAuthorized(log, IssueService.class, "insert", Issue.class)) {
+            System.err.println("insterting issue: " + issue.getName() + ", " + issue);
+            issueDao.insert(issue);
+            indexManager.index(issue);
+        }
     }
 
     @Override
