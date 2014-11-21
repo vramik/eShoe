@@ -28,13 +28,13 @@ public class VersionListView<T extends ProjectVersion> extends Panel {
     private List<ProjectVersion> projectVersionList;
     private final ListView<ProjectVersion> versionsListView;
     private Project project;
-    private boolean hasEditPermissions = isUserInAppRole(getRequest(), "project.create");
+    private boolean hasEditPermissions = isUserInAppRole("project.create");
 
     public VersionListView(String id, IModel<List<ProjectVersion>> versionsModel, final IModel<Project> projectModel) {
         super(id);
         if (projectModel != null) {
             project = projectService.getProjectById(projectModel.getObject().getId());
-            hasEditPermissions = hasPermissionsProject(getRequest(), project, PermissionType.edit);
+            hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
         }
         
         projectVersionList = versionsModel.getObject();

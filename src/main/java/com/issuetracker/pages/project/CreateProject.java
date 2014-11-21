@@ -67,7 +67,7 @@ public class CreateProject extends PageLayout {
                 project.setVersions(projectVersionList);
                 project.setComponents(componentList);
                 project.setCustomFields(customFieldList);
-                project.setOwner(getIDToken(getWebRequest()).getPreferredUsername());
+                project.setOwner(getIDToken().getPreferredUsername());
                 
                 permissionList = checkDefaultProjectPermissions(permissionList);
                 project.setPermissions(new HashSet<>(permissionList));

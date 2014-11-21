@@ -57,7 +57,7 @@ public class CreateIssue extends PageLayout {
 //        issueList = new ArrayList<>();
         List<Project> projects = projectService.getProjects();
         for (Project p : projects) {
-            if (hasPermissionsProject(getRequest(), p, PermissionType.view)) {//has project view rights
+            if (hasPermissionsProject(p, PermissionType.view)) {//has project view rights
                 modelsProjectMap.put(p, projectService.getProjectComponents(p));
                 modelsProjectVersionsMap.put(p, projectService.getProjectVersions(p));
             }
@@ -158,8 +158,8 @@ public class CreateIssue extends PageLayout {
                 issue.setStatus(statusService.getStatusByName("New"));
                 issue.setProject(selectedProject);
                 issue.setCustomFields(cfIssueValues);
-                issue.setCreator(getIDToken(getWebRequest()).getPreferredUsername());
-                issueService.insert(issue);
+                issue.setCreator(getIDToken().getPreferredUsername());
+                issueService.create(issue);
 //                issueList = issueService.getIssues();
                 if (issue.getIssueId() != null) { // if insert doesn't happen from any reason: 
                     PageParameters pageParameters = new PageParameters();

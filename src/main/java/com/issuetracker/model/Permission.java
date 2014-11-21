@@ -1,5 +1,6 @@
 package com.issuetracker.model;
 
+import static com.issuetracker.web.Constants.JPATablePreffix;
 import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.ElementCollection;
@@ -10,12 +11,14 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author mgottval
  */
 @Entity
+@Table(name = JPATablePreffix + "Permission")
 public class Permission implements Serializable, Comparable<Permission> {
     
     private static final long serialVersionUID = 1L;

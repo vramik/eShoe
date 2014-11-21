@@ -61,7 +61,7 @@ public class ProjectDetail extends PageLayout {
     @Override
     public void onConfigure() {
         super.onConfigure();
-        boolean hasEditPermissions = hasPermissionsProject(getRequest(), project, PermissionType.edit);
+        boolean hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
         
         projectVersionForm.setVisible(hasEditPermissions);
         projectComponentForm.setVisible(hasEditPermissions);
@@ -70,9 +70,9 @@ public class ProjectDetail extends PageLayout {
         permissionForm.setVisible(hasEditPermissions);
         
         boolean hasDeletePermission = 
-                isProjectOwner(getRequest(), project) ||
-                isUserInAppRole(getRequest(), "project.delete") ||
-                isSuperUser(getRequest());
+                isProjectOwner(project) ||
+                isUserInAppRole("project.delete") ||
+                isSuperUser();
         deleteProject.setVisible(hasDeletePermission);
     }
     

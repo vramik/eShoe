@@ -2,6 +2,7 @@ package com.issuetracker.model;
 
 import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
 import com.github.holmistr.esannotations.indexing.annotations.Field;
+import static com.issuetracker.web.Constants.JPATablePreffix;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.NotFoundAction;
  * @author mgottval
  */
 @Entity
+@Table(name = JPATablePreffix + "Project")
 public class Project implements Serializable {
 
     private static final long serialVersionUID = 1L;

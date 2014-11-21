@@ -48,21 +48,20 @@ public class HeaderPanel extends Panel {
     @Override
     public void onConfigure() {
         super.onConfigure();
-        boolean signedIn = isSignedIn(getWebRequest());
         
-        signInLink.setVisible(!signedIn);
-        usernameLabel.setVisible(signedIn);
-        signOutLink.setVisible(signedIn);
-        workflowUl.setVisible(signedIn);
-        importUl.setVisible(signedIn);
-        permissionsUl.setVisible(signedIn);
+        signInLink.setVisible(!isSignedIn());
+        usernameLabel.setVisible(isSignedIn());
+        signOutLink.setVisible(isSignedIn());
+        workflowUl.setVisible(isSignedIn());
+        importUl.setVisible(isSignedIn());
+        permissionsUl.setVisible(isSignedIn());
         System.out.println("HeaderPanel: TODO");
     }
     
     //TODO not signed in but roles
     @Override
     public void onBeforeRender() {
-        if (!isSignedIn(getWebRequest())) {
+        if (!isSignedIn()) {
             optsProject.remove("Create Project");
             optsIssue.remove("Create Issue");
             optsIssue.remove("Insert Types of Issue");
@@ -75,7 +74,6 @@ public class HeaderPanel extends Panel {
         
         add(new FeedbackPanel("feedbackPanel"));
         
-        idToken = getIDToken(getWebRequest());
         Label label = new Label("name", "Issue Tracking system");
         label.add(new AttributeModifier("style", "color:red;font-weight:bold"));
         add(label);
@@ -92,10 +90,11 @@ public class HeaderPanel extends Panel {
         add(signInLink);
 
         String username = "";
-        if (isSignedIn(getWebRequest())) {
+        idToken = getIDToken();
+        if (isSignedIn()) {
             username = "idToken.getName(): " + idToken.getName() + ", idToken.getEmail(): " + idToken.getEmail() 
-                    + ", rhelm roles: " + getUserRhelmRoles(getWebRequest());
-            Map<String, AccessToken.Access> resourceAccess = getResourceAccess(getWebRequest());
+                    + ", rhelm roles: " + getUserRhelmRoles();
+            Map<String, AccessToken.Access> resourceAccess = getResourceAccess();
             if (resourceAccess != null) {
                 if (null != resourceAccess.get(RHELM_NAME)) {
                     username = username.concat(", " + RHELM_NAME + " roles: " + resourceAccess.get(RHELM_NAME).getRoles());

@@ -12,7 +12,7 @@ import org.keycloak.KeycloakSecurityContext;
 public class HomePage extends PageLayout {
 
     public HomePage() {
-        KeycloakSecurityContext session = getKeycloakSecurityContext(getRequest());
+        KeycloakSecurityContext session = getKeycloakSecurityContext();
         
         String tokenString = "not signed in!";
         if (session != null) {

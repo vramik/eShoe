@@ -141,12 +141,13 @@ public class ImporterServiceBean implements ImporterService, Serializable {
             issue.setStatus(status);
             issue.setAffectedVersions(BZProjectVersions);
 
-            issueService.insert(issue);
+            issueService.create(issue);
 
             List<Comment> issuesComments = mapComments(bug, comments);
             issue.setComments(issuesComments);
 
-            issueService.update(issue);
+//            issueService.update(issue);
+            issueService.insertComment(issue);
 
             System.out.println(++importedCounter + " issues imported.");
         }

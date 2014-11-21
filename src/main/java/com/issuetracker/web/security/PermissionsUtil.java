@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ThreadContext;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.jboss.logging.Logger;
 
 /**
@@ -25,12 +23,12 @@ import org.jboss.logging.Logger;
  */
 public class PermissionsUtil {
 
-    public static boolean isProjectOwner(Request req, Project project) {
-        return isSignedIn(req) && project.getOwner().equals(getIDToken(req).getPreferredUsername());
+    public static boolean isProjectOwner(Project project) {
+        return isSignedIn() && project.getOwner().equals(getIDToken().getPreferredUsername());
     }
     
-    public static boolean hasPermissionsProject(Request req, Project project, PermissionType type) {
-        if (isSuperUser(req) || isProjectOwner(req, project)) {
+    public static boolean hasPermissionsProject(Project project, PermissionType type) {
+        if (isSuperUser() || isProjectOwner(project)) {
             return true;
         }
         Permission p = new Permission();
@@ -38,7 +36,7 @@ public class PermissionsUtil {
         for (Permission permission : project.getPermissions()) {
             if (permission.equals(p)) {
                 for (String role : permission.getRoles()) {
-                    if (role.equals("public") || isUserInAppRole(req, role)) {
+                    if (role.equals("public") || isUserInAppRole(role)) {
                         return true;
                     }
                 }
@@ -68,41 +66,41 @@ public class PermissionsUtil {
         return permissions;
     }
     
-    public static List<Project> getProjectWithEditPermissions(Request req, List<Project> projects) {
+    public static List<Project> getProjectWithEditPermissions(List<Project> projects) {
         List<Project> result = new ArrayList<>();
         for (Project project : projects) {
-            if (hasPermissionsProject(req, project, PermissionType.edit)) {
+            if (hasPermissionsProject(project, PermissionType.edit)) {
                 result.add(project);
             }
         }
         return result;
     }
     
-    public static List<String> getAvailableRoles(Request req) {
+    public static List<String> getAvailableRoles() {
         try {
-            return new ArrayList<>(getRhelmRoles(req));
+            return new ArrayList<>(getRhelmRoles());
         } catch (KeycloakService.Failure f) {
             throw new RuntimeException("Returned status code was: " + f.getStatus(), f);
         }
     }
     
-    public static boolean hasViewPermissionComment(Request req, Comment comment) {
+    public static boolean hasViewPermissionComment(Comment comment) {
         if (comment == null || comment.getViewPermission() == null) {
             return false;
         }
-        if (isSuperUser(req) || isCommentOwner(req, comment)) {
+        if (isSuperUser() || isCommentOwner(comment)) {
             return true;
         }
         for (String role : comment.getViewPermission().getRoles()) {
-            if (role.equals("public") || isUserInAppRole(req, role)) {
+            if (role.equals("public") || isUserInAppRole(role)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static boolean isCommentOwner(Request req, Comment comment) {
-        return isSignedIn(req) && comment.getAuthor().equals(getIDToken(req).getPreferredUsername());
+    private static boolean isCommentOwner(Comment comment) {
+        return isSignedIn() && comment.getAuthor().equals(getIDToken().getPreferredUsername());
     }
     
     /**
@@ -123,12 +121,11 @@ public class PermissionsUtil {
             }
             ServiceSecurity annotation = method.getAnnotation(ServiceSecurity.class);
            
-            Request request = RequestCycle.get().getRequest();
-            log.info("is signed in: " + isSignedIn(request));
-            if (isUserInAppRole(request, annotation.allowedRole())) {
+            log.info("is signed in: " + isSignedIn());
+            if (isUserInAppRole(annotation.allowedRole())) {
                 return true;
             } else {
-                log.warn("User " + getIDToken(request).getPreferredUsername() + " doesn't have sufficient privileges to perform " 
+                log.warn("User " + getIDToken().getPreferredUsername() + " doesn't have sufficient privileges to perform " 
                         + IssueService.class.getName() + "." + method.getName());
                 ThreadContext.getSession().error("Unsufficient privileges to perform this operation.");
                 return false;

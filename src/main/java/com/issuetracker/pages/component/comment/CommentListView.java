@@ -38,7 +38,7 @@ public class CommentListView extends Panel implements IFormModelUpdateListener {
             protected void populateItem(ListItem<Comment> item) {
                 final Comment comment = item.getModelObject();
                 
-                item.setVisible(hasViewPermissionComment(getRequest(), comment));
+                item.setVisible(hasViewPermissionComment(comment));
                 
                 item.add(new Label("author", comment.getAuthor()));
                 item.add(new Link("remove") {
@@ -47,7 +47,8 @@ public class CommentListView extends Panel implements IFormModelUpdateListener {
 
                         commentList.remove(comment);
                         issue.setComments(commentList);
-                        issueService.update(issue);
+                        issueService.removeComment(issue);
+//                        issueService.update(issue);
 
                     }
                 });

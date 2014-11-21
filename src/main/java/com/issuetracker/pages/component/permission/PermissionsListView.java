@@ -30,7 +30,7 @@ public class PermissionsListView<T extends Permission> extends Panel {
     private final ListView<Permission> permissionsListView;
     private List<Permission> permissions;
     private Project project;
-    private boolean hasEditPermissions = isUserInAppRole(getRequest(), "project.create");
+    private boolean hasEditPermissions = isUserInAppRole("project.create");
     
     public PermissionsListView(String id, IModel<List<Permission>> permissionsModel, final IModel<Project> projectModel) {
         super(id);
@@ -38,7 +38,7 @@ public class PermissionsListView<T extends Permission> extends Panel {
             Long projectId = projectModel.getObject().getId();
             if (projectId != null) {
                 project = projectService.getProjectById(projectId);
-                hasEditPermissions = hasPermissionsProject(getRequest(), project, PermissionType.edit);
+                hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
             }
         } 
         

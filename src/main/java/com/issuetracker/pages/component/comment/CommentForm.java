@@ -49,12 +49,13 @@ public class CommentForm extends Panel {
                 viewPermission.setPermissionType(PermissionType.view);
                 viewPermission.setRoles(new HashSet<>(selectedRoles));
                 comment.setViewPermission(viewPermission);
-                comment.setAuthor(getIDToken(getRequest()).getPreferredUsername());
+                comment.setAuthor(getIDToken().getPreferredUsername());
                 
                 comments = issueService.getComments(issue);
                 comments.add(comment);
                 issue.setComments(comments);
-                issueService.update(issue);
+                issueService.insertComment(issue);
+//                issueService.update(issue);
                 comment = new Comment();
                 
                 for (Component c : getPage().visitChildren().filterByClass(CommentListView.class)) {
@@ -70,7 +71,7 @@ public class CommentForm extends Panel {
 
         commentForm.add(new TextArea<>("content", new PropertyModel<String>(this, "comment.content")));
         
-        List<String> availableRoles = getAvailableRoles(getRequest());
+        List<String> availableRoles = getAvailableRoles();
         availableRoles.remove("superuser");
         final ListMultipleChoice<String> roles = new ListMultipleChoice<>("roles", 
                 new PropertyModel<List<String>>(this, "selectedRoles"),

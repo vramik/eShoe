@@ -43,7 +43,7 @@ public class CreateWorkflow extends PageLayout {
         IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
             @Override
             public List<Project> getObject() {
-                return getProjectWithEditPermissions(getRequest(), projectService.getProjects());
+                return getProjectWithEditPermissions(projectService.getProjects());
             }
         };
         

@@ -58,7 +58,7 @@ public class SearchIssues extends PageLayout {
     public SearchIssues() {
         List<Project> projects = projectService.getProjects();
         for (Project p : projects) {
-            if (hasPermissionsProject(getRequest(), p, PermissionType.view)) {//has project view rights
+            if (hasPermissionsProject(p, PermissionType.view)) {//has project view rights
                 modelsProjectComponentsMap.put(p, p.getComponents());
                 modelsProjectVersionsMap.put(p, p.getVersions());
             }

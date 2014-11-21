@@ -1,6 +1,7 @@
 package com.issuetracker.model;
 
 import com.github.holmistr.esannotations.indexing.annotations.Field;
+import static com.issuetracker.web.Constants.JPATablePreffix;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Objects;
  * @author mgottval
  */
 @Entity
+@Table(name = JPATablePreffix + "Comment")
 public class Comment implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

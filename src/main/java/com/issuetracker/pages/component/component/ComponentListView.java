@@ -29,7 +29,7 @@ public class ComponentListView<T extends Component> extends Panel {
     private final ListView<Component> componentsListView;
     private List<Component> componentList;
     private Project project;
-    private boolean hasEditPermissions = isUserInAppRole(getRequest(), "project.create");
+    private boolean hasEditPermissions = isUserInAppRole("project.create");
 
     public ComponentListView(String id, IModel<List<Component>> componentsModel, final IModel<Project> projectModel) {
         super(id);
@@ -37,7 +37,7 @@ public class ComponentListView<T extends Component> extends Panel {
             Long projectId = projectModel.getObject().getId();
             if (projectId != null) {
                 project = projectService.getProjectById(projectId);
-                hasEditPermissions = hasPermissionsProject(getRequest(), project, PermissionType.edit);
+                hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
             }
         }
         

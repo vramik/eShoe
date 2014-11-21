@@ -1,5 +1,6 @@
 package com.issuetracker.model;
 
+import static com.issuetracker.web.Constants.JPATablePreffix;
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * @author mgottval
  */
 @Entity
+@Table(name = JPATablePreffix + "IssueUserRelation")
 public class IssueUserRelation implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

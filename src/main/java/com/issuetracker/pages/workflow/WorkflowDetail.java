@@ -50,7 +50,7 @@ public class WorkflowDetail extends PageLayout {
         }
         
         workflow = workflowService.getWorkflowById(workflowId.toLong());
-        selectedProjects = getProjectWithEditPermissions(getRequest(), projectService.getProjectsByWorkflow(workflow));
+        selectedProjects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
         
         add(new Label("workflowName", workflow.getName()));
         add(new Link("back") {
@@ -70,7 +70,7 @@ public class WorkflowDetail extends PageLayout {
             }
         };
         add(setWorkflowToProjects);
-        List<Project> projects = getProjectWithEditPermissions(getRequest(), projectService.getProjects());
+        List<Project> projects = getProjectWithEditPermissions(projectService.getProjects());
         final ListMultipleChoice<Project> projectMultipleChoise = new ListMultipleChoice<>(
                 "projectMultipleChoise", 
                 new PropertyModel<List<Project>>(this, "selectedProjects"), 

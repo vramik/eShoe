@@ -41,7 +41,7 @@ public class ProjectListView<T extends Project> extends Panel implements IFormMo
             protected void populateItem(final ListItem<Project> item) {
                 final Project project = item.getModelObject();
 
-                item.setVisible(hasPermissionsProject(getRequest(), project, PermissionType.view));
+                item.setVisible(hasPermissionsProject(project, PermissionType.view));
                 
                 Link projectDetailLink = new Link<Project>("showProject", item.getModel()) {
                     @Override

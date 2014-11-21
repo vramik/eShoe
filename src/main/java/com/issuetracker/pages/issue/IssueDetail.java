@@ -117,10 +117,11 @@ public class IssueDetail extends PageLayout {
             @Override
             public void onClick(AjaxRequestTarget target) {                
                 target.add(watchersCountLabel);
-                watchersList.add(getIDToken(getRequest()).getPreferredUsername());
+                watchersList.add(getIDToken().getPreferredUsername());
                 watchersCount++;
                 issue.setWatchers(watchersList);
-                issueService.update(issue);
+                issueService.addWatcher(issue);
+//                issueService.update(issue);
 
 //                target.add(modal2);
                 modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));
@@ -130,7 +131,7 @@ public class IssueDetail extends PageLayout {
                 }
             }
         };
-        addWatcherLink.setEnabled(isSignedIn(getRequest()) && !watchersList.contains(getIDToken(getRequest()).getPreferredUsername()));
+        addWatcherLink.setEnabled(isSignedIn() && !watchersList.contains(getIDToken().getPreferredUsername()));
         add(addWatcherLink);
 
 
@@ -168,7 +169,7 @@ public class IssueDetail extends PageLayout {
 
 
 
-        add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")).setVisible(isSignedIn(getRequest())));
+        add(new CommentForm("commentForm", new PropertyModel<Issue>(this, "issue")).setVisible(isSignedIn()));
         add(new CommentListView("commentListView", new PropertyModel<Issue>(this, "issue")));
 
         add(new SetIssueStateForm("setIssueStateForm", new PropertyModel<Issue>(this, "issue")));

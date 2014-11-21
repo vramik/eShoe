@@ -117,7 +117,8 @@ public class SetIssueStateForm extends Panel {
                     issuesRelationship = new IssuesRelationship();
                     issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
                 }
-                issueService.update(issue);
+//                issueService.update(issue);
+                issueService.todo(issue);
 
 
             }

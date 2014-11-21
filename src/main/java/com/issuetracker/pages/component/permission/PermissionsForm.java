@@ -62,7 +62,7 @@ public class PermissionsForm<T extends Permission> extends Panel {
         permissionTypes.setOutputMarkupId(true);
         insertPermissionForm.add(permissionTypes);
         
-        List<String> availableRoles = getAvailableRoles(getRequest());
+        List<String> availableRoles = getAvailableRoles();
         final ListMultipleChoice<String> roles = new ListMultipleChoice<>("roles", 
                 new PropertyModel<List<String>>(this, "selectedRoles"),
                 availableRoles);

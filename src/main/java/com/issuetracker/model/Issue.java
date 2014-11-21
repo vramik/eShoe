@@ -2,6 +2,7 @@ package com.issuetracker.model;
 
 
 import com.github.holmistr.esannotations.indexing.annotations.*;
+import static com.issuetracker.web.Constants.JPATablePreffix;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -18,6 +19,7 @@ import org.hibernate.annotations.NotFoundAction;
  * @author mgottval
  */
 @Entity
+@Table(name = JPATablePreffix + "Issue")
 @Indexed(index = "issues", type = "issue")
 public class Issue implements Serializable {
 

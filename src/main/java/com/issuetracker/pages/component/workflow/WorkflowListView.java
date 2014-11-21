@@ -52,7 +52,7 @@ public class WorkflowListView<T extends Workflow> extends Panel {
                 workflowDetailLink.add(new Label("name", workflow.getName()));
                 item.add(workflowDetailLink);
                 
-                List<Project> projects = getProjectWithEditPermissions(getRequest(), projectService.getProjectsByWorkflow(workflow));
+                List<Project> projects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
                 item.add(new ProjectListView<>("projectListView", projects));
                 item.add(new Link("remove") {
                     @Override

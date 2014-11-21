@@ -19,10 +19,22 @@ public interface IssueService {
     Issue getIssueByName(String name);
     
     @ServiceSecurity(allowedRole = "issue-create")
-    void insert(Issue issue);
+    void create(Issue issue);
     
-    void update(Issue issue);
+    @ServiceSecurity(allowedRole = "issue-create-comment")
+    void insertComment(Issue issue);
     
+    @ServiceSecurity(allowedRole = "issue-remove-comment")
+    void removeComment(Issue issue);
+    
+    @ServiceSecurity(allowedRole = "issue-add-watcher")
+    void addWatcher(Issue issue);
+    
+    void todo(Issue issue);
+    
+//    void update(Issue issue);
+    
+    @ServiceSecurity(allowedRole = "issue-delete")
     void remove(Issue issue);
     
     List<Issue> getIssuesByProject(Project project);

@@ -2,6 +2,7 @@ package com.issuetracker.model;
 
 import com.github.holmistr.esannotations.indexing.annotations.Analyzer;
 import com.github.holmistr.esannotations.indexing.annotations.Field;
+import static com.issuetracker.web.Constants.JPATablePreffix;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,12 +11,14 @@ import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Table;
 
 /**
  *
  * @author mgottval
  */
 @Entity
+@Table(name = JPATablePreffix + "Status")
 public class Status implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

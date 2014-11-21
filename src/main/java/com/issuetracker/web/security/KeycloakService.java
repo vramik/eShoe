@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.wicket.request.Request;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -44,13 +43,13 @@ public class KeycloakService {
         }
     }
     
-    public static List<UserRepresentation> getUsers(Request req) throws Failure {
+    public static List<UserRepresentation> getUsers() throws Failure {
         HttpClient client = new HttpClientBuilder().disableTrustManager().build();
         
         try {
             HttpGet get = new HttpGet(SERVER_URL + "/auth/admin/realms/issue-tracker/users");
             System.out.println("GET: " + get.toString());
-            KeycloakSecurityContext session = getKeycloakSecurityContext(req);
+            KeycloakSecurityContext session = getKeycloakSecurityContext();
             get.addHeader("Authorization", "Bearer " + session.getTokenString());
             System.out.println("GET HEADER: " + Arrays.toString(get.getHeaders("Authorization")));
             try {
@@ -73,18 +72,17 @@ public class KeycloakService {
     
     /**
      * 
-     * @param req
      * @return String rhelm roles without superuser and user
      * 
      * @throws com.issuetracker.web.security.KeycloakService.Failure 
      */
-    public static Set<String> getRhelmRoles(Request req) throws Failure {
+    public static Set<String> getRhelmRoles() throws Failure {
         HttpClient client = new HttpClientBuilder().disableTrustManager().build();
         
         try {
             HttpGet get = new HttpGet(SERVER_URL + "/auth/admin/realms/issue-tracker/roles");
 //            System.out.println("GET: " + get.toString());
-            KeycloakSecurityContext session = getKeycloakSecurityContext(req);
+            KeycloakSecurityContext session = getKeycloakSecurityContext();
             if (session == null) {
                 return new HashSet<>();
             }

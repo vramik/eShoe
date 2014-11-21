@@ -4,12 +4,14 @@ import com.github.holmistr.esannotations.indexing.AnnotationIndexManager;
 import com.issuetracker.dao.api.IssueDao;
 import com.issuetracker.model.*;
 import com.issuetracker.service.api.IssueService;
+import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import com.issuetracker.web.security.PermissionsUtil;
 import java.io.Serializable;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.util.List;
+import org.apache.wicket.ThreadContext;
 import org.jboss.logging.Logger;
 
 /**
@@ -51,16 +53,47 @@ public class IssueServiceBean implements IssueService, Serializable {
     }
 
     @Override
-    public void insert(Issue issue) {
-        if (serviceSecurity.isAuthorized(log, IssueService.class, "insert", Issue.class)) {
+    public void create(Issue issue) {
+//        if (serviceSecurity.isAuthorized(log, IssueService.class, "create", Issue.class)) {
+        if (isAuthorized("issue-create")) {
             System.err.println("insterting issue: " + issue.getName() + ", " + issue);
             issueDao.insert(issue);
             indexManager.index(issue);
         }
     }
+    
+    private boolean isAuthorized(String allowedRole) {
+        if (isUserInAppRole(allowedRole)) {
+            return true;
+        } else {
+            log.warn("User " + getIDToken().getPreferredUsername() + " doesn't have sufficient privileges to perform this");
+            ThreadContext.getSession().error("Unsufficient privileges to perform this operation.");
+            return false;
+        }
+    }
 
     @Override
-    public void update(Issue issue) {
+    public void insertComment(Issue issue) {
+        update(issue);
+    }
+
+    @Override
+    public void removeComment(Issue issue) {
+        update(issue);
+    }
+
+    @Override
+    public void addWatcher(Issue issue) {
+        update(issue);
+    }
+    
+    @Override
+    public void todo(Issue issue) {
+        log.error("TODO");
+        update(issue);
+    }
+    
+    private void update(Issue issue) {
         issueDao.update(issue);
         indexManager.index(issue);
     }

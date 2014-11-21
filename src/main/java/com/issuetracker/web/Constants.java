@@ -18,6 +18,9 @@ public class Constants {
     public static final String CONTEXT_ROOT = "/IssueTracker/";
     public static final String HOME_PAGE = SERVER_URL + CONTEXT_ROOT;
     
+    public static final String JPATablePreffix = "IssueTracker_"; //keycloakDS
+//    public static final String JPATablePreffix = ""; //separateDS
+    
     public static final Properties roles;
     
     static {
