@@ -5,7 +5,7 @@ import java.util.List;
 import com.issuetracker.model.IssueType;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.service.api.IssueTypeService;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,7 +26,7 @@ public class CreateIssueType extends PageLayout {
     private IssueType issueType = new IssueType();
     private final List<IssueType> issueTypes;
 
-    @SecurityConstraint(allowedRole = "issue.type")
+    @ViewPageConstraint(allowedRole = "kc.issue.type")
     public CreateIssueType() {
         issueTypes = issueTypeService.getIssueTypes();
         Form<IssueType> insertIssueTypeForm = new Form<IssueType>("insertIssueTypeForm") {

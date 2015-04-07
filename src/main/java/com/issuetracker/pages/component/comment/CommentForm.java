@@ -3,7 +3,7 @@ package com.issuetracker.pages.component.comment;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.Permission;
-import com.issuetracker.model.PermissionType;
+import com.issuetracker.model.TypeId;
 import com.issuetracker.service.api.IssueService;
 import static com.issuetracker.web.security.PermissionsUtil.*;
 import static com.issuetracker.web.security.KeycloakAuthSession.getIDToken;
@@ -38,7 +38,7 @@ public class CommentForm extends Panel {
         super(id);
         
         //set default view role for comment
-        selectedRoles.add("public");
+        selectedRoles.add("Public");
         
         issue = issueModel.getObject();
 
@@ -46,9 +46,9 @@ public class CommentForm extends Panel {
             @Override
             protected void onSubmit() {
                 Permission viewPermission = new Permission();
-                viewPermission.setPermissionType(PermissionType.view);
-                viewPermission.setRoles(new HashSet<>(selectedRoles));
-                comment.setViewPermission(viewPermission);
+//                viewPermission.setPermissionType(PermissionType.view);
+//                viewPermission.setRoles(new HashSet<>(selectedRoles));
+//                comment.setViewPermission(viewPermission);
                 comment.setAuthor(getIDToken().getPreferredUsername());
                 
                 comments = issueService.getComments(issue);
@@ -64,7 +64,7 @@ public class CommentForm extends Panel {
                 
                 //clear the select
                 selectedRoles.clear();
-                selectedRoles.add("public");
+                selectedRoles.add("Public");
             }
         };
         add(commentForm);

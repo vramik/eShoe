@@ -21,6 +21,8 @@ public interface ProjectService {
     
     List<Project> getProjects();
     
+    List<Project> getProjectsWithRights(String action);
+    
     List<ProjectVersion> getProjectVersions(Project project);
     
     List<Component> getProjectComponents(Project project);

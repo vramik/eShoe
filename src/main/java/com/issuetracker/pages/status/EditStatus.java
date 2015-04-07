@@ -5,7 +5,7 @@ import com.issuetracker.model.Status;
 import com.issuetracker.service.api.StatusService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
 import static com.issuetracker.web.Utils.parsePageClassFromPageParams;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.PropertyModel;
@@ -26,7 +26,7 @@ public class EditStatus extends PageLayout {
     private StatusService statusService;
     private Status status;
     
-    @SecurityConstraint(allowedRole = "status")
+    @ViewPageConstraint(allowedRole = "status")
     public EditStatus(final PageParameters parameters) {
         final StringValue statusName = parameters.get("statusName");
         final StringValue page = parameters.get("page");

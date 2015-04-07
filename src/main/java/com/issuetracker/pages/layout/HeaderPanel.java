@@ -43,8 +43,9 @@ public class HeaderPanel extends Panel {
     private final Link<String> signInLink;
     private final List<String> optsProject;
     private final List<String> optsIssue;
+    public final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
 
-    //TODO not signed in but roles
+    //TODO not signedIn but roles
     @Override
     public void onConfigure() {
         super.onConfigure();
@@ -72,7 +73,7 @@ public class HeaderPanel extends Panel {
     public HeaderPanel(String id) {
         super(id);
         
-        add(new FeedbackPanel("feedbackPanel"));
+        add(feedbackPanel);
         
         Label label = new Label("name", "Issue Tracking system");
         label.add(new AttributeModifier("style", "color:red;font-weight:bold"));
@@ -94,7 +95,7 @@ public class HeaderPanel extends Panel {
         if (isSignedIn()) {
             username = "idToken.getName(): " + idToken.getName() + ", idToken.getEmail(): " + idToken.getEmail() 
                     + ", rhelm roles: " + getUserRhelmRoles();
-            Map<String, AccessToken.Access> resourceAccess = getResourceAccess();
+            Map<String, AccessToken.Access> resourceAccess = getKeycloakSecurityContext().getToken().getResourceAccess();
             if (resourceAccess != null) {
                 if (null != resourceAccess.get(RHELM_NAME)) {
                     username = username.concat(", " + RHELM_NAME + " roles: " + resourceAccess.get(RHELM_NAME).getRoles());

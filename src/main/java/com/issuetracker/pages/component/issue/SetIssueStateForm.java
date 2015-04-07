@@ -101,7 +101,7 @@ public class SetIssueStateForm extends Panel {
                 }
             };
 
-        final DropDownChoice<Status> priorityDropDown = new DropDownChoice<Status>("statusDropDown", new PropertyModel<Status>(this, "issue.status"), statusModelChoices, new ChoiceRenderer<Status>("name"));
+        final DropDownChoice<Status> priorityDropDown = new DropDownChoice<>("statusDropDown", new PropertyModel<Status>(this, "issue.status"), statusModelChoices, new ChoiceRenderer<Status>("name"));
 
         updateIssueForm = new Form<Issue>("updateIssueForm") {
             @Override
@@ -117,15 +117,12 @@ public class SetIssueStateForm extends Panel {
                     issuesRelationship = new IssuesRelationship();
                     issuesRelationship.setRelationshipType(RelationshipType.RELATES_TO);
                 }
-//                issueService.update(issue);
-                issueService.todo(issue);
-
-
+                issueService.update(issue);
             }
         };
         updateIssueForm.add(priorityDropDown);
-        updateIssueForm.add(new TextField<String>("issueRelatesToId", new PropertyModel<String>(this, "issueRelatesToId")));
-        updateIssueForm.add(new DropDownChoice<IssuesRelationship.RelationshipType>("relTypeDropDown", new PropertyModel<IssuesRelationship.RelationshipType>(this, "issuesRelationship.relationshipType"), relTypeModelChoices));
+        updateIssueForm.add(new TextField<>("issueRelatesToId", new PropertyModel<String>(this, "issueRelatesToId")));
+        updateIssueForm.add(new DropDownChoice<>("relTypeDropDown", new PropertyModel<IssuesRelationship.RelationshipType>(this, "issuesRelationship.relationshipType"), relTypeModelChoices));
         add(updateIssueForm);
 
 

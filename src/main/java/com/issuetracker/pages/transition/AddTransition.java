@@ -9,7 +9,7 @@ import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.TransitionService;
 import com.issuetracker.service.api.WorkflowService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -41,7 +41,7 @@ public class AddTransition extends PageLayout {
     @Inject
     private TransitionService transitionService;
 
-    @SecurityConstraint(allowedRole = "workflow")
+    @ViewPageConstraint(allowedRole = "workflow")
     public AddTransition(PageParameters parameters) {
         StringValue nullSV = StringValue.valueOf((String)null);
         StringValue statusId = parameters.get("status");

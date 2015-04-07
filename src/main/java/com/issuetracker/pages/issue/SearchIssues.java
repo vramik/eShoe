@@ -6,7 +6,7 @@ import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.IssueTypeService;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.StatusService;
-import static com.issuetracker.web.security.PermissionsUtil.hasPermissionsProject;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -58,10 +58,8 @@ public class SearchIssues extends PageLayout {
     public SearchIssues() {
         List<Project> projects = projectService.getProjects();
         for (Project p : projects) {
-            if (hasPermissionsProject(p, PermissionType.view)) {//has project view rights
-                modelsProjectComponentsMap.put(p, p.getComponents());
-                modelsProjectVersionsMap.put(p, p.getVersions());
-            }
+            modelsProjectComponentsMap.put(p, p.getComponents());
+            modelsProjectVersionsMap.put(p, p.getVersions());
         }
         
         IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
@@ -94,8 +92,8 @@ public class SearchIssues extends PageLayout {
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-                issues = issueService.getIssuesByAffectedVersions(affectedVersions);
-//                issues = issueService.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, containsText);
+//                issues = issueService.getIssuesByAffectedVersions(affectedVersions);
+                issues = issueService.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, containsText);
             }
         };
         form.add(new TextField("containsText", new PropertyModel<String>(this, "containsText")));
@@ -110,12 +108,12 @@ public class SearchIssues extends PageLayout {
                 new ChoiceRenderer<ProjectVersion>("name"));
         
         listMultipleVersions.setOutputMarkupId(true);
-        listMultipleVersions.setRequired(true);
+//        listMultipleVersions.setRequired(true);
         form.add(listMultipleVersions);
 
         componentsDropDownChoice = new DropDownChoice<>("componentsDropDownChoice", new PropertyModel<Component>(this, "component"), modelProjectComponentsChoices, new ChoiceRenderer<Component>("name"));
         componentsDropDownChoice.setOutputMarkupId(true);
-        componentsDropDownChoice.setRequired(true);
+//        componentsDropDownChoice.setRequired(true);
         form.add(componentsDropDownChoice);
 
         listMultipleStatuses = new ListMultipleChoice<>(

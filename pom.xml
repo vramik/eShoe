@@ -112,7 +112,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Compiler plugin enforces Java 1.6 compatibility and activates annotation processors. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

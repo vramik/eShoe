@@ -1,11 +1,9 @@
 package com.issuetracker.pages.component.customField;
 
 import com.issuetracker.model.CustomField;
-import com.issuetracker.model.PermissionType;
 import com.issuetracker.model.Project;
 import com.issuetracker.service.api.ProjectService;
 import static com.issuetracker.web.security.KeycloakAuthSession.isUserInAppRole;
-import static com.issuetracker.web.security.PermissionsUtil.hasPermissionsProject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -29,7 +27,7 @@ public class CustomFieldListView<T extends CustomField> extends Panel {
     private final Label label;
     private List<CustomField> customFieldList;
     private Project project;
-    private boolean hasEditPermissions = isUserInAppRole("project.create");
+    private boolean hasEditPermissions = isUserInAppRole("keycloak.project.create");
     
     @Override
     public void onConfigure() {
@@ -41,7 +39,7 @@ public class CustomFieldListView<T extends CustomField> extends Panel {
         super(id);
         if (projectModel != null) {
             project = projectService.getProjectById(projectModel.getObject().getId());
-            hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
+//            hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
         }
         
         customFieldList = customFieldsModel.getObject();

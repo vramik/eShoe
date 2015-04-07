@@ -46,6 +46,11 @@ public class ProjectServiceBean implements ProjectService, Serializable {
     public List<Project> getProjects() {
         return projectDao.getProjects();
     }
+    
+    @Override
+    public List<Project> getProjectsWithRights(String permissionName) {
+        return projectDao.getProjectsWithRights(permissionName);
+    }
 
     @Override
     public List<ProjectVersion> getProjectVersions(Project project) {

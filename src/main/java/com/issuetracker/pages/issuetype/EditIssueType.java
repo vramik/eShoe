@@ -4,7 +4,7 @@ import com.issuetracker.model.IssueType;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.service.api.IssueTypeService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.PropertyModel;
@@ -24,7 +24,7 @@ public class EditIssueType extends PageLayout {
     private IssueTypeService issueTypeService;
     private IssueType issueType;
     
-    @SecurityConstraint(allowedRole = "issue.type")
+    @ViewPageConstraint(allowedRole = "kc.issue.type")
     public EditIssueType(PageParameters parameters) {
         final StringValue issueTypeName = parameters.get("issueTypeName");
         if (issueTypeName.equals(StringValue.valueOf((String)null))) {

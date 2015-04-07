@@ -6,7 +6,8 @@ import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.component.workflow.WorkflowListView;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.WorkflowService;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
+import java.util.ArrayList;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
@@ -16,7 +17,6 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import static com.issuetracker.web.security.PermissionsUtil.*;
 import javax.inject.Inject;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class CreateWorkflow extends PageLayout {
     private List<Workflow> workflows;
     private List<Project> selectedProjects;
 
-    @SecurityConstraint(allowedRole = "workflow")
+    @ViewPageConstraint(allowedRole = "workflow")
     public CreateWorkflow() {
         
         workflows = workflowService.getWorkflows();
@@ -43,7 +43,8 @@ public class CreateWorkflow extends PageLayout {
         IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
             @Override
             public List<Project> getObject() {
-                return getProjectWithEditPermissions(projectService.getProjects());
+//                return getProjectWithEditPermissions(projectService.getProjects());
+                return new ArrayList<>();
             }
         };
         

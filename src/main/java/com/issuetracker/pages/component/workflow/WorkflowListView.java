@@ -1,6 +1,6 @@
 package com.issuetracker.pages.component.workflow;
 
-import com.issuetracker.model.PermissionType;
+import com.issuetracker.model.TypeId;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.component.project.ProjectListView;
@@ -52,7 +52,8 @@ public class WorkflowListView<T extends Workflow> extends Panel {
                 workflowDetailLink.add(new Label("name", workflow.getName()));
                 item.add(workflowDetailLink);
                 
-                List<Project> projects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
+                List<Project> projects = new ArrayList<>();
+//                List<Project> projects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
                 item.add(new ProjectListView<>("projectListView", projects));
                 item.add(new Link("remove") {
                     @Override

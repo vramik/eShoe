@@ -2,63 +2,79 @@ package com.issuetracker.model;
 
 import static com.issuetracker.web.Constants.JPATablePreffix;
 import java.io.Serializable;
-import java.util.Set;
-import javax.persistence.ElementCollection;
+import java.util.Objects;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import org.hibernate.annotations.Index;
+import org.jboss.logging.Logger;
 
 /**
  *
- * @author mgottval
+ * @author vramik
  */
-@Entity
+@Entity @IdClass(PermissionId.class)
 @Table(name = JPATablePreffix + "Permission")
-public class Permission implements Serializable, Comparable<Permission> {
+public class Permission implements Serializable {
+    
+    @Transient//not in DB
+    private final Logger log = Logger.getLogger(Permission.class);
     
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
-    private PermissionType permissionType;
     
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<String> roles;
+    @Id
+    private Integer typeId;
+    @Id
+    @Index(name = "permission_itemid")
+    private Long itemId;
+    @Id
+    @Index(name = "permission_actionid")
+    private Long actionId;
+    @Id
+    @Index(name = "permission_roleid")
+    private Long roleId;
 
-    public Long getId() {
-        return id;
+    public TypeId getTypeId() {
+        return TypeId.parse(this.typeId);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTypeId(TypeId typeId) {
+        this.typeId = typeId.getValue();
     }
 
-    public Set<String> getRoles() {
-        return roles;
+    public Long getItemId() {
+        return itemId;
     }
 
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
     }
 
-    public PermissionType getPermissionType() {
-        return permissionType;
+    public Long getActionId() {
+        return actionId;
     }
 
-    public void setPermissionType(PermissionType permissionType) {
-        this.permissionType = permissionType;
+    public void setActionId(Long actionId) {
+        this.actionId = actionId;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
     @Override
     public int hashCode() {
         int hash = 3;
+        hash = 29 * hash + Objects.hashCode(this.typeId);
+        hash = 29 * hash + Objects.hashCode(this.itemId);
+        hash = 29 * hash + Objects.hashCode(this.actionId);
+        hash = 29 * hash + Objects.hashCode(this.roleId);
         return hash;
     }
 
@@ -71,16 +87,23 @@ public class Permission implements Serializable, Comparable<Permission> {
             return false;
         }
         final Permission other = (Permission) obj;
-        return this.permissionType == other.permissionType;
+        if (!Objects.equals(this.typeId, other.typeId)) {
+            return false;
+        }
+        if (!Objects.equals(this.itemId, other.itemId)) {
+            return false;
+        }
+        if (!Objects.equals(this.actionId, other.actionId)) {
+            return false;
+        }
+        if (!Objects.equals(this.roleId, other.roleId)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
-        return "Permission{" + "id=" + id + ", permissionType=" + permissionType + ", roles=" + roles + '}';
-    }
-
-    @Override
-    public int compareTo(Permission p) {
-        return getPermissionType().toString().compareTo(p.getPermissionType().toString());
+        return "Permission{" + "typeId=" + typeId + ", itemId=" + itemId + ", actionId=" + actionId + ", roleId=" + roleId + '}';
     }
 }

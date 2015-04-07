@@ -9,6 +9,7 @@ import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueVa
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
+import com.issuetracker.service.UnsufficientPrivilegesException;
 import com.issuetracker.service.api.IssueService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;

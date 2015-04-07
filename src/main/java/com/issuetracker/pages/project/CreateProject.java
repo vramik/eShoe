@@ -3,35 +3,32 @@ package com.issuetracker.pages.project;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.Component;
 import com.issuetracker.model.CustomField;
-import com.issuetracker.model.Permission;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
+import static com.issuetracker.model.TypeId.global;
 import com.issuetracker.pages.component.component.ComponentListView;
 import com.issuetracker.pages.component.customField.CustomFieldListView;
-import com.issuetracker.pages.component.permission.PermissionsForm;
-import com.issuetracker.pages.component.permission.PermissionsListView;
-import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.component.version.VersionListView;
 import com.issuetracker.pages.validator.ProjectNameValidator;
 import com.issuetracker.service.api.ProjectService;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
-import static com.issuetracker.web.security.KeycloakAuthSession.getIDToken;
-import static com.issuetracker.web.security.PermissionsUtil.checkDefaultProjectPermissions;
+import com.issuetracker.service.api.SecurityService;
+import static com.issuetracker.web.Constants.roles;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
+import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.logging.Logger;
 
 
 /**
@@ -40,47 +37,44 @@ import org.apache.wicket.model.PropertyModel;
  */
 public class CreateProject extends PageLayout {
 
+    private final Logger log = Logger.getLogger(CreateProject.class);
+    
     @Inject
     private ProjectService projectService;
+    @Inject
+    private SecurityService securityService;
                 
-    private final WebMarkupContainer wmcVersion, wmcComponent, wmcCustomField, wmcPermission;
-    private ProjectListView listViewProjects;
+    private final WebMarkupContainer wmcVersion, wmcComponent, wmcCustomField;
     private List<ProjectVersion> projectVersionList;
     private List<Component> componentList;
     private List<CustomField> customFieldList;
-    private List<Permission> permissionList;
     private String stringVersion, stringComponent, stringCustomField;
     
     private Project project = new Project();
  
-    @SecurityConstraint(allowedRole = "project.create")
+    @ViewPageConstraint(allowedRole = "kc.project.create")
     public CreateProject() {
         projectVersionList = new ArrayList<>();
         componentList = new ArrayList<>();
         customFieldList = new ArrayList<>();
-        permissionList = new ArrayList<>();
 
 //<editor-fold defaultstate="collapsed" desc="insertProjectForm">
         Form<Project> insertProjectForm = new Form<Project>("insertProjectForm") {
             @Override
             protected void onSubmit() {
-                project.setVersions(projectVersionList);
-                project.setComponents(componentList);
-                project.setCustomFields(customFieldList);
-                project.setOwner(getIDToken().getPreferredUsername());
-                
-                permissionList = checkDefaultProjectPermissions(permissionList);
-                project.setPermissions(new HashSet<>(permissionList));
-                
-                projectService.insert(project);
-
-                project = new Project();
-                
-                listViewProjects.updateModel();
-                projectVersionList.clear();
-                componentList.clear();
-                customFieldList.clear();
-                permissionList.clear();
+                if (securityService.canUserPerformAction(global, null, roles.getProperty("it.project.create"))) {
+                    project.setVersions(projectVersionList);
+                    project.setComponents(componentList);
+                    project.setCustomFields(customFieldList);
+                    project.setOwner(getIDToken().getPreferredUsername());
+                    projectService.insert(project);
+                    
+                    PageParameters pageParameters = new PageParameters();
+                    pageParameters.add("project", project.getId());
+                    setResponsePage(ProjectDetail.class, pageParameters);
+                } else {
+                    error("Unsuffitient privilages");
+                }
             }
 
             @Override
@@ -196,28 +190,7 @@ public class CreateProject extends PageLayout {
         add(wmcCustomField);
 //</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="permissions">
-        IModel<List<Permission>> permissionModel = new CompoundPropertyModel<List<Permission>>(permissionList) {
-            @Override
-            public List<Permission> getObject() {
-                Collections.sort(permissionList);
-                return permissionList;
-            }
-        };
-        PermissionsForm<Permission> permissionForm = new PermissionsForm("permissionForm", permissionModel, null);
-        add(permissionForm);
-        PermissionsListView<Permission> permissionListView = new PermissionsListView<>("permissionSet", permissionModel, null);
-        wmcPermission = new WebMarkupContainer("wmcPermission");
-        wmcPermission.add(permissionListView);
-        wmcPermission.setOutputMarkupId(true);
-        add(wmcPermission);
-//</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="projectList">
-        add(new Label("projectName", "Projects"));
-        listViewProjects = new ProjectListView<>("projectList", null);
-        add(listViewProjects);
-//</editor-fold>
     }
 
 //<editor-fold defaultstate="collapsed" desc="getters/setters">
@@ -251,14 +224,6 @@ public class CreateProject extends PageLayout {
 
     public void setCustomFieldList(List<CustomField> customFieldList) {
         this.customFieldList = customFieldList;
-    }
-
-    public ProjectListView getListViewProjects() {
-        return listViewProjects;
-    }
-
-    public void setListViewProjects(ProjectListView listViewProjects) {
-        this.listViewProjects = listViewProjects;
     }
     
     public String getStringVersion() {

@@ -1,11 +1,9 @@
 package com.issuetracker.pages.component.component;
 
 import com.issuetracker.model.Component;
-import com.issuetracker.model.PermissionType;
 import com.issuetracker.model.Project;
 import com.issuetracker.service.api.ProjectService;
 import static com.issuetracker.web.security.KeycloakAuthSession.isUserInAppRole;
-import static com.issuetracker.web.security.PermissionsUtil.hasPermissionsProject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -29,7 +27,7 @@ public class ComponentListView<T extends Component> extends Panel {
     private final ListView<Component> componentsListView;
     private List<Component> componentList;
     private Project project;
-    private boolean hasEditPermissions = isUserInAppRole("project.create");
+    private boolean hasEditPermissions = isUserInAppRole("keycloak.project.create");
 
     public ComponentListView(String id, IModel<List<Component>> componentsModel, final IModel<Project> projectModel) {
         super(id);
@@ -37,7 +35,7 @@ public class ComponentListView<T extends Component> extends Panel {
             Long projectId = projectModel.getObject().getId();
             if (projectId != null) {
                 project = projectService.getProjectById(projectId);
-                hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
+//                hasEditPermissions = hasPermissionsProject(project, PermissionType.edit);
             }
         }
         

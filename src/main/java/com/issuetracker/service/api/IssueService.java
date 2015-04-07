@@ -2,7 +2,6 @@ package com.issuetracker.service.api;
 
 import com.issuetracker.model.*;
 import com.issuetracker.model.Issue.Priority;
-import com.issuetracker.web.quilifiers.ServiceSecurity;
 
 import java.util.List;
 
@@ -18,25 +17,18 @@ public interface IssueService {
     
     Issue getIssueByName(String name);
     
-    @ServiceSecurity(allowedRole = "issue-create")
     void create(Issue issue);
     
-    @ServiceSecurity(allowedRole = "issue-create-comment")
     void insertComment(Issue issue);
     
-    @ServiceSecurity(allowedRole = "issue-remove-comment")
     void removeComment(Issue issue);
     
-    @ServiceSecurity(allowedRole = "issue-add-watcher")
     void addWatcher(Issue issue);
     
-    void todo(Issue issue);
-    
-//    void update(Issue issue);
-    
-    @ServiceSecurity(allowedRole = "issue-delete")
     void remove(Issue issue);
     
+    void update(Issue issue);
+            
     List<Issue> getIssuesByProject(Project project);
     
     List<Issue> getIssuesByProjectName(String projectName);

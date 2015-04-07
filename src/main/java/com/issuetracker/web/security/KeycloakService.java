@@ -72,7 +72,7 @@ public class KeycloakService {
     
     /**
      * 
-     * @return String rhelm roles without superuser and user
+     * @return String rhelm roles without 'Admin' and with 'Public'
      * 
      * @throws com.issuetracker.web.security.KeycloakService.Failure 
      */
@@ -98,10 +98,12 @@ public class KeycloakService {
                 try (InputStream is = entity.getContent()) {
                     Set<String> roles = new TreeSet<>();
                     for (RoleRepresentation role : JsonSerialization.readValue(is, TypedSetOfRoles.class)) {
-                        if (!role.getName().equals("user")) {
+                        role.getId();
+                        if (!role.getName().equals("Admin")) {
                             roles.add(role.getName());
                         }
                     }
+                    roles.add("Public");
                     return roles;
                 }
             } catch (IOException ex) {

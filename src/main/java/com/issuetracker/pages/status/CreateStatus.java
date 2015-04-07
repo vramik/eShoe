@@ -4,7 +4,7 @@ import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.Status;
 import com.issuetracker.pages.component.status.StatusListView;
 import com.issuetracker.service.api.StatusService;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -26,7 +26,7 @@ public class CreateStatus extends PageLayout {
     private Status status = new Status();
     private List<Status> statuses;
     
-    @SecurityConstraint(allowedRole = "status")
+    @ViewPageConstraint(allowedRole = "status")
     public CreateStatus() {
         if (statusService.getStatuses().isEmpty()) {
             statusService.insert(new Status("New"));

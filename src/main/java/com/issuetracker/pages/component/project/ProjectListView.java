@@ -1,9 +1,9 @@
 package com.issuetracker.pages.component.project;
 
-import com.issuetracker.model.PermissionType;
 import com.issuetracker.model.Project;
 import com.issuetracker.pages.project.ProjectDetail;
 import com.issuetracker.service.api.ProjectService;
+import static com.issuetracker.web.Constants.roles;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -15,7 +15,6 @@ import org.apache.wicket.markup.html.form.IFormModelUpdateListener;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import static com.issuetracker.web.security.PermissionsUtil.*;
 
 /**
  *
@@ -32,7 +31,7 @@ public class ProjectListView<T extends Project> extends Panel implements IFormMo
     public ProjectListView(String id, final List<Project> projects) {
         super(id);
         if (projects == null) {
-            this.projects = projectService.getProjects();
+            this.projects = projectService.getProjectsWithRights(roles.getProperty("it.project.browse"));
         } else {
             this.projects = projects;
         }
@@ -41,8 +40,6 @@ public class ProjectListView<T extends Project> extends Panel implements IFormMo
             protected void populateItem(final ListItem<Project> item) {
                 final Project project = item.getModelObject();
 
-                item.setVisible(hasPermissionsProject(project, PermissionType.view));
-                
                 Link projectDetailLink = new Link<Project>("showProject", item.getModel()) {
                     @Override
                     public void onClick() {

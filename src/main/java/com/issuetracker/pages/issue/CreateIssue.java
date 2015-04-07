@@ -4,9 +4,9 @@ import com.issuetracker.model.*;
 import com.issuetracker.pages.component.issue.CreateIssueCustomFIeldsListView;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.service.api.*;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
-import static com.issuetracker.web.security.KeycloakAuthSession.getIDToken;
-import static com.issuetracker.web.security.PermissionsUtil.hasPermissionsProject;
+import static com.issuetracker.web.Constants.roles;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
+import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.*;
@@ -22,8 +22,8 @@ import org.apache.wicket.util.lang.Bytes;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.jboss.logging.Logger;
+
 
 /**
  *
@@ -31,6 +31,8 @@ import java.util.logging.Logger;
  */
 public class CreateIssue extends PageLayout {
 
+    private final Logger log = Logger.getLogger(CreateIssue.class);
+    
     @Inject
     private IssueService issueService;
     @Inject
@@ -52,15 +54,17 @@ public class CreateIssue extends PageLayout {
     private CreateIssueCustomFIeldsListView cfListView;
     private List<CustomFieldIssueValue> cfIssueValues;
 
-    @SecurityConstraint(allowedRole = "issue.create")
+    @ViewPageConstraint(allowedRole = "kc.issue.create")
     public CreateIssue() {
 //        issueList = new ArrayList<>();
-        List<Project> projects = projectService.getProjects();
+        List<Project> projects = projectService.getProjectsWithRights(roles.getProperty("it.issue.create"));
+        log.warn("Projects with create issue permission:");
+        for (Project project : projects) {
+            log.info(project);
+        }
         for (Project p : projects) {
-            if (hasPermissionsProject(p, PermissionType.view)) {//has project view rights
-                modelsProjectMap.put(p, projectService.getProjectComponents(p));
-                modelsProjectVersionsMap.put(p, projectService.getProjectVersions(p));
-            }
+            modelsProjectMap.put(p, projectService.getProjectComponents(p));
+            modelsProjectVersionsMap.put(p, projectService.getProjectVersions(p));
         }
         //model of projects list
         IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
@@ -135,7 +139,6 @@ public class CreateIssue extends PageLayout {
                     try {
                         file = new File("/home/mgottval/TEST-GATEINplug/" + fileUpload.getClientFileName());
                         fileUpload.writeTo(file);
-                        Logger.getLogger(CreateIssue.class.getName()).log(Level.SEVERE, fileUpload.getClientFileName());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
@@ -158,7 +161,11 @@ public class CreateIssue extends PageLayout {
                 issue.setStatus(statusService.getStatusByName("New"));
                 issue.setProject(selectedProject);
                 issue.setCustomFields(cfIssueValues);
-                issue.setCreator(getIDToken().getPreferredUsername());
+                if (isSignedIn()) {
+                    issue.setCreator(getIDToken().getPreferredUsername());
+                } else {
+                    issue.setCreator("");
+                }
                 issueService.create(issue);
 //                issueList = issueService.getIssues();
                 if (issue.getIssueId() != null) { // if insert doesn't happen from any reason: 
@@ -217,14 +224,15 @@ public class CreateIssue extends PageLayout {
         insertIssueForm.add(cfListView);
 
         projectDropDown.add(
-                new AjaxFormComponentUpdatingBehavior("onchange") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
-                        target.add(componentDropDown);
-                        target.add(versionDropDown);
-                        target.add(cfListView);
-                    }
-                });
+            new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    target.add(componentDropDown);
+                    target.add(versionDropDown);
+                    target.add(cfListView);
+                }
+            }
+        );
     }
 //<editor-fold defaultstate="collapsed" desc="getter/setter">
 

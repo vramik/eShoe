@@ -10,8 +10,8 @@ import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.WorkflowService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
-import static com.issuetracker.web.security.PermissionsUtil.getProjectWithEditPermissions;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
+import java.util.ArrayList;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -42,7 +42,7 @@ public class WorkflowDetail extends PageLayout {
     private ProjectService projectService;
     private List<Project> selectedProjects;
     
-    @SecurityConstraint(allowedRole = "workflow")
+    @ViewPageConstraint(allowedRole = "workflow")
     public WorkflowDetail(PageParameters parameters) {
         StringValue workflowId = parameters.get("workflow");
         if (workflowId.equals(StringValue.valueOf((String)null))) {
@@ -50,7 +50,7 @@ public class WorkflowDetail extends PageLayout {
         }
         
         workflow = workflowService.getWorkflowById(workflowId.toLong());
-        selectedProjects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
+//        selectedProjects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
         
         add(new Label("workflowName", workflow.getName()));
         add(new Link("back") {
@@ -70,7 +70,8 @@ public class WorkflowDetail extends PageLayout {
             }
         };
         add(setWorkflowToProjects);
-        List<Project> projects = getProjectWithEditPermissions(projectService.getProjects());
+//        List<Project> projects = getProjectWithEditPermissions(projectService.getProjects());
+        List<Project> projects = new ArrayList<>();
         final ListMultipleChoice<Project> projectMultipleChoise = new ListMultipleChoice<>(
                 "projectMultipleChoise", 
                 new PropertyModel<List<Project>>(this, "selectedProjects"), 
