@@ -9,8 +9,9 @@ import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueVa
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
-import com.issuetracker.service.UnsufficientPrivilegesException;
+import com.issuetracker.pages.permissions.IssuePermission;
 import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -39,6 +40,8 @@ public class IssueDetail extends PageLayout {
 
     @Inject
     private IssueService issueService;
+    @Inject
+    private SecurityService securityService;
 
     private IndicatingAjaxLink addWatcherLink;
     private final Label watchersCountLabel;
@@ -52,13 +55,19 @@ public class IssueDetail extends PageLayout {
     private List<CustomFieldIssueValue> cfIssueValueList;
     private List<IssuesRelationship> issuesRelationships;
     private final IssueRelationsListView<IssuesRelationship> issueRelationsListView;
+    
+    List<String> permittedActions = new ArrayList<>();
 
     public IssueDetail(PageParameters parameters) {
-        StringValue issueId = parameters.get("issue");
-        if (issueId.equals(StringValue.valueOf((String)null))) {
+        StringValue stringIssueId = parameters.get("issue");
+        if (stringIssueId.equals(StringValue.valueOf((String)null))) {
             throw new RedirectToUrlException(HOME_PAGE);
         }
-        issue = issueService.getIssueById(issueId.toLong());
+        Long issueId = stringIssueId.toLong();
+        
+        permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.issue, issueId);
+        
+        issue = issueService.getIssueById(issueId);
         watchersList = issueService.getIssueWatchers(issue);
         
         customField = new CustomField();
@@ -66,7 +75,15 @@ public class IssueDetail extends PageLayout {
         setDefaultModel(defaultModel);
         watchersCount = issue.getWatchers().size();
 
-
+        add(new Link("permissions") {
+            @Override
+            public void onClick() {
+                PageParameters pageParameters = new PageParameters();
+                pageParameters.add("issue", issue.getIssueId());
+                setResponsePage(IssuePermission.class, pageParameters);
+            }
+        });
+        
         projectLink = new Link("link") {
             @Override
             public void onClick() {

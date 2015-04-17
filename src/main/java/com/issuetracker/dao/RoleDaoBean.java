@@ -61,4 +61,18 @@ public class RoleDaoBean implements RoleDao {
         query.from(Role.class);
         return em.createQuery(query).getResultList();
     }
+
+    @Override
+    public Role getRoleById(Long roleId) {
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Role> roleQuery = cb.createQuery(Role.class);
+        Root<Role> fromRole = roleQuery.from(Role.class);
+        roleQuery.where(cb.equal(fromRole.get("id"), roleId));
+        List<Role> resultList = em.createQuery(roleQuery).getResultList();
+        if (resultList != null && !resultList.isEmpty()) {
+            return resultList.get(0);
+        } else {
+            return null;
+        }
+    }
 }

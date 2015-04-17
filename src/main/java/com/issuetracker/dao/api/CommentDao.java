@@ -1,9 +1,7 @@
 package com.issuetracker.dao.api;
 
 import com.issuetracker.model.Comment;
-import com.issuetracker.model.Issue;
 
-import java.util.List;
 
 /**
  *
@@ -11,10 +9,8 @@ import java.util.List;
  */
 public interface CommentDao {
     
-    void insert(Comment comment);
+    Comment insertComment(Comment comment);
     
     void remove(Comment comment);
-    
-    List<Comment> getCommentsOfIssue(Issue issue);
     
 }

@@ -18,18 +18,14 @@ public interface PermissionDao {
 
     void update(Permission permission);
 
-//    List<Permission> getDefaultPermissions();
-//
-//    List<Permission> getDefaultProjectPermissions();
-//
-//    List<Permission> getDefaultIssuePermissions();
+    List<Permission> getPermissionsByRole(TypeId typeId, Long itemId, Long roleId);
 
-    List<Permission> getPermissions(TypeId typeId, Long itemId, Long roleId);
-
-    List<Permission> getPermissions(TypeId typeId, Long actionId);
+    List<Permission> getPermissionsByTypeAndAction(TypeId typeId, Long actionId);
 
     List<Permission> getPermissions(Long actionId, Long roleId, TypeId[] typeIds);
 
     Permission getPermission(TypeId typeId, Long itemId, Long roleId, Long actionId);
+
+    List<Permission> getPermissionsByAction(TypeId typeId, Long itemId, Long actionId);
     
 }

@@ -49,7 +49,9 @@ public class KeycloakAuthSession {
         if (isSignedIn()) {
             return getKeycloakSecurityContext().getToken().getRealmAccess().getRoles();
         } else {
-            return new HashSet<>();
+            Set<String> publicRole = new HashSet<>();
+            publicRole.add("Public");
+            return publicRole;
         }
     }
     

@@ -56,7 +56,7 @@ public class SearchIssues extends PageLayout {
     private final Map<Project, List<ProjectVersion>> modelsProjectVersionsMap = new HashMap<>();
 
     public SearchIssues() {
-        List<Project> projects = projectService.getProjects();
+        List<Project> projects = projectService.getDisplayableProjects();
         for (Project p : projects) {
             modelsProjectComponentsMap.put(p, p.getComponents());
             modelsProjectVersionsMap.put(p, p.getVersions());

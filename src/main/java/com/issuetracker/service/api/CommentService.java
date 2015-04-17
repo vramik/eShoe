@@ -1,9 +1,7 @@
 package com.issuetracker.service.api;
 
 import com.issuetracker.model.Comment;
-import com.issuetracker.model.Issue;
 
-import java.util.List;
 
 /**
  *
@@ -11,10 +9,7 @@ import java.util.List;
  */
 public interface CommentService {
     
-    void insert(Comment comment);
+    Comment insert(Comment comment);
     
     void remove(Comment comment);
-    
-    List<Comment> getCommentsOfIssue(Issue issue);
-    
 }

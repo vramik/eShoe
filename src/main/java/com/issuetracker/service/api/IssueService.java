@@ -1,8 +1,12 @@
 package com.issuetracker.service.api;
 
-import com.issuetracker.model.*;
-import com.issuetracker.model.Issue.Priority;
-
+import com.issuetracker.model.Comment;
+import com.issuetracker.model.Component;
+import com.issuetracker.model.Issue;
+import com.issuetracker.model.IssueType;
+import com.issuetracker.model.Project;
+import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Status;
 import java.util.List;
 
 /**
@@ -14,8 +18,6 @@ public interface IssueService {
     List<Issue> getIssues();
     
     Issue getIssueById(Long id);
-    
-    Issue getIssueByName(String name);
     
     void create(Issue issue);
     
@@ -29,19 +31,12 @@ public interface IssueService {
     
     void update(Issue issue);
             
-    List<Issue> getIssuesByProject(Project project);
-    
-    List<Issue> getIssuesByProjectName(String projectName);
-    
-    List<Priority> getPriorities();
-    
-    List<Issue> getIssuesByAffectedVersions(List<ProjectVersion> affectedVersions);
-    
     List<Issue> getIssuesBySearch(Project project, List<ProjectVersion> affectedVersions,
                                   Component component, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText);
     
     List<String> getIssueWatchers(Issue issue);
     
     List<Comment> getComments(Issue issue);
-    
+
+    List<Comment> getDisplayableComments(Issue issue);
 }

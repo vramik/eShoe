@@ -31,7 +31,7 @@ public class ProjectListView<T extends Project> extends Panel implements IFormMo
     public ProjectListView(String id, final List<Project> projects) {
         super(id);
         if (projects == null) {
-            this.projects = projectService.getProjectsWithRights(roles.getProperty("it.project.browse"));
+            this.projects = projectService.getDisplayableProjects();
         } else {
             this.projects = projects;
         }
@@ -70,6 +70,6 @@ public class ProjectListView<T extends Project> extends Panel implements IFormMo
 
     @Override
     public void updateModel() {
-        projects = projectService.getProjects();
+        projects = projectService.getDisplayableProjects();
     }
 }

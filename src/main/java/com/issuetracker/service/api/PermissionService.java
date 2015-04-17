@@ -12,8 +12,14 @@ public interface PermissionService {
     
     void createPermissions(TypeId typeId, Object item, String actionName, TypeId actionType, String... roleNames);
     
-    List<Permission> getPermissions(TypeId typeId, Long itemId, Long roleId);
+    List<Permission> getPermissionsByRole(TypeId typeId, Long itemId, Long roleId);
+
+    List<Permission> getPermissionsByAction(TypeId typeId, Long itemId, Long actionId);
 
     void update(TypeId typeId, Long itemId, Long roleId, List<Permission> permissions);
+
+    List<Permission> getPermissionsByTypeAndAction(TypeId typeId, Long actionId);
+    
+    List<Permission> getPermissions(Long actionId, Long roleId, TypeId... typeIds);
 
 }

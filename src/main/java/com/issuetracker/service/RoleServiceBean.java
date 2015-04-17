@@ -43,4 +43,9 @@ public class RoleServiceBean implements RoleService, Serializable {
     public List<Role> getRoles() {
         return roleDao.getRoles();
     }
+
+    @Override
+    public Role getRoleById(Long roleId) {
+        return roleDao.getRoleById(roleId);
+    }
 }

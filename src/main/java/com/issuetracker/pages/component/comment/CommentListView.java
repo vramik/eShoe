@@ -3,7 +3,6 @@ package com.issuetracker.pages.component.comment;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import com.issuetracker.service.api.IssueService;
-import static com.issuetracker.web.security.PermissionsUtil.*;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -30,8 +29,10 @@ public class CommentListView extends Panel implements IFormModelUpdateListener {
 
     public CommentListView(String id, final IModel<Issue> issueModel) {
         super(id);
+        
         issue = issueModel.getObject();
-        commentList = issueService.getComments(issue);
+        
+        commentList = issueService.getDisplayableComments(issue);
 
         commentsListView = new ListView<Comment>("commentsList", new PropertyModel<List<Comment>>(this, "commentList")) {
             @Override
@@ -53,6 +54,7 @@ public class CommentListView extends Panel implements IFormModelUpdateListener {
                     }
                 });
                 item.add(new Label("comment", comment.getContent()));
+                item.add(new Label("commentID", comment.getId()));
             }
         };
         add(commentsListView);
@@ -76,6 +78,6 @@ public class CommentListView extends Panel implements IFormModelUpdateListener {
 
     @Override
     public void updateModel() {
-        commentList = issueService.getComments(issue);
+        commentList = issueService.getDisplayableComments(issue);
     }
 }

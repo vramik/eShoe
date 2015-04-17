@@ -109,14 +109,14 @@ public class PermissionDaoBean implements PermissionDao {
     }
 
     @Override
-    public List<Permission> getPermissions(TypeId typeid, Long itemId, Long roleId) {
+    public List<Permission> getPermissionsByRole(TypeId typeId, Long itemId, Long roleId) {
         cb = em.getCriteriaBuilder();
         
         CriteriaQuery<Permission> query = cb.createQuery(Permission.class);
         Root<Permission> fromPermission = query.from(Permission.class);
         
         query.where(cb.and(
-                cb.equal(fromPermission.<Integer>get("typeId"), typeid.getValue()),
+                cb.equal(fromPermission.<Integer>get("typeId"), typeId.getValue()),
                 cb.equal(fromPermission.<Long>get("itemId"), itemId),
                 cb.equal(fromPermission.<Long>get("roleId"), roleId)
         ));
@@ -130,7 +130,7 @@ public class PermissionDaoBean implements PermissionDao {
     }
 
     @Override
-    public List<Permission> getPermissions(TypeId typeId, Long actionId) {
+    public List<Permission> getPermissionsByTypeAndAction(TypeId typeId, Long actionId) {
         cb = em.getCriteriaBuilder();
         
         CriteriaQuery<Permission> query = cb.createQuery(Permission.class);
@@ -198,6 +198,27 @@ public class PermissionDaoBean implements PermissionDao {
             return resultList.get(0);
         } else {
             throw new IllegalStateException("this method shouldn't return more than one result");
+        }
+    }
+
+    @Override
+    public List<Permission> getPermissionsByAction(TypeId typeId, Long itemId, Long actionId) {
+        cb = em.getCriteriaBuilder();
+        
+        CriteriaQuery<Permission> query = cb.createQuery(Permission.class);
+        Root<Permission> fromPermission = query.from(Permission.class);
+        
+        query.where(cb.and(
+                cb.equal(fromPermission.<Integer>get("typeId"), typeId.getValue()),
+                cb.equal(fromPermission.<Long>get("itemId"), itemId),
+                cb.equal(fromPermission.<Long>get("actionId"), actionId)
+        ));
+        
+        List<Permission> result = em.createQuery(query).getResultList();
+        if (result != null && !result.isEmpty()) {
+            return result;
+        } else {
+            return new ArrayList<>();
         }
     }
     

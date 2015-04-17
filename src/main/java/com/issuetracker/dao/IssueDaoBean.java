@@ -10,6 +10,7 @@ import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -18,6 +19,8 @@ import java.util.List;
 @Stateless
 public class IssueDaoBean implements IssueDao {
 
+    private final Logger log = Logger.getLogger(IssueDaoBean.class);
+    
     @PersistenceContext
     private EntityManager em;
     private CriteriaBuilder qb;
@@ -47,36 +50,6 @@ public class IssueDaoBean implements IssueDao {
     }
 
     @Override
-    public List<Issue> getIssuesByProjectName(String projectName) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
-        Root<Issue> i = c.from(Issue.class);
-        c.select(i);
-        c.where(qb.equal(i.get("project").get("name"), projectName));
-        List<Issue> results = em.createQuery(c).getResultList();
-        if (results != null && !results.isEmpty()) {
-            return results;
-        }
-        return null;
-    }
-
-    @Override
-    public Issue getIssueByName(String name) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
-        Root<Issue> i = c.from(Issue.class);
-        Predicate condition = qb.equal(i.get("name"), name);
-        c.where(condition);
-        TypedQuery<Issue> q = em.createQuery(c);
-        List<Issue> results = q.getResultList();
-
-        if (results != null && !results.isEmpty()) {
-            return results.get(0);
-        }
-        return null;
-    }
-
-    @Override
     public void insert(Issue issue) {
         em.persist(issue);
     }
@@ -89,20 +62,6 @@ public class IssueDaoBean implements IssueDao {
     @Override
     public void remove(Issue issue) {
         em.remove(em.contains(issue)? issue : em.merge(issue));
-    }
-
-    @Override
-    public List<Issue> getIssuesByProject(Project project) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
-        Root<Issue> i = c.from(Issue.class);
-        c.select(i);
-        c.where(qb.equal(i.get("project").get("name"), project.getName()));
-        List<Issue> results = em.createQuery(c).getResultList();
-        if (results != null && !results.isEmpty()) {
-            return results;
-        }
-        return new ArrayList<>();
     }
 
     @Override
@@ -120,45 +79,6 @@ public class IssueDaoBean implements IssueDao {
         } else {
             return new ArrayList<>();
         }
-    }
-
-    @Override
-    public List<Issue.Priority> getPriorities() {
-//        qb = em.getCriteriaBuilder();
-//        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
-//        Root<Issue> i = c.from(Issue.class);
-//        
-//        TypedQuery<Issue.Priority> q = em.createQuery(c);
-//        List<Issue.Priority> results = q.getResultList();
-//
-//        if (results != null && !results.isEmpty()) {
-//            return results;
-//        }
-        return null;
-    }
-
-    @Override
-    public List<Issue> getIssuesByAffectedVersions(List<ProjectVersion> affectedVersions) {
-        qb = em.getCriteriaBuilder();
-        
-        CriteriaQuery<Issue> c = qb.createQuery(Issue.class);
-        
-        Root<Issue> i = c.from(Issue.class);
-
-        c.select(i);
-        
-        List<Predicate> versionsPredicates = new ArrayList<>();
-        Expression<List<ProjectVersion>> versions = i.get("affectedVersions");
-        for (ProjectVersion affectedVersion : affectedVersions) {
-            versionsPredicates.add(qb.isMember(affectedVersion, versions));
-        }
-        Object[] objectArray = versionsPredicates.toArray();
-        Predicate[] predicateArray = Arrays.copyOf(objectArray, objectArray.length, Predicate[].class);
-        Predicate or = qb.or(predicateArray);
-        c.where(or);
-        
-        TypedQuery<Issue> createQuery = em.createQuery(c);
-        return createQuery.getResultList();
     }
     
     @Override
@@ -229,4 +149,4 @@ public class IssueDaoBean implements IssueDao {
                 return new ArrayList<>();
             }
         }
-    }
+}

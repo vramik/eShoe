@@ -4,8 +4,11 @@ import com.issuetracker.model.Action;
 import com.issuetracker.model.Permission;
 import com.issuetracker.model.Role;
 import com.issuetracker.model.TypeId;
+import static com.issuetracker.model.TypeId.*;
 import com.issuetracker.service.api.ActionService;
+import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.PermissionService;
+import static com.issuetracker.web.Constants.roles;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -13,8 +16,6 @@ import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
-import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.feedback.IFeedbackMessageFilter;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -24,7 +25,6 @@ import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
 import org.apache.wicket.markup.html.form.CheckGroupSelector;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.jboss.logging.Logger;
 
@@ -34,15 +34,14 @@ import org.jboss.logging.Logger;
  */
 public class PermissionListView extends Panel {
 
-    @Inject
-    private PermissionService permissionService;
-    @Inject
-    private ActionService actionService;
+    @Inject private PermissionService permissionService;
+    @Inject private ActionService actionService;
+    @Inject private IssueService issueService;
     
     private final List<Permission> allPermissions;
     private final List<Action> actions;
     private final WebMarkupContainer wmc = new WebMarkupContainer("wmc");
-    private final PermissionFeedbackPanel feedbackPanel = new PermissionFeedbackPanel("permissionFeedbnackPanel");
+    private final PermissionFeedbackPanel feedbackPanel = new PermissionFeedbackPanel("permissionFeedbackPanel");
     
     private final Logger log = Logger.getLogger(PermissionListView.class);
     
@@ -54,7 +53,7 @@ public class PermissionListView extends Panel {
         
         Long roleId = role.getId();
         
-        actions = actionService.getActionsByType(typeId);
+        actions = excludeActionsSetOnHigherLevel(typeId, itemId, roleId, actionService.getActionsByType(typeId));
         allPermissions = new ArrayList<>();
         for (Action action : actions) {
             Permission permission = new Permission();
@@ -76,7 +75,7 @@ public class PermissionListView extends Panel {
         };
         testListView.setReuseItems(true);
 
-        final List<Permission> permissionsIdDB = permissionService.getPermissions(typeId, itemId, roleId);
+        final List<Permission> permissionsIdDB = permissionService.getPermissionsByRole(typeId, itemId, roleId);
         
         final CheckGroup<Permission> testGroup = new CheckGroup<>("permissionGroup", permissionsIdDB);//this permissions will be checked
         testGroup.add(new CheckGroupSelector("permissionGroupSelector", testGroup));
@@ -94,7 +93,7 @@ public class PermissionListView extends Panel {
                 for (Permission p : selectedPermissions) {       
                     log.warn(p);
                 }
-                permissionService.update(TypeId.project, itemId, role.getId(), new ArrayList(selectedPermissions));
+                permissionService.update(typeId, itemId, role.getId(), new ArrayList(selectedPermissions));
             }
         };
         testForm.add(new Label("permissionRoleName", role.getName()));
@@ -122,47 +121,45 @@ public class PermissionListView extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 info(role.getName() + "'s permissions was saved.");
-                
                 target.add(feedbackPanel);
+                feedbackPanel.clearMessages();
             }
         });
     }
-    
-//<editor-fold defaultstate="collapsed" desc="PermissionFeedbackPanel">
-    private class PermissionFeedbackPanel extends FeedbackPanel {
+
+    private List<Action> excludeActionsSetOnHigherLevel(TypeId typeId, Long itemId, Long roleId, List<Action> actionsFromDB) {
+        List<Action> result = new ArrayList<>();
+        List<Permission> higherLevelPermissions = permissionService.getPermissionsByRole(global, 0L, roleId);
         
-        private final MessageFilter filter = new MessageFilter();
-        
-        public PermissionFeedbackPanel(String id) {
-            super(id);
-            setFilter(filter);
+        switch (typeId) {
+            case project:
+                actionsFromDB.remove(actionService.getActionByNameAndType(roles.getProperty("it.project.browse"), typeId));//exclude visibility permission
+                excludeActions(actionsFromDB, higherLevelPermissions, result);
+                break;
+            case issue:
+                Long projectId = issueService.getIssueById(itemId).getProject().getId();
+                higherLevelPermissions.addAll(permissionService.getPermissionsByRole(project, projectId, roleId));
+                actionsFromDB.remove(actionService.getActionByNameAndType(roles.getProperty("it.issue.browse"), typeId));//exclude visibility permission
+                excludeActions(actionsFromDB, higherLevelPermissions, result);
+                break;
+            default:
+                throw new IllegalStateException("unreachable state was reached");
         }
-        
-        public void clearMessages() {
-            filter.clearMessages();
-        }
+        return result;
     }
-    
-    private class MessageFilter implements IFeedbackMessageFilter {
-        
-        private final List<FeedbackMessage> messages = new ArrayList<>();
-        
-        public void clearMessages() {
-            messages.clear();
-        }
-        
-        @Override
-        public boolean accept(FeedbackMessage currentMessage) {
-            for(FeedbackMessage message : messages){
-                if(message.getMessage().toString().equals(currentMessage.getMessage().toString())) {
-                    return false;
+
+    private void excludeActions(List<Action> actionsFromDB, List<Permission> higherLevelPermissions, List<Action> result) {
+        for (Action actionFromDB : actionsFromDB) {
+            boolean present = false;
+            for (Permission globalPermission : higherLevelPermissions) {
+                if (globalPermission.getActionId().equals(actionFromDB.getId())) {
+                    present = true;
+                    break;
                 }
             }
-            messages.add(currentMessage);
-            return true;
+            if (!present) {
+                result.add(actionFromDB);
+            }
         }
-        
     }
-//</editor-fold>
-    
 }

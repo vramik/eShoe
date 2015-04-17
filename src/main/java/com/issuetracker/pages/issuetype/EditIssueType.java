@@ -24,7 +24,7 @@ public class EditIssueType extends PageLayout {
     private IssueTypeService issueTypeService;
     private IssueType issueType;
     
-    @ViewPageConstraint(allowedRole = "kc.issue.type")
+//    @ViewPageConstraint(allowedRole = "kc.issue.type")
     public EditIssueType(PageParameters parameters) {
         final StringValue issueTypeName = parameters.get("issueTypeName");
         if (issueTypeName.equals(StringValue.valueOf((String)null))) {

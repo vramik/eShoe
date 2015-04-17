@@ -19,7 +19,7 @@ public interface ProjectService {
     
     Project getProjectByName(String name);
     
-    List<Project> getProjects();
+    List<Project> getDisplayableProjects();
     
     List<Project> getProjectsWithRights(String action);
     

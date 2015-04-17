@@ -26,7 +26,7 @@ public class CreateIssueType extends PageLayout {
     private IssueType issueType = new IssueType();
     private final List<IssueType> issueTypes;
 
-    @ViewPageConstraint(allowedRole = "kc.issue.type")
+//    @ViewPageConstraint(allowedRole = "kc.issue.type")
     public CreateIssueType() {
         issueTypes = issueTypeService.getIssueTypes();
         Form<IssueType> insertIssueTypeForm = new Form<IssueType>("insertIssueTypeForm") {

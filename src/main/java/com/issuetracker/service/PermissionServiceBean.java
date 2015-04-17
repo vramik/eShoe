@@ -1,7 +1,6 @@
 package com.issuetracker.service;
 
 import com.issuetracker.dao.api.PermissionDao;
-import com.issuetracker.model.Action;
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.Project;
@@ -11,7 +10,6 @@ import static com.issuetracker.model.TypeId.*;
 import com.issuetracker.service.api.ActionService;
 import com.issuetracker.service.api.PermissionService;
 import com.issuetracker.service.api.RoleService;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -71,81 +69,19 @@ public class PermissionServiceBean implements PermissionService {
             newPermission.setActionId(actionService.getActionByNameAndType(actionName, actionType).getId());
             newPermission.setRoleId(roleService.getRoleByName(roleName).getId());
 
+            log.info(newPermission);
             permissionDao.insertOrUpdate(newPermission);
         }
     }
 
     @Override
-    public List<Permission> getPermissions(TypeId typeId, Long itemId, Long roleId) {
-        log.error("TODO");
-        List<Permission> permissions = permissionDao.getPermissions(typeId, itemId, roleId);
-        return permissions;
-//        
-//        log.warn("--" + permissions);
-//        
-//        List<Permission> result = new ArrayList<>(permissions);
-//        //todo: pokud neexistuje project-specific permission, tak vzit vyssi level
-//        if (!typeId.equals(global)) {
-//            boolean present = false;
-//            for(Action action : actionService.getActionsByType(typeId)) {
-//                log.info(action + ", id: " + action.getId());
-//                for (Permission p : permissions) {
-//                    log.warn("p.getActionId(): " + p.getActionId());
-//                    if (action.getId().equals(p.getActionId())) {
-//                        present = true;
-//                        break;
-//                    }
-//                    log.warn("isPresent: " + present);
-//                }
-//                if (!present) {
-//                    switch (typeId) {
-//                        case project:
-//                            Permission globalPermission = checkPermission(global, 0L, typeId, itemId, action.getId(), roleId);
-//                            if (globalPermission != null) {
-//                                result.add(globalPermission);
-//                            }
-//                            break;
-//                        case issue:
-//                            throw new UnsupportedOperationException("not supported yet.");
-////                            Permission projectPermission = checkPermission(project, itemId, typeId, itemId, itemId, roleId)
-////                            if (projectPermission.isEmpty()) {
-////                                result.addAll(permissionDao.getPermissions(global, null, roleId));
-////                            } else {
-////                                result.addAll(projectPermission);
-////                            }
-////                            break;
-//                        case comment:
-//                            throw new UnsupportedOperationException("not supported yet.");
-////                            List<Permission> issuePermissions = permissionDao.getPermissions(issue, itemId, roleId);
-////                            if (issuePermissions.isEmpty()) {
-////                                List<Permission> projectPermission2 = permissionDao.getPermissions(project, itemId, roleId);
-////                                if (projectPermission2.isEmpty()) {
-////                                    result.addAll(permissionDao.getPermissions(global, 0L, roleId));
-////                                } else {
-////                                    result.addAll(projectPermission2);
-////                                }
-////                            } else {
-////                                result.addAll(issuePermissions);
-////                            }
-////                            break;
-//                        default:
-//                            throw new IllegalStateException("Unreachable state was reached.");
-//                    }
-//                }
-//            }
-//        }
-//        log.warn("<returned permissions> for roleId: " + roleId);
-//        for (Permission p : result) {
-//            log.warn(p);
-//        }
-//        log.warn("</returned permissions>");
-//        
-//        return result;
+    public List<Permission> getPermissionsByRole(TypeId typeId, Long itemId, Long roleId) {
+        return permissionDao.getPermissionsByRole(typeId, itemId, roleId);
     }
 
     @Override
     public void update(TypeId typeId, Long itemId, Long roleId, List<Permission> permissions) {
-        List<Permission> permissinsFromDB = getPermissions(typeId, itemId, roleId);
+        List<Permission> permissinsFromDB = getPermissionsByRole(typeId, itemId, roleId);
         
         if (permissions.isEmpty()) {
             log.error("removing all permissions");
@@ -206,21 +142,19 @@ public class PermissionServiceBean implements PermissionService {
         } 
     }
 
-    private List<Permission> getPermissions(Long actionId, Long roleId, TypeId... typeIds) {
+    @Override
+    public List<Permission> getPermissions(Long actionId, Long roleId, TypeId... typeIds) {
         return permissionDao.getPermissions(actionId, roleId, typeIds);
     }
 
-    private Permission checkPermission(TypeId typeId, Long itemId, TypeId newPermissionTypeId, Long newPermissionItemId, Long actionId, Long roleId) {
-        Permission globalPermission = permissionDao.getPermission(typeId, itemId, roleId, actionId);
-        if (globalPermission != null) {
-            Permission newPermission = new Permission();
-            newPermission.setTypeId(newPermissionTypeId);
-            newPermission.setItemId(newPermissionItemId);
-            newPermission.setActionId(actionId);
-            newPermission.setRoleId(roleId);
-            return newPermission;
-        }
-        return globalPermission;
+    @Override
+    public List<Permission> getPermissionsByAction(TypeId typeId, Long itemId, Long actionId) {
+        return permissionDao.getPermissionsByAction(typeId, itemId, actionId);
+    }
+
+    @Override
+    public List<Permission> getPermissionsByTypeAndAction(TypeId typeId, Long actionId) {
+        return permissionDao.getPermissionsByTypeAndAction(typeId, actionId);
     }
 
 }

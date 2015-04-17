@@ -1,6 +1,5 @@
 package com.issuetracker.web;
 
-import com.issuetracker.model.Project;
 import com.issuetracker.model.TypeId;
 import com.issuetracker.pages.issue.SearchIssues;
 import com.issuetracker.pages.transition.AddTransition;
@@ -85,6 +84,7 @@ public class IssueWeb extends WebApplication {
         mountPage("/addTransition", AddTransition.class);
         mountPage("/accessDenied", AccessDenied.class);
         mountPage("/projectPermissions", ProjectPermission.class);
+        mountPage("/issuePermissions", IssuePermission.class);
         
         createDefaultPermissions();
     }    
@@ -93,53 +93,52 @@ public class IssueWeb extends WebApplication {
 //<editor-fold defaultstate="collapsed" desc="defaultPermissions">
     private void createDefaultPermissions() {
         
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.create"), TypeId.global, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.create"), TypeId.global, "JBossPM");
         
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.browse"), TypeId.project, "Public", "Customer");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.rename"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.versions"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.components"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.custom.fields"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.permissions"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.delete"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.create"), TypeId.project, "RedHat", "Customer");
+            permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.browse"), TypeId.project, "X");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.rename"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.versions"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.components"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.custom.fields"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.permissions"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.delete"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.create"), TypeId.project, "RedHat", "Customer");
         
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.browse"), TypeId.issue, "Public");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.edit.description"), TypeId.issue, "Owner");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.delete"), TypeId.issue, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.assign"), TypeId.issue, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.resolve"), TypeId.issue, "RedHat");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.close"), TypeId.issue, "RedHat");
-        
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.add"), TypeId.comment, "RedHat", "Customer");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.edit.all"), TypeId.comment, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.edit.own"), TypeId.comment, "RedHat");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.delete.all"), TypeId.comment, "JBossPM");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.delete.own"), TypeId.comment, "RedHat");
+//            permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.browse"), TypeId.issue, "X");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.edit.description"), TypeId.issue, "Owner");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.delete"), TypeId.issue, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.assign"), TypeId.issue, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.resolve"), TypeId.issue, "RedHat");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.close"), TypeId.issue, "RedHat");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.add"), TypeId.issue, "RedHat", "Customer");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.edit.all"), TypeId.issue, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.edit.own"), TypeId.issue, "RedHat");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.delete.all"), TypeId.issue, "JBossPM");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.delete.own"), TypeId.issue, "RedHat");
 
-        Project p = projectService.getProjectById(1L);
+//        Project p = projectService.getProjectById(1L);
         
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.browse"), TypeId.project, "Public");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.rename"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.versions"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.components"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.custom.fields"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.permissions"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.delete"), TypeId.project, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.create"), TypeId.project, "RedHat", "Customer");
-        
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.browse"), TypeId.issue, "Public");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.edit.description"), TypeId.issue, "Owner");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.delete"), TypeId.issue, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.assign"), TypeId.issue, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.resolve"), TypeId.issue, "RedHat");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.close"), TypeId.issue, "RedHat");
-        
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.add"), TypeId.comment, "RedHat", "Customer");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.edit.all"), TypeId.comment, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.edit.own"), TypeId.comment, "RedHat");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.delete.all"), TypeId.comment, "JBossPM");
-        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.delete.own"), TypeId.comment, "RedHat");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.browse"), TypeId.project, "Public");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.rename"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.versions"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.components"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.custom.fields"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.permissions"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.project.delete"), TypeId.project, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.create"), TypeId.project, "RedHat", "Customer");
+//        
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.browse"), TypeId.issue, "Public");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.edit.description"), TypeId.issue, "Owner");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.delete"), TypeId.issue, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.assign"), TypeId.issue, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.resolve"), TypeId.issue, "RedHat");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.issue.close"), TypeId.issue, "RedHat");
+//        
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.add"), TypeId.comment, "RedHat", "Customer");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.edit.all"), TypeId.comment, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.edit.own"), TypeId.comment, "RedHat");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.delete.all"), TypeId.comment, "JBossPM");
+//        permissionService.createPermissions(TypeId.project, p, roles.getProperty("it.comment.delete.own"), TypeId.comment, "RedHat");
         
         
         

@@ -6,6 +6,7 @@ import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Workflow;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -21,8 +22,6 @@ public interface ProjectDao {
     
     List<Project> getProjects();
     
-    List<Project> getProjectsWithRights(String action);
-    
     List<ProjectVersion> getProjectVersions(Project project);
     
     List<Component> getProjectComponents(Project project);
@@ -34,4 +33,8 @@ public interface ProjectDao {
     boolean isProjectNameInUse(String projectName);
 
     List<Project> getProjectsByWorkflow(Workflow workflow);
+
+    List<Project> getProjectsByIds(Set<Long> projectIds);
+
+    Set<Long> getProjectsIDs();
 }

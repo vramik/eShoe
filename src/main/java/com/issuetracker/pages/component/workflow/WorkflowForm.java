@@ -60,7 +60,7 @@ public class WorkflowForm<T extends Workflow> extends Panel {
         IModel<List<Project>> projectsModel = new AbstractReadOnlyModel<List<Project>>() {
             @Override
             public List<Project> getObject() {
-                return projectService.getProjects();
+                return projectService.getDisplayableProjects();
             }
         };
         

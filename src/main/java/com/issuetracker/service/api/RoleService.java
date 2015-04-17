@@ -16,4 +16,6 @@ public interface RoleService {
     Role getRoleByName(String name);
     
     List<Role> getRoles();
+
+    Role getRoleById(Long roleId);
 }

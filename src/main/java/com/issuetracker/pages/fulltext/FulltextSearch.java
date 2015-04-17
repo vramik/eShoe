@@ -91,7 +91,7 @@ public class FulltextSearch extends PageLayout {
 
         List<Project> projectsModel = new ArrayList<Project>();
         projectsModel.add(null);
-        projectsModel.addAll(projectService.getProjects());
+        projectsModel.addAll(projectService.getDisplayableProjects());
 
         List<IssueType> issueTypesModel = new ArrayList<IssueType>();
         issueTypesModel.add(null);
