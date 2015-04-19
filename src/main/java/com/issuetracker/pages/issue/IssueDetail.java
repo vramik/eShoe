@@ -68,6 +68,9 @@ public class IssueDetail extends PageLayout {
         permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.issue, issueId);
         
         issue = issueService.getIssueById(issueId);
+        if (issue == null) {
+            throw new RedirectToUrlException(HOME_PAGE);
+        }
         watchersList = issueService.getIssueWatchers(issue);
         
         customField = new CustomField();
@@ -79,7 +82,7 @@ public class IssueDetail extends PageLayout {
             @Override
             public void onClick() {
                 PageParameters pageParameters = new PageParameters();
-                pageParameters.add("issue", issue.getIssueId());
+                pageParameters.add("issue", issue.getId());
                 setResponsePage(IssuePermission.class, pageParameters);
             }
         });

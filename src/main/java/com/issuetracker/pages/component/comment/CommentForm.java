@@ -57,10 +57,7 @@ public class CommentForm extends Panel {
                     permissionService.createPermissions(TypeId.comment, comment, roles.getProperty("it.comment.browse"), TypeId.comment, selectedRoles.toArray(new String[selectedRoles.size()]));
                 } 
                 
-                comments = issueService.getComments(issue);
-                comments.add(comment);
-                issue.setComments(comments);
-                issueService.insertComment(issue);
+                issueService.insertComment(issue, comment);
                 
                 comment = new Comment();
                 

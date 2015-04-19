@@ -11,6 +11,7 @@ import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.security.KeycloakAuthSession;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -57,7 +58,11 @@ public class IssueServiceBean implements IssueService, Serializable {
     }
     
     @Override
-    public void insertComment(Issue issue) {
+    public void insertComment(Issue issue, Comment comment) {
+        List<Comment> comments = issueDao.getComments(issue);
+        comments.add(comment);
+        issue.setComments(comments);
+        
         update(issue);
     }
 
@@ -91,32 +96,50 @@ public class IssueServiceBean implements IssueService, Serializable {
     @Override
     public List<Issue> getIssuesBySearch(Project project, List<ProjectVersion> affectedVersions,
             Component component, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
-        return issueDao.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, nameContainsText);
-    }
-
-    @Override
-    public List<Comment> getComments(Issue issue) {
-        return issueDao.getComments(issue);
+        
+        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
+        
+        List<Issue> issues = new ArrayList<>();
+        Action action = actionService.getActionByNameAndType(roles.getProperty("it.issue.browse"), TypeId.issue);
+        
+        for (Issue issue : issueDao.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, nameContainsText)) {
+            
+            List<Permission> permissions = permissionService.getPermissionsByAction(TypeId.issue, issue.getId(), action.getId());
+            
+            if (permissions.isEmpty()) {
+                permissions = permissionService.getPermissionsByTypeAndAction(TypeId.global, action.getId());
+                permissions.addAll(permissionService.getPermissionsByAction(TypeId.project, issue.getProject().getId(), action.getId()));
+            }
+            for (Permission p : permissions) {
+                if (userRolesIds.contains(p.getRoleId())) {
+                    issues.add(issue);
+                    break;
+                }
+            }
+        } 
+        return issues;
     }
 
     @Override
     public List<Comment> getDisplayableComments(Issue issue) {
+        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
+        
         List<Comment> comments = new ArrayList<>();
         Action action = actionService.getActionByNameAndType(roles.getProperty("it.comment.browse"), TypeId.comment);
         
         for (Comment comment : issueDao.getComments(issue)) {
             
-            List<Permission> permissionsByAction = permissionService.getPermissionsByAction(TypeId.comment, comment.getId(), action.getId());
+            List<Permission> permissions = permissionService.getPermissionsByAction(TypeId.comment, comment.getId(), action.getId());
             
-            if (permissionsByAction.isEmpty()) {
-                comments.add(comment);
-            } else {
-                Set<String> userRoles = KeycloakAuthSession.getUserRhelmRoles();
-                for (Permission p : permissionsByAction) {
-                    if (userRoles.contains(roleService.getRoleById(p.getRoleId()).getName())) {
-                        comments.add(comment);
-                        break;
-                    }
+            if (permissions.isEmpty()) {
+                permissions = permissionService.getPermissionsByTypeAndAction(TypeId.global, action.getId());
+                permissions.addAll(permissionService.getPermissionsByAction(TypeId.project, issue.getProject().getId(), action.getId()));
+                permissions.addAll(permissionService.getPermissionsByAction(TypeId.issue, issue.getId(), action.getId()));
+            } 
+            for (Permission p : permissions) {
+                if (userRolesIds.contains(p.getRoleId())) {
+                    comments.add(comment);
+                    break;
                 }
             }
         } 

@@ -21,7 +21,7 @@ public interface IssueService {
     
     void create(Issue issue);
     
-    void insertComment(Issue issue);
+    void insertComment(Issue issue, Comment comment);
     
     void removeComment(Issue issue);
     
@@ -36,7 +36,5 @@ public interface IssueService {
     
     List<String> getIssueWatchers(Issue issue);
     
-    List<Comment> getComments(Issue issue);
-
     List<Comment> getDisplayableComments(Issue issue);
 }

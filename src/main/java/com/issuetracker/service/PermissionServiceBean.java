@@ -47,7 +47,7 @@ public class PermissionServiceBean implements PermissionService {
                     break;
                 case issue:
                     if (item instanceof Issue) {
-                        newPermission.setItemId(((Issue) item).getIssueId());
+                        newPermission.setItemId(((Issue) item).getId());
                     } else {
                         throw new IllegalArgumentException("Item is not Issue.");
                     }

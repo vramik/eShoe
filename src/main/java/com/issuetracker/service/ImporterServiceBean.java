@@ -149,8 +149,7 @@ public class ImporterServiceBean implements ImporterService, Serializable {
             List<Comment> issuesComments = mapComments(bug, comments);
             issue.setComments(issuesComments);
 
-//            issueService.update(issue);
-            issueService.insertComment(issue);
+            issueService.update(issue);
 
             System.out.println(++importedCounter + " issues imported.");
         }

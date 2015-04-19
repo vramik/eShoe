@@ -32,5 +32,5 @@ public interface IssueDao {
     List<String> getIssueWatchers(Issue issue);
     
     List<Comment> getComments(Issue issue);
-
+    
 }

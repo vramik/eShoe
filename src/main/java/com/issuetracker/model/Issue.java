@@ -29,7 +29,7 @@ public class Issue implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @DocumentId
     @Field(name = "id")
-    private Long issueId;
+    private Long id;
 
     @Field
     private String name;
@@ -113,12 +113,12 @@ public class Issue implements Serializable {
 
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">
-    public Long getIssueId() {
-        return issueId;
+    public Long getId() {
+        return id;
     }
 
-    public void setIssueId(Long issueId) {
-        this.issueId = issueId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -321,7 +321,7 @@ public class Issue implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (issueId != null ? issueId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -331,11 +331,11 @@ public class Issue implements Serializable {
             return false;
         }
         Issue other = (Issue) object;
-        return (this.issueId != null || other.issueId == null) && (this.issueId == null || this.issueId.equals(other.issueId));
+        return (this.id != null || other.id == null) && (this.id == null || this.id.equals(other.id));
     }
 
     @Override
     public String toString() {
-        return "com.issuetracker.Issue[ id=" + issueId + " ]";
+        return "com.issuetracker.Issue[ id=" + id + " ]";
     }
 }

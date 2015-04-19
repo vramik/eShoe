@@ -2,6 +2,8 @@ package com.issuetracker.dao;
 
 import com.issuetracker.dao.api.RoleDao;
 import com.issuetracker.model.Role;
+import java.util.ArrayList;
+import java.util.HashSet;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -10,6 +12,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Set;
+import javax.persistence.criteria.Predicate;
 import org.jboss.logging.Logger;
 
 /**
@@ -74,5 +78,27 @@ public class RoleDaoBean implements RoleDao {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public Set<Long> getIdsByNames(Set<String> roleNames) {
+        cb = em.getCriteriaBuilder();
+        
+        CriteriaQuery<Long> roleQuery = cb.createQuery(Long.class);
+        Root<Role> fromRole = roleQuery.from(Role.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        for (String roleName : roleNames) {
+            predicates.add(cb.equal(fromRole.get("name"), roleName));
+        }
+        roleQuery.select(fromRole.<Long>get("id"));
+        roleQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+        List<Long> resultList = em.createQuery(roleQuery).getResultList();
+        if (resultList != null && !resultList.isEmpty()) {
+            return new HashSet<>(resultList);
+        } else {
+            return new HashSet<>();
+        }
+        
     }
 }

@@ -2,6 +2,7 @@ package com.issuetracker.service.api;
 
 import com.issuetracker.model.Role;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -18,4 +19,6 @@ public interface RoleService {
     List<Role> getRoles();
 
     Role getRoleById(Long roleId);
+
+    Set<Long> getIdsByNames(Set<String> userRhelmRoles);
 }

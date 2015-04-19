@@ -5,6 +5,7 @@ import com.issuetracker.model.Role;
 import com.issuetracker.service.api.RoleService;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -47,5 +48,10 @@ public class RoleServiceBean implements RoleService, Serializable {
     @Override
     public Role getRoleById(Long roleId) {
         return roleDao.getRoleById(roleId);
+    }
+
+    @Override
+    public Set<Long> getIdsByNames(Set<String> roleNames) {
+        return roleDao.getIdsByNames(roleNames);
     }
 }

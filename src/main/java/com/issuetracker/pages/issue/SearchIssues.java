@@ -6,7 +6,6 @@ import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.IssueTypeService;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.StatusService;
-import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -92,7 +91,6 @@ public class SearchIssues extends PageLayout {
         Form form = new Form("searchIssuesForm") {
             @Override
             protected void onSubmit() {
-//                issues = issueService.getIssuesByAffectedVersions(affectedVersions);
                 issues = issueService.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, containsText);
             }
         };
@@ -145,7 +143,7 @@ public class SearchIssues extends PageLayout {
                     @Override
                     public void onClick() {
                         PageParameters pageParameters = new PageParameters();
-                        pageParameters.add("issue", ((Issue) item.getModelObject()).getIssueId());
+                        pageParameters.add("issue", ((Issue) item.getModelObject()).getId());
                         setResponsePage(IssueDetail.class, pageParameters);
                     }
                 };

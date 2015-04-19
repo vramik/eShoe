@@ -2,6 +2,7 @@ package com.issuetracker.dao.api;
 
 import com.issuetracker.model.Role;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -19,6 +20,8 @@ public interface RoleDao {
 
     List<Role> getRoles();
 
-    public Role getRoleById(Long roleId);
+    Role getRoleById(Long roleId);
+
+    Set<Long> getIdsByNames(Set<String> roleNames);
     
 }

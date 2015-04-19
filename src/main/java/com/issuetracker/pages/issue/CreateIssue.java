@@ -168,9 +168,9 @@ public class CreateIssue extends PageLayout {
                 }
                 issueService.create(issue);
 //                issueList = issueService.getIssues();
-                if (issue.getIssueId() != null) { // if insert doesn't happen from any reason: 
+                if (issue.getId() != null) { // if insert doesn't happen from any reason: 
                     PageParameters pageParameters = new PageParameters();
-                    pageParameters.add("issue", issue.getIssueId());
+                    pageParameters.add("issue", issue.getId());
                     setResponsePage(IssueDetail.class, pageParameters);
                 }
 //                issue = new Issue();

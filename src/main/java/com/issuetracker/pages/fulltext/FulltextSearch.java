@@ -239,7 +239,7 @@ public class FulltextSearch extends PageLayout {
                     @Override
                     public void onClick() {
                         PageParameters pageParameters = new PageParameters();
-                        pageParameters.add("issue", (item.getModelObject()).getIssueId());
+                        pageParameters.add("issue", (item.getModelObject()).getId());
                         setResponsePage(IssueDetail.class, pageParameters);
                     }
                 };

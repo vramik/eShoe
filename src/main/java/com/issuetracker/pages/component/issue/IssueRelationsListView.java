@@ -45,7 +45,7 @@ public class IssueRelationsListView<I extends IssuesRelationship> extends Panel 
                     @Override
                     public void onClick() {
                         PageParameters pageParameters = new PageParameters();
-                        pageParameters.add("issue", issuesRelation.getRelatesToIssue().getIssueId());
+                        pageParameters.add("issue", issuesRelation.getRelatesToIssue().getId());
                         setResponsePage(IssueDetail.class, pageParameters);
                     }
                 }.add(new Label("issueName", issuesRelation.getRelatesToIssue().getName())));
