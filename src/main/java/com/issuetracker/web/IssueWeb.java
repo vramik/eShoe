@@ -93,9 +93,11 @@ public class IssueWeb extends WebApplication {
 //<editor-fold defaultstate="collapsed" desc="defaultPermissions">
     private void createDefaultPermissions() {
         
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.create"), TypeId.global, "JBossPM");
-        
-            permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.browse"), TypeId.project, "X");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.status"), TypeId.global, "ITAdmin");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.workflow"), TypeId.global, "ITAdmin");
+//        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.create"), TypeId.global, "JBossPM");
+//        
+//            permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.browse"), TypeId.project, "X");
 //        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.rename"), TypeId.project, "JBossPM");
 //        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.versions"), TypeId.project, "JBossPM");
 //        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.components"), TypeId.project, "JBossPM");

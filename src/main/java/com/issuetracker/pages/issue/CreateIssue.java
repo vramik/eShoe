@@ -1,15 +1,39 @@
 package com.issuetracker.pages.issue;
 
-import com.issuetracker.model.*;
+import com.issuetracker.model.Component;
+import com.issuetracker.model.CustomField;
+import com.issuetracker.model.CustomFieldIssueValue;
+import com.issuetracker.model.Issue;
+import com.issuetracker.model.IssueType;
+import com.issuetracker.model.Project;
+import com.issuetracker.model.ProjectVersion;
+import com.issuetracker.model.Status;
 import com.issuetracker.pages.component.issue.CreateIssueCustomFIeldsListView;
 import com.issuetracker.pages.layout.PageLayout;
-import com.issuetracker.service.api.*;
+import com.issuetracker.pages.permissions.AccessDenied;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.IssueTypeService;
+import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.StatusService;
 import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.quilifiers.ViewPageConstraint;
-import static com.issuetracker.web.security.KeycloakAuthSession.*;
+import com.issuetracker.web.security.KeycloakAuthSession;
+import static com.issuetracker.web.security.KeycloakAuthSession.getIDToken;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.inject.Inject;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.ListMultipleChoice;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -18,11 +42,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.file.File;
 import org.apache.wicket.util.lang.Bytes;
-
-import javax.inject.Inject;
-import java.io.IOException;
-import java.util.*;
 import org.jboss.logging.Logger;
+
 
 
 /**
@@ -46,7 +67,6 @@ public class CreateIssue extends PageLayout {
     private final DropDownChoice<IssueType> issueTypeList;
     private FileUploadField fileUploadField;
     private Issue issue;
-//    private List<Issue> issueList;
     private Project selectedProject;
     private List<CustomField> projectCustomFieldList;
     private final Map<Project, List<Component>> modelsProjectMap = new HashMap<>();
@@ -54,14 +74,9 @@ public class CreateIssue extends PageLayout {
     private CreateIssueCustomFIeldsListView cfListView;
     private List<CustomFieldIssueValue> cfIssueValues;
 
-    @ViewPageConstraint(allowedAction = "kc.issue.create")
+    @ViewPageConstraint(allowedRole = "kc.user")
     public CreateIssue() {
-//        issueList = new ArrayList<>();
         List<Project> projects = projectService.getProjectsWithRights(roles.getProperty("it.issue.create"));
-        log.warn("Projects with create issue permission:");
-        for (Project project : projects) {
-            log.info(project);
-        }
         for (Project p : projects) {
             modelsProjectMap.put(p, projectService.getProjectComponents(p));
             modelsProjectVersionsMap.put(p, projectService.getProjectVersions(p));
@@ -133,6 +148,9 @@ public class CreateIssue extends PageLayout {
         insertIssueForm = new Form("form") {
             @Override
             protected void onSubmit() {
+                if (!KeycloakAuthSession.isUserInRhelmRole(roles.getProperty("kc.user"))) {
+                    setResponsePage(AccessDenied.class);
+                }
                 FileUpload fileUpload = fileUploadField.getFileUpload();
                 if (fileUpload != null) {
                     File file = null;
@@ -145,35 +163,19 @@ public class CreateIssue extends PageLayout {
                     issue.setFileLocation(file.getAbsolutePath());
                 }
 
-//                if (issueService.getIssues().isEmpty()) {
                 if (statusService.getStatusByName("New") == null) {
                     statusService.insert(new Status("New"));
                 }
-//                    if (statusService.getStatusByName("Modified") == null) {
-//                        Status modifiedStatus = new Status("Modified");
-//                        statusService.insert(modifiedStatus);
-//                    }
-//                    if (statusService.getStatusByName("Closed") == null) {
-//                        Status closedStatus = new Status("Closed");
-//                        statusService.insert(closedStatus);
-//                    }
-//                }
                 issue.setStatus(statusService.getStatusByName("New"));
                 issue.setProject(selectedProject);
                 issue.setCustomFields(cfIssueValues);
-                if (isSignedIn()) {
-                    issue.setCreator(getIDToken().getPreferredUsername());
-                } else {
-                    issue.setCreator("");
-                }
+                issue.setCreator(getIDToken().getPreferredUsername());
                 issueService.create(issue);
-//                issueList = issueService.getIssues();
                 if (issue.getId() != null) { // if insert doesn't happen from any reason: 
                     PageParameters pageParameters = new PageParameters();
                     pageParameters.add("issue", issue.getId());
                     setResponsePage(IssueDetail.class, pageParameters);
                 }
-//                issue = new Issue();
             }
         };
         add(insertIssueForm);
@@ -184,9 +186,6 @@ public class CreateIssue extends PageLayout {
                 new ChoiceRenderer<Project>("name"));
         projectDropDown.setMarkupId("projectDD");
         projectDropDown.setNullValid(false);
-//        if (projectDropDown.getChoices().get(0) != null) {
-//            projectDropDown.setModelObject(projectDropDown.getChoices().get(0));
-//        }
         projectDropDown.setRequired(true);
         final DropDownChoice<Component> componentDropDown = new DropDownChoice<>(
                 "componentDropDown",

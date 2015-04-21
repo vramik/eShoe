@@ -10,4 +10,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(ElementType.CONSTRUCTOR)
 public @interface ViewPageConstraint {
     String allowedAction() default "";
+    String allowedRole() default "";
 }

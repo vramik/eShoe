@@ -236,17 +236,11 @@ public class PermissionDaoBean implements PermissionDao {
         }
         query.where(cb.and(
                 cb.equal(fromPermission.<Integer>get("typeId"), typeId.getValue()),
-                cb.equal(fromPermission.<Long>get("itemId"), itemId)//,
-//                cb.or(predicates.toArray(new Predicate[predicates.size()]))
+                cb.equal(fromPermission.<Long>get("itemId"), itemId),
+                cb.or(predicates.toArray(new Predicate[predicates.size()]))
         ));
         
         List<Permission> result = em.createQuery(query).getResultList();
-        
-        log.warn("@@@@@@@@@@@@@@@@@@@@@@@@@");
-        for (Permission p : result) {
-            log.warn(p);
-        }
-        
         if (result != null && !result.isEmpty()) {
             return result;
         } else {

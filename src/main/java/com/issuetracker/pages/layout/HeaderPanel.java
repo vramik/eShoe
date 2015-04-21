@@ -1,5 +1,6 @@
 package com.issuetracker.pages.layout;
 
+import com.issuetracker.model.TypeId;
 import com.issuetracker.pages.issue.SearchIssues;
 import com.issuetracker.pages.workflow.CreateWorkflow;
 import com.issuetracker.pages.project.ListProjects;
@@ -9,11 +10,14 @@ import com.issuetracker.pages.issuetype.CreateIssueType;
 import com.issuetracker.pages.*;
 import com.issuetracker.pages.issue.CreateIssue;
 import com.issuetracker.pages.fulltext.FulltextSearch;
+import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.*;
+import com.issuetracker.web.security.KeycloakAuthSession;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.inject.Inject;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -31,13 +35,14 @@ import org.keycloak.util.KeycloakUriBuilder;
 
 public class HeaderPanel extends Panel {
 
+    @Inject SecurityService securityService;
     private String selected;
     private final Label usernameLabel;
     private IDToken idToken;
     
     private final WebMarkupContainer workflowUl;
     private final WebMarkupContainer importUl;
-    private final WebMarkupContainer permissionsUl;
+    private final WebMarkupContainer adminConsoleUl;
     
     private final Link<String> signOutLink;
     private final Link<String> signInLink;
@@ -45,33 +50,38 @@ public class HeaderPanel extends Panel {
     private final List<String> optsIssue;
     public final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
 
-    //TODO not signedIn but roles
+    private final boolean signedIn = isSignedIn();
+    
+    List<String> permittedActions = new ArrayList<>();
+    
     @Override
     public void onConfigure() {
         super.onConfigure();
         
-        signInLink.setVisible(!isSignedIn());
-        usernameLabel.setVisible(isSignedIn());
-        signOutLink.setVisible(isSignedIn());
-        workflowUl.setVisible(isSignedIn());
-        importUl.setVisible(isSignedIn());
-        permissionsUl.setVisible(isSignedIn());
-        System.out.println("HeaderPanel: TODO");
+        signInLink.setVisible(!signedIn);
+        signOutLink.setVisible(signedIn);
+        usernameLabel.setVisible(signedIn);
+        adminConsoleUl.setVisible(signedIn);
+        
+        workflowUl.setVisible(permittedActions.contains(roles.getProperty("it.workflow")));
+        importUl.setVisible(permittedActions.contains(roles.getProperty("it.import")));
     }
     
-    //TODO not signed in but roles
     @Override
     public void onBeforeRender() {
-        if (!isSignedIn()) {
+        if (!permittedActions.contains(roles.getProperty("it.project.create"))) {
             optsProject.remove("Create Project");
-            optsIssue.remove("Create Issue");
-            optsIssue.remove("Insert Types of Issue");
+        }
+        if (!permittedActions.contains(roles.getProperty("it.issue.type"))) {
+            optsIssue.remove("Issue Types");
         }
         super.onBeforeRender();
     }
     
     public HeaderPanel(String id) {
         super(id);
+        
+        permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.global, 0L);
         
         add(feedbackPanel);
         
@@ -92,7 +102,7 @@ public class HeaderPanel extends Panel {
 
         String username = "";
         idToken = getIDToken();
-        if (isSignedIn()) {
+        if (signedIn) {
             username = "idToken.getName(): " + idToken.getName() + ", idToken.getEmail(): " + idToken.getEmail() 
                     + ", rhelm roles: " + getUserRhelmRoles();
             Map<String, AccessToken.Access> resourceAccess = getKeycloakSecurityContext().getToken().getResourceAccess();
@@ -143,8 +153,8 @@ public class HeaderPanel extends Panel {
         List<String> optsImport = new ArrayList<>();
         optsImport.add("Import");
         
-        List<String> optsPermissions = new ArrayList<>();
-        optsPermissions.add("Permissions");
+        List<String> optsProfile = new ArrayList<>();
+        optsProfile.add("Profile");
             
         add(new PropertyListView<String>("projectTasks", optsProject) {
             @Override
@@ -236,24 +246,32 @@ public class HeaderPanel extends Panel {
         });
         add(importUl);
         
-        permissionsUl = new WebMarkupContainer("permissionsUl");
-        permissionsUl.add(new Label("permissionsLabel", "Permissions"));
-        permissionsUl.add(new PropertyListView<String>("permissionsTasks", optsPermissions) {
+        final String redirectPage;
+        final String linkName;
+        if (KeycloakAuthSession.isUserInAppRole("kc.admin")) {
+            redirectPage = SERVER_URL + "/auth/admin/" + RHELM_NAME + "/console";
+            linkName = "Admin Console";
+        } else {
+            redirectPage = SERVER_URL + "/auth/realms/" + RHELM_NAME + "/account";
+            linkName = "Profile";
+        }
+        adminConsoleUl = new WebMarkupContainer("adminConsoleUl");
+        adminConsoleUl.add(new Label("adminConsoleLabel", linkName));
+        adminConsoleUl.add(new PropertyListView<String>("profile", optsProfile) {
             @Override
             protected void populateItem(ListItem<String> listItem) {
                 Link nameLink = new Link<String>("actionLink", listItem.getModel()) {
                     @Override
                     public void onClick() {
-//                        setResponsePage(Permissions.class);
-                        setResponsePage(new RedirectPage(SERVER_URL + "/auth/admin/" + RHELM_NAME + "/console"));
+                        setResponsePage(new RedirectPage(redirectPage));
                     }
                 };
-                nameLink.add(new Label("name", "Permissions"));
+                nameLink.add(new Label("name", linkName));
                 nameLink.add(new AttributeModifier("target", "_blank"));
                 listItem.add(nameLink);
             }
         });
-        add(permissionsUl);
+        add(adminConsoleUl);
     }
 
     public String getSelected() {

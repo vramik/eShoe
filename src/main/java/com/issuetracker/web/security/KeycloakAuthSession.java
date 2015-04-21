@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.jboss.resteasy.logging.Logger;
 import org.keycloak.KeycloakSecurityContext;
+import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.IDToken;
 
 /**
@@ -57,7 +58,11 @@ public class KeycloakAuthSession {
     
     public static Set<String> getUserAppRoles() {
         if (isSignedIn()) {
-            return getKeycloakSecurityContext().getToken().getResourceAccess().get(Constants.RHELM_NAME).getRoles();
+            AccessToken.Access get = getKeycloakSecurityContext().getToken().getResourceAccess().get(Constants.RHELM_NAME);
+            if (get == null) {
+                return new HashSet<>();
+            }
+            return get.getRoles();
         } else {
             return new HashSet<>();
         }
@@ -75,8 +80,11 @@ public class KeycloakAuthSession {
     
     public static boolean isUserInAppRole(String roleKey) {
         if (isSignedIn()) {
-            String role = roles.getProperty(roleKey);
-            return getKeycloakSecurityContext().getToken().getResourceAccess().get(Constants.RHELM_NAME).isUserInRole(role);
+            AccessToken.Access get = getKeycloakSecurityContext().getToken().getResourceAccess().get(Constants.RHELM_NAME);
+            if (get == null) {
+                return false;
+            } 
+            return get.isUserInRole(roles.getProperty(roleKey));
         } else {
             return false;
         }

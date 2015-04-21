@@ -42,7 +42,7 @@
     </login-config>
     
     <security-role>
-        <role-name>SignedIn</role-name>
+        <role-name>User</role-name>
     </security-role>
     
     <security-constraint>
@@ -52,18 +52,9 @@
             <url-pattern>/login/*</url-pattern>
         </web-resource-collection>
         <auth-constraint>
-            <role-name>SignedIn</role-name>
+            <role-name>User</role-name>
         </auth-constraint>
     </security-constraint>
     
-    <!--    <error-page>
-        <error-code>400</error-code>
-        <location>/home</location>
-    </error-page>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/home</location>
-    </error-page>-->
-
 </web-app>
 

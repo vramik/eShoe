@@ -9,10 +9,12 @@ import com.issuetracker.pages.component.customFieldIssueValue.CustomFieldIssueVa
 import com.issuetracker.pages.component.issue.IssueRelationsListView;
 import com.issuetracker.pages.component.issue.SetIssueStateForm;
 import com.issuetracker.pages.layout.ModalPanel1;
+import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.pages.permissions.IssuePermission;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
+import static com.issuetracker.web.Constants.roles;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -31,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.util.string.StringValue;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -38,6 +41,8 @@ import org.apache.wicket.util.string.StringValue;
  */
 public class IssueDetail extends PageLayout {
 
+    private final Logger log = Logger.getLogger(IssueDetail.class);
+    
     @Inject
     private IssueService issueService;
     @Inject
@@ -61,16 +66,22 @@ public class IssueDetail extends PageLayout {
     public IssueDetail(PageParameters parameters) {
         StringValue stringIssueId = parameters.get("issue");
         if (stringIssueId.equals(StringValue.valueOf((String)null))) {
+            log.warn("Page parameters doesn't contain issue id. Redirecting to Home page.");
             throw new RedirectToUrlException(HOME_PAGE);
         }
         Long issueId = stringIssueId.toLong();
-        
-        permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.issue, issueId);
-        
         issue = issueService.getIssueById(issueId);
+        
         if (issue == null) {
+            log.warn("Issue with given id doesn't exist. Redirecting to Home page.");
             throw new RedirectToUrlException(HOME_PAGE);
         }
+        permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.issue, issueId);
+        
+        if (!permittedActions.contains(roles.getProperty("it.issue.browse"))) {
+            setResponsePage(AccessDenied.class);
+        } 
+        
         watchersList = issueService.getIssueWatchers(issue);
         
         customField = new CustomField();
