@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.criteria.Predicate;
 import org.jboss.logging.Logger;
 
@@ -99,6 +100,28 @@ public class ActionDaoBean implements ActionDao {
         query.select(fromAction).where(cb.or(predicates));
         
         List<Action> results = em.createQuery(query).getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<String> getActionNamesByIds(Set<Long> actionIds) {
+        cb = em.getCriteriaBuilder();
+        
+        CriteriaQuery<String> query = cb.createQuery(String.class);
+        
+        Root<Action> fromAction = query.from(Action.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        for (Long actionId : actionIds) {
+            predicates.add(cb.equal(fromAction.<Long>get("id"), actionId));
+        }
+        query.select(fromAction.<String>get("name")).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+        
+        List<String> results = em.createQuery(query).getResultList();
         if (results != null && !results.isEmpty()) {
             return results;
         } else {

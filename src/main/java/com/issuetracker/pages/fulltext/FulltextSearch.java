@@ -85,7 +85,7 @@ public class FulltextSearch extends PageLayout {
                 computeQuery();
 
                 String query = advancedSearchEnabled ? queryInput : queryBuilder.getQuery();
-                issues = searchService.search(query);
+                issues = issueService.getDisplayableIssues(searchService.search(query));
             }
         };
 

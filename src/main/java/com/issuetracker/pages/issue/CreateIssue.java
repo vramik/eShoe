@@ -54,7 +54,7 @@ public class CreateIssue extends PageLayout {
     private CreateIssueCustomFIeldsListView cfListView;
     private List<CustomFieldIssueValue> cfIssueValues;
 
-    @ViewPageConstraint(allowedRole = "kc.issue.create")
+    @ViewPageConstraint(allowedAction = "kc.issue.create")
     public CreateIssue() {
 //        issueList = new ArrayList<>();
         List<Project> projects = projectService.getProjectsWithRights(roles.getProperty("it.issue.create"));

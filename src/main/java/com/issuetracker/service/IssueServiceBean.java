@@ -7,11 +7,11 @@ import com.issuetracker.service.api.ActionService;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.PermissionService;
 import com.issuetracker.service.api.RoleService;
+import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.security.KeycloakAuthSession;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -97,27 +97,7 @@ public class IssueServiceBean implements IssueService, Serializable {
     public List<Issue> getIssuesBySearch(Project project, List<ProjectVersion> affectedVersions,
             Component component, List<IssueType> issueTypes, List<Status> statusList, String nameContainsText) {
         
-        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
-        
-        List<Issue> issues = new ArrayList<>();
-        Action action = actionService.getActionByNameAndType(roles.getProperty("it.issue.browse"), TypeId.issue);
-        
-        for (Issue issue : issueDao.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, nameContainsText)) {
-            
-            List<Permission> permissions = permissionService.getPermissionsByAction(TypeId.issue, issue.getId(), action.getId());
-            
-            if (permissions.isEmpty()) {
-                permissions = permissionService.getPermissionsByTypeAndAction(TypeId.global, action.getId());
-                permissions.addAll(permissionService.getPermissionsByAction(TypeId.project, issue.getProject().getId(), action.getId()));
-            }
-            for (Permission p : permissions) {
-                if (userRolesIds.contains(p.getRoleId())) {
-                    issues.add(issue);
-                    break;
-                }
-            }
-        } 
-        return issues;
+        return getDisplayableIssues(issueDao.getIssuesBySearch(project, affectedVersions, component, issueTypes, statusList, nameContainsText));
     }
 
     @Override
@@ -144,5 +124,29 @@ public class IssueServiceBean implements IssueService, Serializable {
             }
         } 
         return comments;
+    }
+    
+    @Override
+    public List<Issue> getDisplayableIssues(List<Issue> issues) {
+        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
+        
+        List<Issue> result = new ArrayList<>();
+        Action action = actionService.getActionByNameAndType(roles.getProperty("it.issue.browse"), TypeId.issue);
+        
+        for (Issue issue : issues) {
+            List<Permission> permissions = permissionService.getPermissionsByAction(TypeId.issue, issue.getId(), action.getId());
+            
+            if (permissions.isEmpty()) {
+                permissions = permissionService.getPermissionsByTypeAndAction(TypeId.global, action.getId());
+                permissions.addAll(permissionService.getPermissionsByAction(TypeId.project, issue.getProject().getId(), action.getId()));
+            }
+            for (Permission p : permissions) {
+                if (userRolesIds.contains(p.getRoleId())) {
+                    result.add(issue);
+                    break;
+                }
+            }
+        }
+        return result;
     }
 }

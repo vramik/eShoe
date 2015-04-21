@@ -3,12 +3,16 @@ package com.issuetracker.pages.transition;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.Status;
 import com.issuetracker.model.Transition;
+import static com.issuetracker.model.TypeId.global;
 import com.issuetracker.model.Workflow;
+import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.pages.workflow.WorkflowDetail;
+import com.issuetracker.service.api.SecurityService;
 import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.TransitionService;
 import com.issuetracker.service.api.WorkflowService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
+import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -40,8 +44,10 @@ public class AddTransition extends PageLayout {
     private StatusService statusService;
     @Inject
     private TransitionService transitionService;
+    @Inject
+    private SecurityService securityService;
 
-    @ViewPageConstraint(allowedRole = "workflow")
+    @ViewPageConstraint(allowedAction = "it.workflow")
     public AddTransition(PageParameters parameters) {
         StringValue nullSV = StringValue.valueOf((String)null);
         StringValue statusId = parameters.get("status");
@@ -59,6 +65,9 @@ public class AddTransition extends PageLayout {
         Form<Status> editStatusForm = new Form<Status>("addTransitionForm") {
             @Override
             protected void onSubmit() {
+                if (!securityService.canUserPerformAction(global, 0L, roles.getProperty("it.workflow"))) {
+                    setResponsePage(AccessDenied.class);
+                }
                 transition.setFromStatus(fromStatus);
                 transitionService.insert(transition);
                 List<Transition> transitions = workflow.getTransitions();

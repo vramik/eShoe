@@ -32,9 +32,9 @@ public interface ProjectDao {
     
     boolean isProjectNameInUse(String projectName);
 
-    List<Project> getProjectsByWorkflow(Workflow workflow);
-
     List<Project> getProjectsByIds(Set<Long> projectIds);
 
     Set<Long> getProjectsIDs();
+
+    List<Project> getProjectsByIdsAndWorkflow(Workflow workflow, Set<Long> projetsIdsWithRights);
 }

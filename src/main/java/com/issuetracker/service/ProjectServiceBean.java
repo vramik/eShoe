@@ -56,52 +56,12 @@ public class ProjectServiceBean implements ProjectService, Serializable {
 
     @Override
     public List<Project> getDisplayableProjects() {
-        Set<String> userRoles = KeycloakAuthSession.getUserRhelmRoles();
-        
-        Action action = actionService.getActionByNameAndType(roles.getProperty("it.project.browse"), TypeId.project);
-        
-        List<Permission> projectPermissions = permissionService.getPermissionsByTypeAndAction(TypeId.project, action.getId());
-        Set<Long> allProjectIDs = projectDao.getProjectsIDs();
-
-        Set<Long> resultProjectIds = new HashSet<>();
-        for (Permission permission : projectPermissions) {
-            allProjectIDs.remove(permission.getItemId());
-            if (userRoles.contains(roleService.getRoleById(permission.getRoleId()).getName())) {
-                resultProjectIds.add(permission.getItemId());
-            }
-        }
-
-        List<Permission> globalPermissions = permissionService.getPermissionsByAction(TypeId.global, 0L, action.getId());
-        for (Permission globalPermission : globalPermissions) {
-            if (userRoles.contains(roleService.getRoleById(globalPermission.getRoleId()).getName())) {
-                resultProjectIds.addAll(allProjectIDs);
-                break;
-            }
-        }
-        return projectDao.getProjectsByIds(resultProjectIds);
+        return projectDao.getProjectsByIds(getDisplayableProjectIds());
     }
     
     @Override
     public List<Project> getProjectsWithRights(String actionName) {
-        Set<String> userRoles = KeycloakAuthSession.getUserRhelmRoles();
-        
-        Action action = actionService.getActionByNameAndType(actionName, TypeId.project);
-        
-        List<Permission> globalPermissions = permissionService.getPermissionsByAction(TypeId.global, 0L, action.getId());
-        for (Permission globalPermission : globalPermissions) {
-            if (userRoles.contains(roleService.getRoleById(globalPermission.getRoleId()).getName())) {
-                return getDisplayableProjects();
-            }
-        }
-        
-        List<Permission> projectPermissions = permissionService.getPermissionsByTypeAndAction(TypeId.project, action.getId());
-        Set<Long> projectIds = new HashSet<>();
-        for (Permission projectPermission : projectPermissions) {
-            if (userRoles.contains(roleService.getRoleById(projectPermission.getRoleId()).getName())) {
-                projectIds.add(projectPermission.getItemId());
-            }
-        }
-        return projectDao.getProjectsByIds(projectIds);
+        return projectDao.getProjectsByIds(getProjetsIdsWithRights(actionName));
     }
 
     @Override
@@ -126,6 +86,54 @@ public class ProjectServiceBean implements ProjectService, Serializable {
 
     @Override
     public List<Project> getProjectsByWorkflow(Workflow workflow) {
-        return projectDao.getProjectsByWorkflow(workflow);
+        return projectDao.getProjectsByIdsAndWorkflow(workflow, getProjetsIdsWithRights(roles.getProperty("it.project.workflow")));
+    }
+    
+    private Set<Long> getProjetsIdsWithRights(String actionName) {
+        Set<String> userRoles = KeycloakAuthSession.getUserRhelmRoles();
+        
+        Action action = actionService.getActionByNameAndType(actionName, TypeId.project);
+        
+        List<Permission> globalPermissions = permissionService.getPermissionsByAction(TypeId.global, 0L, action.getId());
+        for (Permission globalPermission : globalPermissions) {
+            if (userRoles.contains(roleService.getRoleById(globalPermission.getRoleId()).getName())) {
+                return getDisplayableProjectIds();
+            }
+        }
+        
+        List<Permission> projectPermissions = permissionService.getPermissionsByTypeAndAction(TypeId.project, action.getId());
+        Set<Long> projectIds = new HashSet<>();
+        for (Permission projectPermission : projectPermissions) {
+            if (userRoles.contains(roleService.getRoleById(projectPermission.getRoleId()).getName())) {
+                projectIds.add(projectPermission.getItemId());
+            }
+        }
+        return projectIds;
+    }
+    
+    private Set<Long> getDisplayableProjectIds() {
+        Set<String> userRoles = KeycloakAuthSession.getUserRhelmRoles();
+        
+        Action action = actionService.getActionByNameAndType(roles.getProperty("it.project.browse"), TypeId.project);
+        
+        List<Permission> projectPermissions = permissionService.getPermissionsByTypeAndAction(TypeId.project, action.getId());
+        Set<Long> allProjectIDs = projectDao.getProjectsIDs();
+
+        Set<Long> resultProjectIds = new HashSet<>();
+        for (Permission permission : projectPermissions) {
+            allProjectIDs.remove(permission.getItemId());
+            if (userRoles.contains(roleService.getRoleById(permission.getRoleId()).getName())) {
+                resultProjectIds.add(permission.getItemId());
+            }
+        }
+
+        List<Permission> globalPermissions = permissionService.getPermissionsByAction(TypeId.global, 0L, action.getId());
+        for (Permission globalPermission : globalPermissions) {
+            if (userRoles.contains(roleService.getRoleById(globalPermission.getRoleId()).getName())) {
+                resultProjectIds.addAll(allProjectIDs);
+                break;
+            }
+        }
+        return resultProjectIds;
     }
 }

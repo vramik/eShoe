@@ -3,6 +3,7 @@ package com.issuetracker.dao.api;
 import com.issuetracker.model.Action;
 import com.issuetracker.model.TypeId;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -23,5 +24,7 @@ public interface ActionDao {
     List<Action> getActions();
 
     List<Action> getActionsByTypes(TypeId... typeIds);
+
+    List<String> getActionNamesByIds(Set<Long> actionIds);
     
 }

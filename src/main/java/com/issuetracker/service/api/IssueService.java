@@ -37,4 +37,6 @@ public interface IssueService {
     List<String> getIssueWatchers(Issue issue);
     
     List<Comment> getDisplayableComments(Issue issue);
+    
+    List<Issue> getDisplayableIssues(List<Issue> search);
 }

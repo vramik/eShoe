@@ -6,6 +6,7 @@ import com.issuetracker.model.PermissionId;
 import com.issuetracker.model.TypeId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -215,6 +216,37 @@ public class PermissionDaoBean implements PermissionDao {
         ));
         
         List<Permission> result = em.createQuery(query).getResultList();
+        if (result != null && !result.isEmpty()) {
+            return result;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<Permission> getPermissions(TypeId typeId, Long itemId, Set<Long> userRolesIds) {
+        cb = em.getCriteriaBuilder();
+        
+        CriteriaQuery<Permission> query = cb.createQuery(Permission.class);
+        Root<Permission> fromPermission = query.from(Permission.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        for (Long userRoleId : userRolesIds) {
+            predicates.add(cb.equal(fromPermission.<Long>get("roleId"), userRoleId));
+        }
+        query.where(cb.and(
+                cb.equal(fromPermission.<Integer>get("typeId"), typeId.getValue()),
+                cb.equal(fromPermission.<Long>get("itemId"), itemId)//,
+//                cb.or(predicates.toArray(new Predicate[predicates.size()]))
+        ));
+        
+        List<Permission> result = em.createQuery(query).getResultList();
+        
+        log.warn("@@@@@@@@@@@@@@@@@@@@@@@@@");
+        for (Permission p : result) {
+            log.warn(p);
+        }
+        
         if (result != null && !result.isEmpty()) {
             return result;
         } else {

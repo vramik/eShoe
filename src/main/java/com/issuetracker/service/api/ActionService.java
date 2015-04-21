@@ -3,6 +3,7 @@ package com.issuetracker.service.api;
 import com.issuetracker.model.Action;
 import com.issuetracker.model.TypeId;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -21,4 +22,6 @@ public interface ActionService {
     List<Action> getActions();
 
     List<Action> getActionsByType(TypeId typeId);
+    
+    List<String> getActionNamesByIds(Set<Long> actionIds);
 }

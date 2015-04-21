@@ -7,6 +7,7 @@ import static com.issuetracker.model.TypeId.*;
 import com.issuetracker.service.api.ActionService;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -66,5 +67,10 @@ public class ActionServiceBean implements ActionService, Serializable {
             default:
                 throw new IllegalStateException("Reached unreacheable state.");
         }
+    }
+
+    @Override
+    public List<String> getActionNamesByIds(Set<Long> actionIds) {
+        return actionDao.getActionNamesByIds(actionIds);
     }
 }

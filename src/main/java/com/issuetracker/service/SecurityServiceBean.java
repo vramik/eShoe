@@ -1,15 +1,22 @@
 package com.issuetracker.service;
 
+import com.issuetracker.model.Action;
 import com.issuetracker.model.Issue;
 import com.issuetracker.model.Permission;
-import com.issuetracker.model.Project;
 import com.issuetracker.model.TypeId;
+import com.issuetracker.service.api.ActionService;
+import com.issuetracker.service.api.IssueService;
+import com.issuetracker.service.api.PermissionService;
+import com.issuetracker.service.api.RoleService;
 import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.security.KeycloakAuthSession;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import org.jboss.logging.Logger;
 
 /**
@@ -21,57 +28,41 @@ public class SecurityServiceBean implements SecurityService {
 
     private final Logger log = Logger.getLogger(SecurityServiceBean.class);
     
-//    @Override
-    public boolean canUserPerformIssueAction(Issue issue, String action) {
-        
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-//    @Override
-    public boolean canUserPerformProjectAction(Project project, String action) {
-        log.warn("TODO: can user do everything with project if he is the owner?");
-        if (KeycloakAuthSession.isSignedIn() && project.getOwner().equals(KeycloakAuthSession.getIDToken().getPreferredUsername())) {//if user is owner of the project
-            return true;
-        }
-        
-        Permission permission = null;
-//        for (Permission projectPermission : project.getPermissions()) {
-//            log.info("action: " + action + ", permission: " + projectPermission);
-//            if (as
-//        }
-        if (permission == null) {
-            return false;
-        }
-//        log.info("related Permission: " + permission + ", roles: " + permission.getRoles());
-        
-        boolean allowed = false;
-//        for (String allowedRole : permission.getRoles()) {
-//            allowed = KeycloakAuthSession.isUserInRhelmRole(allowedRole);
-//            if (allowed) {
-//                break;
-//            }
-//        }
-        return allowed;
-    }
-
+    @Inject private PermissionService permissionService;
+    @Inject private RoleService roleService;
+    @Inject private ActionService actionService;
+    @Inject private IssueService issueService;
+    
     @Override
     public List<String> getPermittedActionsForUserAndItem(TypeId typeId, Long itemId) {
-        log.error("TODO getPermittedActionsForUserAndItem");
-        List<String> result = new ArrayList<>();
-        result.add(roles.getProperty("it.project.rename"));
-        result.add(roles.getProperty("it.project.versions"));
-        result.add(roles.getProperty("it.project.components"));
-        result.add(roles.getProperty("it.project.custom.fields"));
-        result.add(roles.getProperty("it.project.permissions"));
-        result.add(roles.getProperty("it.project.delete"));
+        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
+        Set<Long> actionIds = new HashSet<>();
         
-        return result;
+        List<Permission> hierarchyPermissions = permissionService.getPermissions(TypeId.global, 0L, userRolesIds);
+        switch (typeId) {
+            case global:
+                break;
+            case project:
+                hierarchyPermissions.addAll(permissionService.getPermissions(TypeId.project, itemId, userRolesIds));
+                break;
+            case issue:
+                Issue issue = issueService.getIssueById(itemId);
+                hierarchyPermissions.addAll(permissionService.getPermissions(TypeId.project, issue.getProject().getId(), userRolesIds));
+                hierarchyPermissions.addAll(permissionService.getPermissions(TypeId.issue, issue.getId(), userRolesIds));
+            default:
+                throw new IllegalStateException("Unreacheble state was reached");
+                
+        }
+        for (Permission p : hierarchyPermissions) {
+            log.warn(p);
+            actionIds.add(p.getActionId());
+        }
+        return actionService.getActionNamesByIds(actionIds);
     }
 
     @Override
     public boolean canUserPerformAction(TypeId typeId, Long itemId, String action) {
-        log.error("TODO canUserPerformAction");
-        return true;
+        return getPermittedActionsForUserAndItem(typeId, itemId).contains(action);
     }
-    
+
 }

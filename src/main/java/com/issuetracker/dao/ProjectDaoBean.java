@@ -134,22 +134,6 @@ public class ProjectDaoBean implements ProjectDao {
     }
 
     @Override
-    public List<Project> getProjectsByWorkflow(Workflow workflow) {
-        cb = em.getCriteriaBuilder();
-        CriteriaQuery<Project> projectQuery = cb.createQuery(Project.class);
-        Root<Project> p = projectQuery.from(Project.class);
-        Predicate pCondition = cb.equal(p.get("workflow"), workflow.getId());
-        projectQuery.where(pCondition);
-        TypedQuery<Project> pQuery = em.createQuery(projectQuery);
-        List<Project> results = pQuery.getResultList();
-        if (results != null && !results.isEmpty()) {
-            return results;
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    @Override
     public List<Project> getProjectsByIds(Set<Long> projectIds) {
         cb = em.getCriteriaBuilder();
         CriteriaQuery<Project> projectQuery = cb.createQuery(Project.class);
@@ -181,6 +165,29 @@ public class ProjectDaoBean implements ProjectDao {
             return new HashSet<>(resultList);
         } else {
             return new HashSet<>();
+        }
+    }
+
+    @Override
+    public List<Project> getProjectsByIdsAndWorkflow(Workflow workflow, Set<Long> projetsIdsWithRights) {
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> projectQuery = cb.createQuery(Project.class);
+        Root<Project> p = projectQuery.from(Project.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        for (Long projetsId : projetsIdsWithRights) {
+            predicates.add(cb.equal(p.<Long>get("id"), projetsId));
+        }
+        projectQuery.where(cb.and(
+                    cb.equal(p.get("workflow"), workflow.getId()),
+                    cb.or(predicates.toArray(new Predicate[predicates.size()]))
+                ));
+        TypedQuery<Project> pQuery = em.createQuery(projectQuery);
+        List<Project> results = pQuery.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        } else {
+            return new ArrayList<>();
         }
     }
 }

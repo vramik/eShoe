@@ -89,10 +89,10 @@ public class RoleDaoBean implements RoleDao {
         
         List<Predicate> predicates = new ArrayList<>();
         for (String roleName : roleNames) {
-            predicates.add(cb.equal(fromRole.get("name"), roleName));
+            predicates.add(cb.equal(fromRole.<String>get("name"), roleName));
         }
         roleQuery.select(fromRole.<Long>get("id"));
-        roleQuery.where(predicates.toArray(new Predicate[predicates.size()]));
+        roleQuery.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
         List<Long> resultList = em.createQuery(roleQuery).getResultList();
         if (resultList != null && !resultList.isEmpty()) {
             return new HashSet<>(resultList);

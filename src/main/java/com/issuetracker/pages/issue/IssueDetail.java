@@ -137,18 +137,19 @@ public class IssueDetail extends PageLayout {
         addWatcherLink = new IndicatingAjaxLink("addWatcherLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {                
-                target.add(watchersCountLabel);
-                watchersList.add(getIDToken().getPreferredUsername());
-                watchersCount++;
-                issue.setWatchers(watchersList);
-                issueService.addWatcher(issue);
-//                issueService.update(issue);
-
-//                target.add(modal2);
-                modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));
-                try {
+                
+                if (isSignedIn() && !watchersList.contains(getIDToken().getPreferredUsername())) {
+                    target.add(watchersCountLabel);
+                    watchersList.add(getIDToken().getPreferredUsername());
+                    watchersCount++;
+                    issue.setWatchers(watchersList);
+                    issueService.addWatcher(issue);
+                    modal2.setContent(new ModalPanel1(modal2.getContentId(), watchersModel));
+                                    try {
                     Thread.sleep(2000);
-                } catch (InterruptedException e) {
+                    } catch (InterruptedException e) {
+                    }
+
                 }
             }
         };

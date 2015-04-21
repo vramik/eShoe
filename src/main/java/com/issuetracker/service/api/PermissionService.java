@@ -3,6 +3,7 @@ package com.issuetracker.service.api;
 import com.issuetracker.model.Permission;
 import com.issuetracker.model.TypeId;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -21,5 +22,7 @@ public interface PermissionService {
     List<Permission> getPermissionsByTypeAndAction(TypeId typeId, Long actionId);
     
     List<Permission> getPermissions(Long actionId, Long roleId, TypeId... typeIds);
+
+    List<Permission> getPermissions(TypeId typeId, Long itemId, Set<Long> userRolesIds);
 
 }

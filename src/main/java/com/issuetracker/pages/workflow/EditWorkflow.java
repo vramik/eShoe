@@ -2,8 +2,13 @@ package com.issuetracker.pages.workflow;
 
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.Project;
+import static com.issuetracker.model.TypeId.global;
 import com.issuetracker.model.Workflow;
+import com.issuetracker.pages.permissions.AccessDenied;
+import com.issuetracker.service.api.SecurityService;
 import com.issuetracker.service.api.WorkflowService;
+import static com.issuetracker.web.Constants.roles;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -27,11 +32,17 @@ public class EditWorkflow extends PageLayout {
     private Workflow workflow;
     @Inject
     private WorkflowService workflowService;
+    @Inject
+    private SecurityService securityService;
 
+    @ViewPageConstraint(allowedAction = "it.workflow")
     public EditWorkflow() {
         searchWorkflowForm = new Form("form") {
             @Override
             protected void onSubmit() {
+                if (!securityService.canUserPerformAction(global, 0L, roles.getProperty("it.workflow"))) {
+                    setResponsePage(AccessDenied.class);
+                }
                 PageParameters parameters = new PageParameters();
                 parameters.add("workflow", workflow.getId());
                 setResponsePage(WorkflowDetail.class, parameters);

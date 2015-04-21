@@ -11,6 +11,7 @@ import com.issuetracker.service.api.ActionService;
 import com.issuetracker.service.api.PermissionService;
 import com.issuetracker.service.api.RoleService;
 import java.util.List;
+import java.util.Set;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.jboss.logging.Logger;
@@ -155,6 +156,11 @@ public class PermissionServiceBean implements PermissionService {
     @Override
     public List<Permission> getPermissionsByTypeAndAction(TypeId typeId, Long actionId) {
         return permissionDao.getPermissionsByTypeAndAction(typeId, actionId);
+    }
+
+    @Override
+    public List<Permission> getPermissions(TypeId typeId, Long itemId, Set<Long> userRolesIds) {
+        return permissionDao.getPermissions(typeId, itemId, userRolesIds);
     }
 
 }

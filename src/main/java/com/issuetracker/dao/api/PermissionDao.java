@@ -3,6 +3,7 @@ package com.issuetracker.dao.api;
 import com.issuetracker.model.Permission;
 import com.issuetracker.model.TypeId;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -27,5 +28,7 @@ public interface PermissionDao {
     Permission getPermission(TypeId typeId, Long itemId, Long roleId, Long actionId);
 
     List<Permission> getPermissionsByAction(TypeId typeId, Long itemId, Long actionId);
+
+    List<Permission> getPermissions(TypeId typeId, Long itemId, Set<Long> userRolesIds);
     
 }

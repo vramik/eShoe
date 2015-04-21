@@ -9,6 +9,7 @@ import static com.issuetracker.model.TypeId.global;
 import com.issuetracker.pages.component.component.ComponentListView;
 import com.issuetracker.pages.component.customField.CustomFieldListView;
 import com.issuetracker.pages.component.version.VersionListView;
+import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.pages.validator.ProjectNameValidator;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.SecurityService;
@@ -43,7 +44,7 @@ public class CreateProject extends PageLayout {
     private ProjectService projectService;
     @Inject
     private SecurityService securityService;
-                
+
     private final WebMarkupContainer wmcVersion, wmcComponent, wmcCustomField;
     private List<ProjectVersion> projectVersionList;
     private List<Component> componentList;
@@ -52,7 +53,7 @@ public class CreateProject extends PageLayout {
     
     private Project project = new Project();
  
-    @ViewPageConstraint(allowedRole = "kc.project.create")
+    @ViewPageConstraint(allowedAction = "it.project.create")
     public CreateProject() {
         projectVersionList = new ArrayList<>();
         componentList = new ArrayList<>();
@@ -62,19 +63,18 @@ public class CreateProject extends PageLayout {
         Form<Project> insertProjectForm = new Form<Project>("insertProjectForm") {
             @Override
             protected void onSubmit() {
-                if (securityService.canUserPerformAction(global, null, roles.getProperty("it.project.create"))) {
-                    project.setVersions(projectVersionList);
-                    project.setComponents(componentList);
-                    project.setCustomFields(customFieldList);
-                    project.setOwner(getIDToken().getPreferredUsername());
-                    projectService.insert(project);
-                    
-                    PageParameters pageParameters = new PageParameters();
-                    pageParameters.add("project", project.getId());
-                    setResponsePage(ProjectDetail.class, pageParameters);
-                } else {
-                    error("Unsuffitient privilages");
+                if (!securityService.canUserPerformAction(global, 0L, roles.getProperty("it.project.create"))) {
+                    setResponsePage(AccessDenied.class);
                 }
+                project.setVersions(projectVersionList);
+                project.setComponents(componentList);
+                project.setCustomFields(customFieldList);
+                project.setOwner(getIDToken().getPreferredUsername());
+                projectService.insert(project);
+
+                PageParameters pageParameters = new PageParameters();
+                pageParameters.add("project", project.getId());
+                setResponsePage(ProjectDetail.class, pageParameters);
             }
 
             @Override
