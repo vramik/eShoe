@@ -10,6 +10,7 @@ import com.issuetracker.pages.issuetype.CreateIssueType;
 import com.issuetracker.pages.*;
 import com.issuetracker.pages.issue.CreateIssue;
 import com.issuetracker.pages.fulltext.FulltextSearch;
+import com.issuetracker.pages.permissions.GlobalPermission;
 import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.*;
 import com.issuetracker.web.security.KeycloakAuthSession;
@@ -28,6 +29,7 @@ import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.jboss.logging.Logger;
 import org.keycloak.ServiceUrlConstants;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.IDToken;
@@ -35,6 +37,8 @@ import org.keycloak.util.KeycloakUriBuilder;
 
 public class HeaderPanel extends Panel {
 
+    private final Logger log = Logger.getLogger(HeaderPanel.class);
+    
     @Inject SecurityService securityService;
     private String selected;
     private final Label usernameLabel;
@@ -42,12 +46,13 @@ public class HeaderPanel extends Panel {
     
     private final WebMarkupContainer workflowUl;
     private final WebMarkupContainer importUl;
-    private final WebMarkupContainer adminConsoleUl;
+    private final WebMarkupContainer adminUl;
     
     private final Link<String> signOutLink;
     private final Link<String> signInLink;
     private final List<String> optsProject;
     private final List<String> optsIssue;
+    private final List<String> optsProfile;
     public final FeedbackPanel feedbackPanel = new FeedbackPanel("feedbackPanel");
 
     private final boolean signedIn = isSignedIn();
@@ -61,7 +66,7 @@ public class HeaderPanel extends Panel {
         signInLink.setVisible(!signedIn);
         signOutLink.setVisible(signedIn);
         usernameLabel.setVisible(signedIn);
-        adminConsoleUl.setVisible(signedIn);
+        adminUl.setVisible(signedIn);
         
         workflowUl.setVisible(permittedActions.contains(roles.getProperty("it.workflow")));
         importUl.setVisible(permittedActions.contains(roles.getProperty("it.import")));
@@ -75,6 +80,9 @@ public class HeaderPanel extends Panel {
         if (!permittedActions.contains(roles.getProperty("it.issue.type"))) {
             optsIssue.remove("Issue Types");
         }
+        if (!permittedActions.contains(roles.getProperty("it.permissions"))) {
+            optsProfile.remove("Permissions");
+        }
         super.onBeforeRender();
     }
     
@@ -82,6 +90,7 @@ public class HeaderPanel extends Panel {
         super(id);
         
         permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.global, 0L);
+//        log.info("Permitted actions: " + permittedActions);
         
         add(feedbackPanel);
         
@@ -104,7 +113,7 @@ public class HeaderPanel extends Panel {
         idToken = getIDToken();
         if (signedIn) {
             username = "idToken.getName(): " + idToken.getName() + ", idToken.getEmail(): " + idToken.getEmail() 
-                    + ", rhelm roles: " + getUserRhelmRoles();
+                    + ", rhelm roles: " + getUserRealmRoles();
             Map<String, AccessToken.Access> resourceAccess = getKeycloakSecurityContext().getToken().getResourceAccess();
             if (resourceAccess != null) {
                 if (null != resourceAccess.get(RHELM_NAME)) {
@@ -114,6 +123,7 @@ public class HeaderPanel extends Panel {
                     username = username.concat(", rhelm-management roles: " + resourceAccess.get("rhelm-management").getRoles());
                 }
             }
+            username = username.concat("; permittedActions: " + permittedActions);
         }
         
         usernameLabel = new Label("userName", username);
@@ -153,8 +163,9 @@ public class HeaderPanel extends Panel {
         List<String> optsImport = new ArrayList<>();
         optsImport.add("Import");
         
-        List<String> optsProfile = new ArrayList<>();
+        optsProfile = new ArrayList<>();
         optsProfile.add("Profile");
+        optsProfile.add("Permissions");
             
         add(new PropertyListView<String>("projectTasks", optsProject) {
             @Override
@@ -255,23 +266,28 @@ public class HeaderPanel extends Panel {
             redirectPage = SERVER_URL + "/auth/realms/" + RHELM_NAME + "/account";
             linkName = "Profile";
         }
-        adminConsoleUl = new WebMarkupContainer("adminConsoleUl");
-        adminConsoleUl.add(new Label("adminConsoleLabel", linkName));
-        adminConsoleUl.add(new PropertyListView<String>("profile", optsProfile) {
+        adminUl = new WebMarkupContainer("adminConsoleUl");
+        adminUl.add(new Label("adminConsoleLabel", linkName));
+        adminUl.add(new PropertyListView<String>("profile", optsProfile) {
             @Override
             protected void populateItem(ListItem<String> listItem) {
+                final String stringLink = listItem.getModelObject();
                 Link nameLink = new Link<String>("actionLink", listItem.getModel()) {
                     @Override
                     public void onClick() {
-                        setResponsePage(new RedirectPage(redirectPage));
+                        if (stringLink.equals("Permissions")) {
+                            setResponsePage(GlobalPermission.class);
+                        } else {
+                            setResponsePage(new RedirectPage(redirectPage));
+                        }
                     }
                 };
-                nameLink.add(new Label("name", linkName));
+                nameLink.add(new Label("name", stringLink));
                 nameLink.add(new AttributeModifier("target", "_blank"));
                 listItem.add(nameLink);
             }
         });
-        add(adminConsoleUl);
+        add(adminUl);
     }
 
     public String getSelected() {

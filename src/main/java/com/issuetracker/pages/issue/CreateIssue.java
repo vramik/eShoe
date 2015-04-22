@@ -8,12 +8,14 @@ import com.issuetracker.model.IssueType;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.ProjectVersion;
 import com.issuetracker.model.Status;
+import com.issuetracker.model.TypeId;
 import com.issuetracker.pages.component.issue.CreateIssueCustomFIeldsListView;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.IssueTypeService;
 import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.SecurityService;
 import com.issuetracker.service.api.StatusService;
 import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.quilifiers.ViewPageConstraint;
@@ -54,14 +56,11 @@ public class CreateIssue extends PageLayout {
 
     private final Logger log = Logger.getLogger(CreateIssue.class);
     
-    @Inject
-    private IssueService issueService;
-    @Inject
-    private StatusService statusService;
-    @Inject
-    private ProjectService projectService;
-    @Inject
-    private IssueTypeService issueTypeService;
+    @Inject private IssueService issueService;
+    @Inject private StatusService statusService;
+    @Inject private ProjectService projectService;
+    @Inject private IssueTypeService issueTypeService;
+    @Inject private SecurityService securityService;
     
     private final Form<Issue> insertIssueForm;
     private final DropDownChoice<IssueType> issueTypeList;
@@ -148,7 +147,7 @@ public class CreateIssue extends PageLayout {
         insertIssueForm = new Form("form") {
             @Override
             protected void onSubmit() {
-                if (!KeycloakAuthSession.isUserInRhelmRole(roles.getProperty("kc.user"))) {
+                if (!KeycloakAuthSession.isUserInRhelmRole(roles.getProperty("kc.user")) || !securityService.canUserPerformAction(TypeId.project, selectedProject.getId(), roles.getProperty("it.project.create.issue"))) {
                     setResponsePage(AccessDenied.class);
                 }
                 FileUpload fileUpload = fileUploadField.getFileUpload();

@@ -21,4 +21,6 @@ public interface RoleService {
     Role getRoleById(Long roleId);
 
     Set<Long> getIdsByNames(Set<String> userRhelmRoles);
+
+    void addRolesByNames(List<String> availableRoles);
 }

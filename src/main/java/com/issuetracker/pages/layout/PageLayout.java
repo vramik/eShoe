@@ -7,7 +7,6 @@ import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.IssueTrackerSession;
 import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import com.issuetracker.web.security.KeycloakAuthSession;
-import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import java.lang.reflect.Constructor;
 import javax.inject.Inject;
 import org.apache.wicket.Component;

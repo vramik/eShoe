@@ -9,7 +9,7 @@ import java.util.List;
  */
 public interface SecurityService {
     
-    boolean canUserPerformAction(TypeId typeId, Long itemId, String action);
+    boolean canUserPerformAction(TypeId typeId, Long itemId, String actionName);
 
     List<String> getPermittedActionsForUserAndItem(TypeId typeId, Long itemId);
 }

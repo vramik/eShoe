@@ -46,7 +46,7 @@ public class KeycloakAuthSession {
         }
     }
     
-    public static Set<String> getUserRhelmRoles() {
+    public static Set<String> getUserRealmRoles() {
         if (isSignedIn()) {
             return getKeycloakSecurityContext().getToken().getRealmAccess().getRoles();
         } else {
@@ -69,12 +69,10 @@ public class KeycloakAuthSession {
     }
     
     public static boolean isUserInRhelmRole(String role) {
-        log.warn("TODO");
         if (isSignedIn()) {
             return getKeycloakSecurityContext().getToken().getRealmAccess().isUserInRole(role);
         } else {
-//            return role.equals("Public");
-            return false;
+            return role.equals("Public");
         }
     }
     

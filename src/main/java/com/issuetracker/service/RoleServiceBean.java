@@ -4,6 +4,7 @@ import com.issuetracker.dao.api.RoleDao;
 import com.issuetracker.model.Role;
 import com.issuetracker.service.api.RoleService;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -53,5 +54,12 @@ public class RoleServiceBean implements RoleService, Serializable {
     @Override
     public Set<Long> getIdsByNames(Set<String> roleNames) {
         return roleDao.getIdsByNames(roleNames);
+    }
+
+    @Override
+    public void addRolesByNames(List<String> availableRoles) {
+        for (String availableRole : availableRoles) {
+            getRoleByName(availableRole);
+        }
     }
 }

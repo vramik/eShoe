@@ -9,7 +9,10 @@ import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.pages.project.ProjectDetail;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.RoleService;
+import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
+import static com.issuetracker.web.Constants.roles;
+import static com.issuetracker.web.security.KeycloakService.getRealmRoles;
 import javax.inject.Inject;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -28,10 +31,9 @@ public class ProjectPermission extends PageLayout {
 
     private final Logger log = Logger.getLogger(ProjectPermission.class);
     
-    @Inject 
-    RoleService roleService;
-    @Inject 
-    ProjectService projectService;
+    @Inject RoleService roleService;
+    @Inject ProjectService projectService;
+    @Inject SecurityService securityService;
     
     public ProjectPermission(PageParameters parameters) {
         StringValue stringProjectId = parameters.get("project");
@@ -40,10 +42,19 @@ public class ProjectPermission extends PageLayout {
         }
         final Long projectId = stringProjectId.toLong();
         Project project = projectService.getProjectById(projectId);
+        if (project == null) {
+            log.warn("Project with given id doesn't exist. Redirecting to Home page.");
+            throw new RedirectToUrlException(HOME_PAGE);
+        }
+        if (!securityService.canUserPerformAction(TypeId.project, projectId, roles.getProperty("it.project.browse")) || 
+                !securityService.canUserPerformAction(TypeId.project, projectId, roles.getProperty("it.project.permissions"))) {
+            setResponsePage(AccessDenied.class);
+        }
         
         add(new Label("permissionTitle", "Permissions for project " + project.getName()));
         add(new VisibilityProjectForm("visibilityProjectForm", project));
         
+        roleService.addRolesByNames(getRealmRoles());
         ListView<Role> permissions = new ListView<Role>("permissions", roleService.getRoles()) {
             
             @Override

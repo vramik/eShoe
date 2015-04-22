@@ -72,42 +72,37 @@ public class KeycloakService {
     
     /**
      * 
-     * @return String rhelm roles without 'Admin' and with 'Public'
+     * @return String realm roles with 'Public'
      * 
-     * @throws com.issuetracker.web.security.KeycloakService.Failure 
      */
-    public static Set<String> getRhelmRoles() throws Failure {
+    public static List<String> getRealmRoles() {
         HttpClient client = new HttpClientBuilder().disableTrustManager().build();
         
         try {
             HttpGet get = new HttpGet(SERVER_URL + "/auth/admin/realms/issue-tracker/roles");
-//            System.out.println("GET: " + get.toString());
             KeycloakSecurityContext session = getKeycloakSecurityContext();
             if (session == null) {
-                return new HashSet<>();
+                return new ArrayList<>();
             }
             get.addHeader("Authorization", "Bearer " + session.getTokenString());
-//            System.out.println("GET HEADER: " + Arrays.toString(get.getHeaders("Authorization")));
             try {
                 HttpResponse response = client.execute(get);
                 if (response.getStatusLine().getStatusCode() != 200) {
-//                    System.out.println("STATUS CODE: " + response.getStatusLine().getStatusCode());
                     throw new Failure(response.getStatusLine().getStatusCode());
                 }
                 HttpEntity entity = response.getEntity();
                 try (InputStream is = entity.getContent()) {
                     Set<String> roles = new TreeSet<>();
                     for (RoleRepresentation role : JsonSerialization.readValue(is, TypedSetOfRoles.class)) {
-                        role.getId();
-                        if (!role.getName().equals("Admin")) {
-                            roles.add(role.getName());
-                        }
+                        roles.add(role.getName());
                     }
                     roles.add("Public");
-                    return roles;
+                    return new ArrayList<>(roles);
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
+            } catch (Failure f) {
+                throw new RuntimeException("Returned status code: " + f.getStatus(), f);
             }
         } finally {
             client.getConnectionManager().shutdown();

@@ -7,7 +7,6 @@ import com.issuetracker.service.api.ActionService;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.PermissionService;
 import com.issuetracker.service.api.RoleService;
-import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.security.KeycloakAuthSession;
 import java.io.Serializable;
@@ -102,7 +101,7 @@ public class IssueServiceBean implements IssueService, Serializable {
 
     @Override
     public List<Comment> getDisplayableComments(Issue issue) {
-        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
+        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRealmRoles());
         
         List<Comment> comments = new ArrayList<>();
         Action action = actionService.getActionByNameAndType(roles.getProperty("it.comment.browse"), TypeId.comment);
@@ -128,7 +127,7 @@ public class IssueServiceBean implements IssueService, Serializable {
     
     @Override
     public List<Issue> getDisplayableIssues(List<Issue> issues) {
-        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
+        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRealmRoles());
         
         List<Issue> result = new ArrayList<>();
         Action action = actionService.getActionByNameAndType(roles.getProperty("it.issue.browse"), TypeId.issue);

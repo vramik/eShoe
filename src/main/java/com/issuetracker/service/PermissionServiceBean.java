@@ -70,7 +70,6 @@ public class PermissionServiceBean implements PermissionService {
             newPermission.setActionId(actionService.getActionByNameAndType(actionName, actionType).getId());
             newPermission.setRoleId(roleService.getRoleByName(roleName).getId());
 
-            log.info(newPermission);
             permissionDao.insertOrUpdate(newPermission);
         }
     }
@@ -85,7 +84,6 @@ public class PermissionServiceBean implements PermissionService {
         List<Permission> permissinsFromDB = getPermissionsByRole(typeId, itemId, roleId);
         
         if (permissions.isEmpty()) {
-            log.error("removing all permissions");
             for (Permission p : permissinsFromDB) {
                 permissionDao.remove(p);
             }
@@ -107,7 +105,6 @@ public class PermissionServiceBean implements PermissionService {
             //remove all newly unselected permissions from DB
             for (Permission permissinFromDB : permissinsFromDB) {
                 if (!permissions.contains(permissinFromDB)) {
-                    log.error("removing: " + permissinFromDB);
                     permissionDao.remove(permissinFromDB);
                 }
             }

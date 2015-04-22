@@ -7,11 +7,11 @@ import com.issuetracker.model.TypeId;
 import com.issuetracker.service.api.ActionService;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.PermissionService;
+import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.RoleService;
 import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.roles;
 import com.issuetracker.web.security.KeycloakAuthSession;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,7 +35,7 @@ public class SecurityServiceBean implements SecurityService {
     
     @Override
     public List<String> getPermittedActionsForUserAndItem(TypeId typeId, Long itemId) {
-        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRhelmRoles());
+        Set<Long> userRolesIds = roleService.getIdsByNames(KeycloakAuthSession.getUserRealmRoles());
         Set<Long> actionIds = new HashSet<>();
         
         List<Permission> hierarchyPermissions = permissionService.getPermissions(TypeId.global, 0L, userRolesIds);
@@ -54,15 +54,55 @@ public class SecurityServiceBean implements SecurityService {
                 
         }
         for (Permission p : hierarchyPermissions) {
-            log.warn(p);
             actionIds.add(p.getActionId());
         }
         return actionService.getActionNamesByIds(actionIds);
     }
 
     @Override
-    public boolean canUserPerformAction(TypeId typeId, Long itemId, String action) {
-        return getPermittedActionsForUserAndItem(typeId, itemId).contains(action);
+    public boolean canUserPerformAction(TypeId typeId, Long itemId, String actionName) {
+        Set<String> userRoles = KeycloakAuthSession.getUserRealmRoles();
+        Action action;
+        
+        switch (typeId) {
+            case global:
+                break;
+            case project:
+                if (actionName.equals(roles.getProperty("it.project.browse"))) {
+                    action = actionService.getActionByNameAndType(actionName, typeId);
+                    List<Permission> projectVisibilityPermissions = permissionService.getPermissionsByAction(typeId, itemId, action.getId());
+                    if (projectVisibilityPermissions.isEmpty()) {
+                        return getPermittedActionsForUserAndItem(typeId, itemId).contains(actionName);
+                    } 
+                    for (Permission projectVisibility : projectVisibilityPermissions) {
+                        if (userRoles.contains(roleService.getRoleById(projectVisibility.getRoleId()).getName())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                break;
+            case issue:
+                if (actionName.equals(roles.getProperty("it.issue.browse"))) {
+                    action = actionService.getActionByNameAndType(actionName, typeId);
+                    List<Permission> projectVisibilityPermissions = permissionService.getPermissionsByAction(typeId, itemId, action.getId());
+                    if (projectVisibilityPermissions.isEmpty()) {
+                        return getPermittedActionsForUserAndItem(typeId, itemId).contains(actionName);
+                    } 
+                    for (Permission projectVisibility : projectVisibilityPermissions) {
+                        if (userRoles.contains(roleService.getRoleById(projectVisibility.getRoleId()).getName())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+                break;
+            case comment:
+                throw new UnsupportedOperationException("Not supported yet!");
+            default:
+                throw new IllegalStateException("Unreachable state was reached.");
+        }
+        
+        return getPermittedActionsForUserAndItem(typeId, itemId).contains(actionName);
     }
-
 }

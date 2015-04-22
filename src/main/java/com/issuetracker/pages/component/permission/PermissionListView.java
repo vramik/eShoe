@@ -5,10 +5,13 @@ import com.issuetracker.model.Permission;
 import com.issuetracker.model.Role;
 import com.issuetracker.model.TypeId;
 import static com.issuetracker.model.TypeId.*;
+import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.service.api.ActionService;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.PermissionService;
+import com.issuetracker.service.api.SecurityService;
 import static com.issuetracker.web.Constants.roles;
+import com.issuetracker.web.security.KeycloakAuthSession;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -37,6 +40,7 @@ public class PermissionListView extends Panel {
     @Inject private PermissionService permissionService;
     @Inject private ActionService actionService;
     @Inject private IssueService issueService;
+    @Inject private SecurityService securityService;
     
     private final List<Permission> allPermissions;
     private final List<Action> actions;
@@ -88,6 +92,7 @@ public class PermissionListView extends Panel {
         Form<?> testForm = new Form("permissionForm") {
             @Override
             protected void onSubmit() {
+                checkPermissions(typeId, itemId);
                 Collection<Permission> selectedPermissions = testGroup.getModelObject();
                 log.warn("selectedPermissions");
                 for (Permission p : selectedPermissions) {       
@@ -103,6 +108,7 @@ public class PermissionListView extends Panel {
         IndicatingAjaxButton HideOrShowButton = new IndicatingAjaxButton("hideOrShow", testForm){
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                checkPermissions(typeId, itemId);
                 target.add(wmc);
                 if (testGroup.isVisible()) {
                     testGroup.setVisible(false);
@@ -127,21 +133,51 @@ public class PermissionListView extends Panel {
         });
     }
 
+    private void checkPermissions(TypeId typeId, Long itemId) {
+        switch (typeId) {
+            case global:
+                if (!securityService.canUserPerformAction(TypeId.global, 0L, roles.getProperty("it.permissions"))) {
+                    setResponsePage(AccessDenied.class);
+                }
+                break;
+            case project:
+                if (!securityService.canUserPerformAction(TypeId.project, itemId, roles.getProperty("it.project.permissions"))) {
+                    setResponsePage(AccessDenied.class);
+                }
+                break;
+            case issue:
+                if (!securityService.canUserPerformAction(TypeId.issue, itemId, roles.getProperty("it.issue.permissions"))) {
+                    setResponsePage(AccessDenied.class);
+                }
+            case comment:
+                throw new UnsupportedOperationException("Not suported.");
+            default:
+                throw new IllegalStateException("Unreachable state was reached.");
+        }
+    }
+    
     private List<Action> excludeActionsSetOnHigherLevel(TypeId typeId, Long itemId, Long roleId, List<Action> actionsFromDB) {
         List<Action> result = new ArrayList<>();
-        List<Permission> higherLevelPermissions = permissionService.getPermissionsByRole(global, 0L, roleId);
+        List<Permission> higherLevelPermissions;
         
         switch (typeId) {
+            case global:
+                result = actionsFromDB;
+                break;
             case project:
+                higherLevelPermissions = permissionService.getPermissionsByRole(global, 0L, roleId);
                 actionsFromDB.remove(actionService.getActionByNameAndType(roles.getProperty("it.project.browse"), typeId));//exclude visibility permission
                 excludeActions(actionsFromDB, higherLevelPermissions, result);
                 break;
             case issue:
+                higherLevelPermissions = permissionService.getPermissionsByRole(global, 0L, roleId);
                 Long projectId = issueService.getIssueById(itemId).getProject().getId();
                 higherLevelPermissions.addAll(permissionService.getPermissionsByRole(project, projectId, roleId));
                 actionsFromDB.remove(actionService.getActionByNameAndType(roles.getProperty("it.issue.browse"), typeId));//exclude visibility permission
                 excludeActions(actionsFromDB, higherLevelPermissions, result);
                 break;
+            case comment:
+                throw new UnsupportedOperationException("Not supported!");
             default:
                 throw new IllegalStateException("unreachable state was reached");
         }

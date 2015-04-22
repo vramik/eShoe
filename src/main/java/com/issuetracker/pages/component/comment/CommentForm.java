@@ -7,8 +7,8 @@ import com.issuetracker.service.api.CommentService;
 import com.issuetracker.service.api.IssueService;
 import com.issuetracker.service.api.PermissionService;
 import static com.issuetracker.web.Constants.roles;
-import static com.issuetracker.web.security.PermissionsUtil.*;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
+import static com.issuetracker.web.security.KeycloakService.getRealmRoles;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -38,7 +38,7 @@ public class CommentForm extends Panel {
     private List<Comment> comments;
     private Issue issue;
     private List<String> selectedRoles = new ArrayList<>();
-    List<String> availableRoles = getAvailableRoles();
+    List<String> availableRoles = getRealmRoles();
     
     public CommentForm(String id, final IModel<Issue> issueModel) {
         super(id);

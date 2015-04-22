@@ -89,11 +89,11 @@ public class ProjectDetail extends PageLayout {
             log.warn("Project with given id doesn't exist. Redirecting to Home page.");
             throw new RedirectToUrlException(HOME_PAGE);
         }
-        permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.project, projectId);
-
-        if (!permittedActions.contains(roles.getProperty("it.project.browse"))) {
+        if (!securityService.canUserPerformAction(TypeId.project, projectId, roles.getProperty("it.project.browse"))) {
             setResponsePage(AccessDenied.class);
-        }       
+        }   
+        permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.project, projectId);
+        log.info("Project Actions: " + permittedActions);
         
         projectVersionList = project.getVersions();
         projectComponentList = project.getComponents();

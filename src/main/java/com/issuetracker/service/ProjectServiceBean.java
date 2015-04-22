@@ -90,7 +90,7 @@ public class ProjectServiceBean implements ProjectService, Serializable {
     }
     
     private Set<Long> getProjetsIdsWithRights(String actionName) {
-        Set<String> userRoles = KeycloakAuthSession.getUserRhelmRoles();
+        Set<String> userRoles = KeycloakAuthSession.getUserRealmRoles();
         
         Action action = actionService.getActionByNameAndType(actionName, TypeId.project);
         
@@ -112,7 +112,7 @@ public class ProjectServiceBean implements ProjectService, Serializable {
     }
     
     private Set<Long> getDisplayableProjectIds() {
-        Set<String> userRoles = KeycloakAuthSession.getUserRhelmRoles();
+        Set<String> userRoles = KeycloakAuthSession.getUserRealmRoles();
         
         Action action = actionService.getActionByNameAndType(roles.getProperty("it.project.browse"), TypeId.project);
         
