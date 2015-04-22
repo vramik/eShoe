@@ -1,13 +1,14 @@
 package com.issuetracker.pages.layout;
 
 import com.issuetracker.model.TypeId;
+import com.issuetracker.pages.Importer;
+import com.issuetracker.pages.Login;
 import com.issuetracker.pages.issue.SearchIssues;
 import com.issuetracker.pages.workflow.CreateWorkflow;
 import com.issuetracker.pages.project.ListProjects;
 import com.issuetracker.pages.project.CreateProject;
 import com.issuetracker.pages.status.CreateStatus;
 import com.issuetracker.pages.issuetype.CreateIssueType;
-import com.issuetracker.pages.*;
 import com.issuetracker.pages.issue.CreateIssue;
 import com.issuetracker.pages.fulltext.FulltextSearch;
 import com.issuetracker.pages.permissions.GlobalPermission;
@@ -17,7 +18,6 @@ import com.issuetracker.web.security.KeycloakAuthSession;
 import static com.issuetracker.web.security.KeycloakAuthSession.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -30,8 +30,7 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.jboss.logging.Logger;
-import org.keycloak.ServiceUrlConstants;
-import org.keycloak.representations.AccessToken;
+import org.keycloak.constants.ServiceUrlConstants;
 import org.keycloak.representations.IDToken;
 import org.keycloak.util.KeycloakUriBuilder;
 

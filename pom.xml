@@ -25,7 +25,7 @@
         <jboss.spec.version>3.0.2.Final</jboss.spec.version>
         <version.wicket>6.11.0</version.wicket>
         <version.wicket.cdi>6.0</version.wicket.cdi>
-        <!--<version.picketbox>5.0.0.Final</version.picketbox>-->
+        <version.keycloak>1.1.0.Final</version.keycloak>
 
 
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
@@ -529,13 +529,13 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
-            <version>1.0.1.Final</version>
+            <version>${version.keycloak}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-core</artifactId>
-            <version>1.0.1.Final</version>
+            <version>${version.keycloak}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
