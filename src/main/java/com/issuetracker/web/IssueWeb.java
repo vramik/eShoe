@@ -100,30 +100,28 @@ public class IssueWeb extends WebApplication {
         permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.permissions"), TypeId.global, "ITAdmin");
         
         permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.browse"), TypeId.project, "ITAdmin", "Public");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.versions"), TypeId.project, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.components"), TypeId.project, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.custom.fields"), TypeId.project, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.permissions"), TypeId.project, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.delete"), TypeId.project, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.rename"), TypeId.project, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.create.issue"), TypeId.project, "ITAdmin", "Public");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.versions"), TypeId.project, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.components"), TypeId.project, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.custom.fields"), TypeId.project, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.permissions"), TypeId.project, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.delete"), TypeId.project, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.rename"), TypeId.project, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.project.create.issue"), TypeId.project, "ITAdmin");
         
         permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.browse"), TypeId.issue, "ITAdmin", "Public");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.edit.description"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.delete"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.assign"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.resolve"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.close"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.add"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.edit.all"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.edit.own"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.delete.all"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.delete.own"), TypeId.issue, "ITAdmin", "X");
-        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.permission"), TypeId.project, "ITAdmin", "X");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.edit.description"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.delete"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.assign"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.resolve"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.close"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.add"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.edit.all"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.edit.own"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.delete.all"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.comment.delete.own"), TypeId.issue, "ITAdmin");
+        permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.issue.permission"), TypeId.project, "ITAdmin");
         
         permissionService.createPermissions(TypeId.global, null, roles.getProperty("it.comment.browse"), TypeId.comment, "ITAdmin", "Public");
-        
-        
     }
 //</editor-fold>
 }

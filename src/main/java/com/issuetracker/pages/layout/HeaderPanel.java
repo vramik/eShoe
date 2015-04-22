@@ -90,7 +90,6 @@ public class HeaderPanel extends Panel {
         super(id);
         
         permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.global, 0L);
-//        log.info("Permitted actions: " + permittedActions);
         
         add(feedbackPanel);
         
@@ -112,18 +111,7 @@ public class HeaderPanel extends Panel {
         String username = "";
         idToken = getIDToken();
         if (signedIn) {
-            username = "idToken.getName(): " + idToken.getName() + ", idToken.getEmail(): " + idToken.getEmail() 
-                    + ", rhelm roles: " + getUserRealmRoles();
-            Map<String, AccessToken.Access> resourceAccess = getKeycloakSecurityContext().getToken().getResourceAccess();
-            if (resourceAccess != null) {
-                if (null != resourceAccess.get(RHELM_NAME)) {
-                    username = username.concat(", " + RHELM_NAME + " roles: " + resourceAccess.get(RHELM_NAME).getRoles());
-                }
-                if (resourceAccess.get("rhelm-management") != null) {
-                    username = username.concat(", rhelm-management roles: " + resourceAccess.get("rhelm-management").getRoles());
-                }
-            }
-            username = username.concat("; permittedActions: " + permittedActions);
+            username = "Welcome " + idToken.getName();
         }
         
         usernameLabel = new Label("userName", username);
