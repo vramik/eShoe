@@ -40,14 +40,7 @@ public class PageLayout extends WebPage {
             isAuthorized = isAuthorizedToViewThePageAndCacheResult();
         }
         if (!isAuthorized) {
-            log.warn("TODO");
-//            if (isSignedIn()) {
-                setResponsePage(AccessDenied.class);
-//            } else {
-//                PageParameters params = getPageParameters();
-//                params.add("page", getPageClassNameAndPageParams());
-//                setResponsePage(Login.class, params);
-//            }
+            setResponsePage(AccessDenied.class);
         }
         
         add(new Label("title", "Issue Tracking system"));

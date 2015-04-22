@@ -27,8 +27,6 @@ public class WorkflowListView<T extends Workflow> extends Panel {
 
     @Inject
     private WorkflowService workflowService;
-    @Inject
-    private ProjectService projectService;
     private List<Workflow> workflows;
     private final ListView listViewWorkflows;
 

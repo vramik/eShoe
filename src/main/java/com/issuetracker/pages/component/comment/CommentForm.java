@@ -35,15 +35,12 @@ public class CommentForm extends Panel {
     @Inject private CommentService commentService;
     
     private Comment comment;
-    private List<Comment> comments;
     private Issue issue;
     private List<String> selectedRoles = new ArrayList<>();
     List<String> availableRoles = getRealmRoles();
     
     public CommentForm(String id, final IModel<Issue> issueModel) {
         super(id);
-        
-        log.error("TODO: availableRoles");//jake role budou available
         
         issue = issueModel.getObject();
 
@@ -77,7 +74,6 @@ public class CommentForm extends Panel {
         final ListMultipleChoice<String> roles = new ListMultipleChoice<>("roles", 
                 new PropertyModel<List<String>>(this, "selectedRoles"),
                 availableRoles);
-//        roles.setRequired(true);
         roles.setOutputMarkupId(true);
         roles.setMaxRows(availableRoles.size());
         commentForm.add(roles);

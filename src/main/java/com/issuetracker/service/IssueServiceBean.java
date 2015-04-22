@@ -52,8 +52,7 @@ public class IssueServiceBean implements IssueService, Serializable {
     @Override
     public void create(Issue issue) {
         issueDao.insert(issue);
-        log.error("TODO: enable indexing");
-//        indexManager.index(issue);
+        indexManager.index(issue);
     }
     
     @Override
@@ -78,8 +77,7 @@ public class IssueServiceBean implements IssueService, Serializable {
     @Override
     public void update(Issue issue) {
         issueDao.update(issue);
-        log.error("TODO: enable indexing");
-//        indexManager.index(issue);
+        indexManager.index(issue);
     }
 
     @Override

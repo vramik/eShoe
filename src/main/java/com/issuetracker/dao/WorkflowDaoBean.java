@@ -91,7 +91,6 @@ public class WorkflowDaoBean implements WorkflowDao {
 
     @Override
     public boolean isWorkflowUsed(Workflow workflow) {
-        System.err.println("WorkflowDaoBean.isWorkflowUsed: TODO");
-        return true;
+        return getWorkflowById(workflow.getId()) != null;
     }
 }
