@@ -27,7 +27,6 @@
         <version.wicket.cdi>6.0</version.wicket.cdi>
         <version.keycloak>1.1.0.Final</version.keycloak>
 
-
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
 
@@ -381,24 +380,6 @@
         </dependency>
         -->
         
-        <!-- PicketBox, PicketLink - for login attempts -->
-<!--        <dependency>
-            <groupId>org.picketbox</groupId>
-            <artifactId>picketbox-core</artifactId>
-            <version>${version.picketbox}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.picketbox</groupId>
-            <artifactId>picketbox-http</artifactId>
-            <version>${version.picketbox}</version>
-        </dependency>        
-        <dependency>
-            <groupId>org.picketlink</groupId>
-            <artifactId>picketlink-idm-api</artifactId>
-            <version>3.0.0.Beta2</version>
-            <type>jar</type>
-        </dependency>-->
-
         <!-- Wicket -->
         <dependency>
             <groupId>org.apache.wicket</groupId>

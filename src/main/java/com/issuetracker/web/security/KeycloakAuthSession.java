@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.jboss.resteasy.logging.Logger;
+import org.jboss.logging.Logger;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.representations.AccessToken;
 import org.keycloak.representations.IDToken;
