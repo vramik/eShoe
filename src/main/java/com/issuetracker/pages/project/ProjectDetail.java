@@ -93,7 +93,6 @@ public class ProjectDetail extends PageLayout {
             setResponsePage(AccessDenied.class);
         }   
         permittedActions = securityService.getPermittedActionsForUserAndItem(TypeId.project, projectId);
-        log.info("Project Actions: " + permittedActions);
         
         projectVersionList = project.getVersions();
         projectComponentList = project.getComponents();
