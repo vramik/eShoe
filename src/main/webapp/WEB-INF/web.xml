@@ -22,6 +22,8 @@
     <filter-mapping>
         <filter-name>Wicket</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
     <!-- A message displayed on the page, externalized into web.xml -->
@@ -55,6 +57,11 @@
             <role-name>User</role-name>
         </auth-constraint>
     </security-constraint>
+    
+    <error-page>
+        <error-code>400</error-code>
+        <location>/accessDenied</location>
+    </error-page>
     
 </web-app>
 
