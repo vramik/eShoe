@@ -68,7 +68,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.ISPN_PROJECT.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.ISPN_PROJECT.contains(issue.getId()));
         }
     }
 
@@ -79,7 +79,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.OPEN_STATUS.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.OPEN_STATUS.contains(issue.getId()));
         }
     }
 
@@ -90,7 +90,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.BUG_ISSUETYPE.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.BUG_ISSUETYPE.contains(issue.getId()));
         }
     }
 
@@ -101,7 +101,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.RANGE_CREATED.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.RANGE_CREATED.contains(issue.getId()));
         }
     }
 
@@ -112,7 +112,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.RANGE_UPDATED.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.RANGE_UPDATED.contains(issue.getId()));
         }
     }
 
@@ -123,7 +123,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.SYKORA_CREATOR.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.SYKORA_CREATOR.contains(issue.getId()));
         }
     }
 
@@ -134,7 +134,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.PITONAK_OWNER.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.PITONAK_OWNER.contains(issue.getId()));
         }
     }
 
@@ -145,7 +145,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(SearchTestHelper.HIGH_PRIORITY.contains(issue.getIssueId()));
+            assertTrue(SearchTestHelper.HIGH_PRIORITY.contains(issue.getId()));
         }
     }
 
@@ -156,7 +156,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertEquals(1, (long) issue.getIssueId());
+            assertEquals(1, (long) issue.getId());
         }
     }
 
@@ -167,7 +167,7 @@ public class FulltextSearchTest {
 
         assertFalse(result.isEmpty());
         for(Issue issue: result) {
-            assertTrue(issue.getIssueId().equals(1L) || issue.getIssueId().equals(4L));
+            assertTrue(issue.getId().equals(1L) || issue.getId().equals(4L));
         }
     }
 
@@ -177,7 +177,7 @@ public class FulltextSearchTest {
         List<Issue> result = searchService.search(query);
 
         assertFalse(result.isEmpty());
-        assertTrue(result.get(0).getIssueId().equals(1L));
-        assertTrue(result.get(1).getIssueId().equals(2L));
+        assertTrue(result.get(0).getId().equals(1L));
+        assertTrue(result.get(1).getId().equals(2L));
     }
 }

@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <wicket:extend>
-    <h3><span wicket:id="name">[project name]</span>  </h3>      
+    <h3><span wicket:id="name"/></h3>
+    <form wicket:id="renameForm">
+        <input type="text" wicket:id="rename" size="25"/>
+        <input type="submit" value="Rename Project"/>
+    </form>
     <div wicket:id="summary"/>
     <div><a href="#" wicket:id="delete">[delete project]</a></div>
+    <div><a href="#" wicket:id="permissions">[permissions]</a></div>
     <hr/>
     <div>
         <div wicket:id="wmcVersion">
@@ -34,10 +39,4 @@
         </form>
     </div>
     <hr/>
-    <div>
-        <div wicket:id="wmcPermission">
-            <div wicket:id="permissionsListView"/>
-        </div>
-        <div wicket:id="permissionForm"/>
-    </div>
 </wicket:extend>

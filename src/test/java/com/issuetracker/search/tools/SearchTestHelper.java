@@ -37,7 +37,7 @@ public class SearchTestHelper {
         Date updated = calendar.getTime();
 
         Issue issue = new Issue();
-        issue.setIssueId(1L);
+        issue.setId(1L);
         issue.setSummary("Failing unit tests");
         issue.setIssueType(issueType);
         issue.setPriority(Issue.Priority.HIGH);
@@ -65,7 +65,7 @@ public class SearchTestHelper {
         Date updated = calendar.getTime();
 
         Issue issue = new Issue();
-        issue.setIssueId(2L);
+        issue.setId(2L);
         issue.setSummary("Graceful shutdown should be supported");
         issue.setIssueType(issueType);
         issue.setPriority(Issue.Priority.LOW);
@@ -93,7 +93,7 @@ public class SearchTestHelper {
         Date updated = calendar.getTime();
 
         Issue issue = new Issue();
-        issue.setIssueId(3L);
+        issue.setId(3L);
         issue.setSummary("notifyMessage - stack attribute - only default value works");
         issue.setIssueType(issueType);
         issue.setPriority(Issue.Priority.HIGH);
@@ -121,7 +121,7 @@ public class SearchTestHelper {
         Date updated = calendar.getTime();
 
         Issue issue = new Issue();
-        issue.setIssueId(4L);
+        issue.setId(4L);
         issue.setSummary("EAP 6 JAAS cache does not work correctly");
         issue.setIssueType(issueType);
         issue.setPriority(Issue.Priority.LOW);

@@ -1,6 +1,6 @@
 package com.issuetracker.web;
 
-import com.issuetracker.web.security.PermissionsUtil;
+import com.issuetracker.web.security.KeycloakService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -18,8 +18,8 @@ public class Constants {
     public static final String CONTEXT_ROOT = "/IssueTracker/";
     public static final String HOME_PAGE = SERVER_URL + CONTEXT_ROOT;
     
-    public static final String JPATablePreffix = "IssueTracker_"; //keycloakDS
-//    public static final String JPATablePreffix = ""; //separateDS
+//    public static final String JPATablePreffix = "IssueTracker_"; //keycloakDS
+    public static final String JPATablePreffix = ""; //separateDS
     
     public static final Properties roles;
     
@@ -28,11 +28,9 @@ public class Constants {
         fallback.put("key", "default");
         roles = new Properties(fallback);
         
-//        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream("roles.properties")) {
-        try (InputStream is = PermissionsUtil.class.getResourceAsStream("roles.properties")) {
-            System.out.println("TODO Constants");
+        try (InputStream is = KeycloakService.class.getResourceAsStream("roles.properties")) {
             if (is == null) {
-                throw new RuntimeException("PermissionsUtil.class.getResourceAsStream(\"roles.properties\") has returned null.");
+                throw new RuntimeException("KeycloakService.class.getResourceAsStream(\"roles.properties\") has returned null.");
             }
             
             roles.load(is);

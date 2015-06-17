@@ -25,8 +25,7 @@
         <jboss.spec.version>3.0.2.Final</jboss.spec.version>
         <version.wicket>6.11.0</version.wicket>
         <version.wicket.cdi>6.0</version.wicket.cdi>
-        <!--<version.picketbox>5.0.0.Final</version.picketbox>-->
-
+        <version.keycloak>1.1.0.Final</version.keycloak>
 
         <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
         <buildTimestamp>${maven.build.timestamp}</buildTimestamp>
@@ -112,7 +111,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Compiler plugin enforces Java 1.6 compatibility and activates annotation processors. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -382,24 +380,6 @@
         </dependency>
         -->
         
-        <!-- PicketBox, PicketLink - for login attempts -->
-<!--        <dependency>
-            <groupId>org.picketbox</groupId>
-            <artifactId>picketbox-core</artifactId>
-            <version>${version.picketbox}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.picketbox</groupId>
-            <artifactId>picketbox-http</artifactId>
-            <version>${version.picketbox}</version>
-        </dependency>        
-        <dependency>
-            <groupId>org.picketlink</groupId>
-            <artifactId>picketlink-idm-api</artifactId>
-            <version>3.0.0.Beta2</version>
-            <type>jar</type>
-        </dependency>-->
-
         <!-- Wicket -->
         <dependency>
             <groupId>org.apache.wicket</groupId>
@@ -530,13 +510,13 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
-            <version>1.0.1.Final</version>
+            <version>${version.keycloak}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-adapter-core</artifactId>
-            <version>1.0.1.Final</version>
+            <version>${version.keycloak}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

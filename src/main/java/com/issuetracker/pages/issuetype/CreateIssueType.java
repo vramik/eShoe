@@ -3,9 +3,13 @@ package com.issuetracker.pages.issuetype;
 import javax.inject.Inject;
 import java.util.List;
 import com.issuetracker.model.IssueType;
+import static com.issuetracker.model.TypeId.global;
 import com.issuetracker.pages.layout.PageLayout;
+import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.service.api.IssueTypeService;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.service.api.SecurityService;
+import static com.issuetracker.web.Constants.roles;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.basic.Label;
@@ -21,17 +25,20 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
  */
 public class CreateIssueType extends PageLayout {
 
-    @Inject
-    private IssueTypeService issueTypeService;
+    @Inject private IssueTypeService issueTypeService;
+    @Inject private SecurityService securityService;
     private IssueType issueType = new IssueType();
     private final List<IssueType> issueTypes;
 
-    @SecurityConstraint(allowedRole = "issue.type")
+    @ViewPageConstraint(allowedAction = "it.issue.type")
     public CreateIssueType() {
         issueTypes = issueTypeService.getIssueTypes();
         Form<IssueType> insertIssueTypeForm = new Form<IssueType>("insertIssueTypeForm") {
             @Override
             protected void onSubmit() {
+                if (!securityService.canUserPerformAction(global, 0L, roles.getProperty("it.issue.type"))) {
+                    setResponsePage(AccessDenied.class);
+                }
                 if (issueTypeService.getIssueTypeByName(issueType.getName()) != null) {
                     error("Specified issue type is already added.");
                 } else {

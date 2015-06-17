@@ -50,10 +50,12 @@ public class Project implements Serializable {
     @OneToOne
     private Workflow workflow;
     
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @Fetch(value = FetchMode.SUBSELECT)
-    @NotFound(action = NotFoundAction.IGNORE)  
-    private Set<Permission> permissions;
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Fetch(value = FetchMode.SUBSELECT)
+//    @NotFound(action = NotFoundAction.IGNORE)  
+//    @CollectionTable(joinColumns = @JoinColumn(name = "Project_id"))
+//    @Column(name = "permission_id")
+//    private Set<Permission> permissions;
     
     public Long getId() {
         return id;
@@ -119,13 +121,13 @@ public class Project implements Serializable {
         this.customFields = customFields;
     }
 
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
+//    public Set<Permission> getPermissions() {
+//        return permissions;
+//    }
+//
+//    public void setPermissions(Set<Permission> permissions) {
+//        this.permissions = permissions;
+//    }
 
     @Override
     public int hashCode() {
@@ -148,6 +150,7 @@ public class Project implements Serializable {
 
     @Override
     public String toString() {
-        return "com.issuetracker.Project[ id=" + name + " ]";
+        return "Project{" + "id=" + id + ", name=" + name + ", owner=" + owner + '}';
     }
+
 }

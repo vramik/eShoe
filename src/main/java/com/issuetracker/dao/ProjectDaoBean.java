@@ -15,7 +15,10 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -24,9 +27,11 @@ import java.util.List;
 @Stateless
 public class ProjectDaoBean implements ProjectDao {
 
+    private final Logger log = Logger.getLogger(ProjectDaoBean.class);
+    
     @PersistenceContext
     private EntityManager em;
-    private CriteriaBuilder qb;
+    private CriteriaBuilder cb;
     
     @Override
     public void insert(Project project) {
@@ -40,10 +45,10 @@ public class ProjectDaoBean implements ProjectDao {
 
     @Override
     public Project getProjectByName(String name) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Project> projectQuery = qb.createQuery(Project.class);
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> projectQuery = cb.createQuery(Project.class);
         Root<Project> p = projectQuery.from(Project.class);
-        Predicate pCondition = qb.equal(p.get("name"), name);
+        Predicate pCondition = cb.equal(p.get("name"), name);
         projectQuery.where(pCondition);
         TypedQuery<Project> pQuery = em.createQuery(projectQuery);
         List<Project> projectResults = pQuery.getResultList();
@@ -56,10 +61,10 @@ public class ProjectDaoBean implements ProjectDao {
     
     @Override
     public Project getProjectById(Long id) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Project> projectQuery = qb.createQuery(Project.class);
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> projectQuery = cb.createQuery(Project.class);
         Root<Project> p = projectQuery.from(Project.class);
-        Predicate pCondition = qb.equal(p.get("id"), id);
+        Predicate pCondition = cb.equal(p.get("id"), id);
         projectQuery = projectQuery.where(pCondition);
         TypedQuery<Project> pQuery = em.createQuery(projectQuery);
         List<Project> projectResults = pQuery.getResultList();
@@ -72,25 +77,25 @@ public class ProjectDaoBean implements ProjectDao {
 
     @Override
     public List<Project> getProjects() {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Project> q = qb.createQuery(Project.class);
-        Root<Project> p = q.from(Project.class);
-        TypedQuery<Project> pQuery = em.createQuery(q);
-        List<Project> results = pQuery.getResultList();
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> query = cb.createQuery(Project.class);
+        Root<Project> fromProject = query.from(Project.class);
+        query.select(fromProject);
+        List<Project> results = em.createQuery(query).getResultList();
         if (results != null && !results.isEmpty()) {
             return results;
         } else {
             return new ArrayList<>();
         }
     }
-
+    
     @Override
     public List<ProjectVersion> getProjectVersions(Project project) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Project> c = qb.createQuery(Project.class);
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> c = cb.createQuery(Project.class);
         Root<Project> p = c.from(Project.class);
         c.select(p);
-        c.where(qb.equal(p.get("name"), project.getName()));
+        c.where(cb.equal(p.get("name"), project.getName()));
         TypedQuery query = em.createQuery(c);
         List<Project> projectResults = query.getResultList();
         if (projectResults != null && !projectResults.isEmpty()) {
@@ -103,11 +108,11 @@ public class ProjectDaoBean implements ProjectDao {
 
     @Override
     public List<Component> getProjectComponents(Project project) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Project> c = qb.createQuery(Project.class);
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> c = cb.createQuery(Project.class);
         Root<Project> p = c.from(Project.class);
         c.select(p);
-        c.where(qb.equal(p.get("name"), project.getName()));
+        c.where(cb.equal(p.get("name"), project.getName()));
         TypedQuery query = em.createQuery(c);
         List<Project> projectResults = query.getResultList();
         if (projectResults != null && !projectResults.isEmpty()) {
@@ -129,14 +134,55 @@ public class ProjectDaoBean implements ProjectDao {
     }
 
     @Override
-    public List<Project> getProjectsByWorkflow(Workflow workflow) {
-        qb = em.getCriteriaBuilder();
-        CriteriaQuery<Project> projectQuery = qb.createQuery(Project.class);
-        Root<Project> p = projectQuery.from(Project.class);
-        Predicate pCondition = qb.equal(p.get("workflow"), workflow.getId());
-        projectQuery.where(pCondition);
+    public List<Project> getProjectsByIds(Set<Long> projectIds) {
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> projectQuery = cb.createQuery(Project.class);
+        Root<Project> fromProject = projectQuery.from(Project.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        for (Long projectId : projectIds) {
+            predicates.add(cb.equal(fromProject.get("id"), projectId));
+        }
+        projectQuery.where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
         TypedQuery<Project> pQuery = em.createQuery(projectQuery);
-        List<Project> projectResults = pQuery.getResultList();
+        List<Project> results = pQuery.getResultList();
+        if (results != null && !results.isEmpty()) {
+            return results;
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public Set<Long> getProjectsIDs() {
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> projectQuery = cb.createQuery(Long.class);
+        Root<Project> fromProject = projectQuery.from(Project.class);
+        projectQuery.select(fromProject.<Long>get("id"));
+        TypedQuery<Long> pQuery = em.createQuery(projectQuery);
+        List<Long> resultList = pQuery.getResultList();
+        if (resultList != null && !resultList.isEmpty()) {
+            return new HashSet<>(resultList);
+        } else {
+            return new HashSet<>();
+        }
+    }
+
+    @Override
+    public List<Project> getProjectsByIdsAndWorkflow(Workflow workflow, Set<Long> projetsIdsWithRights) {
+        cb = em.getCriteriaBuilder();
+        CriteriaQuery<Project> projectQuery = cb.createQuery(Project.class);
+        Root<Project> p = projectQuery.from(Project.class);
+        
+        List<Predicate> predicates = new ArrayList<>();
+        for (Long projetsId : projetsIdsWithRights) {
+            predicates.add(cb.equal(p.<Long>get("id"), projetsId));
+        }
+        projectQuery.where(cb.and(
+                    cb.equal(p.get("workflow"), workflow.getId()),
+                    cb.or(predicates.toArray(new Predicate[predicates.size()]))
+                ));
+        TypedQuery<Project> pQuery = em.createQuery(projectQuery);
         List<Project> results = pQuery.getResultList();
         if (results != null && !results.isEmpty()) {
             return results;

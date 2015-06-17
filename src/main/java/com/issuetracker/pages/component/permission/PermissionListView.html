@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+    <wicket:panel>
+        <div wicket:id="permissionFeedbackPanel"/>
+        <form wicket:id="permissionForm">
+            <table style="border: 2px dotted #fc0; padding: 5px;">
+                <tr>
+                    <td style="vertical-align: top;">
+                        <input wicket:id="hideOrShow" value="hide/show" type="submit"/>
+                    </td>
+                    <td style="width: 100px; vertical-align: top;"><span wicket:id="permissionRoleName"/></td>
+                    <td>
+                        <div wicket:id="wmc">
+                            <span wicket:id="permissionGroup">
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" wicket:id="permissionGroupSelector"><b>check/uncheck all</b></input>
+                                            <table cellspacing="0" cellpadding="2">
+                                                <tr wicket:id="permissionListView">
+                                                    <td><input type="checkbox" wicket:id="permissionCheckbox"/></td>
+                                                    <td><span wicket:id="permissionActionName"/></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td style="vertical-align: bottom;">
+                                            <input wicket:id="ajaxSubmit" type="button" value="Apply"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </table>    
+        </form>
+    </wicket:panel>

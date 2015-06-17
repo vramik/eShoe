@@ -2,11 +2,13 @@ package com.issuetracker.pages.component.comment;
 
 import com.issuetracker.model.Comment;
 import com.issuetracker.model.Issue;
-import com.issuetracker.model.Permission;
-import com.issuetracker.model.PermissionType;
+import com.issuetracker.model.TypeId;
+import com.issuetracker.service.api.CommentService;
 import com.issuetracker.service.api.IssueService;
-import static com.issuetracker.web.security.PermissionsUtil.*;
-import static com.issuetracker.web.security.KeycloakAuthSession.getIDToken;
+import com.issuetracker.service.api.PermissionService;
+import static com.issuetracker.web.Constants.roles;
+import static com.issuetracker.web.security.KeycloakAuthSession.*;
+import static com.issuetracker.web.security.KeycloakService.getRealmRoles;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -15,11 +17,10 @@ import org.apache.wicket.model.PropertyModel;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
-import org.apache.wicket.util.iterator.ComponentHierarchyIterator;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -27,56 +28,52 @@ import org.apache.wicket.util.iterator.ComponentHierarchyIterator;
  */
 public class CommentForm extends Panel {
 
-    @Inject
-    private IssueService issueService;
+    private final Logger log = Logger.getLogger(CommentForm.class);
+    
+    @Inject private IssueService issueService;
+    @Inject private PermissionService permissionService;
+    @Inject private CommentService commentService;
+    
     private Comment comment;
-    private List<Comment> comments;
     private Issue issue;
     private List<String> selectedRoles = new ArrayList<>();
-
+    List<String> availableRoles = getRealmRoles();
+    
     public CommentForm(String id, final IModel<Issue> issueModel) {
         super(id);
-        
-        //set default view role for comment
-        selectedRoles.add("public");
         
         issue = issueModel.getObject();
 
         Form<Comment> commentForm = new Form<Comment>("commentForm") {
             @Override
             protected void onSubmit() {
-                Permission viewPermission = new Permission();
-                viewPermission.setPermissionType(PermissionType.view);
-                viewPermission.setRoles(new HashSet<>(selectedRoles));
-                comment.setViewPermission(viewPermission);
                 comment.setAuthor(getIDToken().getPreferredUsername());
                 
-                comments = issueService.getComments(issue);
-                comments.add(comment);
-                issue.setComments(comments);
-                issueService.insertComment(issue);
-//                issueService.update(issue);
+                if (!selectedRoles.isEmpty() && (availableRoles.size() != selectedRoles.size())) {//if NOT empty or all
+                    comment = commentService.insert(comment);//this sets comment's id
+                    permissionService.createPermissions(TypeId.comment, comment, roles.getProperty("it.comment.browse"), TypeId.comment, selectedRoles.toArray(new String[selectedRoles.size()]));
+                } 
+                
+                issueService.insertComment(issue, comment);
+                
                 comment = new Comment();
                 
                 for (Component c : getPage().visitChildren().filterByClass(CommentListView.class)) {
                     ((CommentListView) c).updateModel();
                 }
                 
-                //clear the select
-                selectedRoles.clear();
-                selectedRoles.add("public");
+                //reset the select
+                selectedRoles = null;
             }
         };
         add(commentForm);
 
         commentForm.add(new TextArea<>("content", new PropertyModel<String>(this, "comment.content")));
         
-        List<String> availableRoles = getAvailableRoles();
-        availableRoles.remove("superuser");
+        
         final ListMultipleChoice<String> roles = new ListMultipleChoice<>("roles", 
                 new PropertyModel<List<String>>(this, "selectedRoles"),
                 availableRoles);
-        roles.setRequired(true);
         roles.setOutputMarkupId(true);
         roles.setMaxRows(availableRoles.size());
         commentForm.add(roles);

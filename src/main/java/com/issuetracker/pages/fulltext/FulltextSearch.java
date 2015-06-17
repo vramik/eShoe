@@ -85,13 +85,13 @@ public class FulltextSearch extends PageLayout {
                 computeQuery();
 
                 String query = advancedSearchEnabled ? queryInput : queryBuilder.getQuery();
-                issues = searchService.search(query);
+                issues = issueService.getDisplayableIssues(searchService.search(query));
             }
         };
 
         List<Project> projectsModel = new ArrayList<Project>();
         projectsModel.add(null);
-        projectsModel.addAll(projectService.getProjects());
+        projectsModel.addAll(projectService.getDisplayableProjects());
 
         List<IssueType> issueTypesModel = new ArrayList<IssueType>();
         issueTypesModel.add(null);
@@ -239,7 +239,7 @@ public class FulltextSearch extends PageLayout {
                     @Override
                     public void onClick() {
                         PageParameters pageParameters = new PageParameters();
-                        pageParameters.add("issue", (item.getModelObject()).getIssueId());
+                        pageParameters.add("issue", (item.getModelObject()).getId());
                         setResponsePage(IssueDetail.class, pageParameters);
                     }
                 };

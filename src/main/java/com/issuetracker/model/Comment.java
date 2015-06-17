@@ -6,6 +6,7 @@ import static com.issuetracker.web.Constants.JPATablePreffix;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,10 +27,6 @@ public class Comment implements Serializable {
     private Date created;
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date updated;
-    
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Permission viewPermission;
-    
     private String author;
     
     public Long getId() {
@@ -72,14 +69,6 @@ public class Comment implements Serializable {
 
     public void setUpdated(Date date) {
         this.updated = new Date(date.getTime());
-    }
-    
-    public Permission getViewPermission() {
-        return viewPermission;
-    }
-
-    public void setViewPermission(Permission viewPermission) {
-        this.viewPermission = viewPermission;
     }
 
     public String getAuthor() {

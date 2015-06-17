@@ -2,10 +2,14 @@ package com.issuetracker.pages.status;
 
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.Status;
+import static com.issuetracker.model.TypeId.global;
+import com.issuetracker.pages.permissions.AccessDenied;
+import com.issuetracker.service.api.SecurityService;
 import com.issuetracker.service.api.StatusService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
+import static com.issuetracker.web.Constants.roles;
 import static com.issuetracker.web.Utils.parsePageClassFromPageParams;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.model.PropertyModel;
@@ -24,9 +28,11 @@ public class EditStatus extends PageLayout {
 
     @Inject
     private StatusService statusService;
+    @Inject
+    private SecurityService securityService;
     private Status status;
     
-    @SecurityConstraint(allowedRole = "status")
+    @ViewPageConstraint(allowedAction = "it.status")
     public EditStatus(final PageParameters parameters) {
         final StringValue statusName = parameters.get("statusName");
         final StringValue page = parameters.get("page");
@@ -41,6 +47,9 @@ public class EditStatus extends PageLayout {
         Form<Status> editStatusForm = new Form<Status>("editStatusForm") {
             @Override
             protected void onSubmit() {
+                if (!securityService.canUserPerformAction(global, 0L, roles.getProperty("it.status"))) {
+                    setResponsePage(AccessDenied.class);
+                }
                 Status edittingStatus = statusService.getStatusByName(statusName.toString());
                 Status statusDB = statusService.getStatusByName(status.getName());
                 
@@ -63,6 +72,4 @@ public class EditStatus extends PageLayout {
     public void setStatus(Status status) {
         this.status = status;
     }
-    
-    
 }

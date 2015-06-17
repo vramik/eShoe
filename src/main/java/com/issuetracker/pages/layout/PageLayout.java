@@ -1,11 +1,18 @@
 package com.issuetracker.pages.layout;
 
-import com.issuetracker.web.quilifiers.SecurityConstraint;
-import static com.issuetracker.web.security.KeycloakAuthSession.checkPermissions;
+import static com.issuetracker.model.TypeId.global;
+import com.issuetracker.pages.permissions.AccessDenied;
+import com.issuetracker.service.api.SecurityService;
+import static com.issuetracker.web.Constants.roles;
+import com.issuetracker.web.IssueTrackerSession;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
+import com.issuetracker.web.security.KeycloakAuthSession;
 import java.lang.reflect.Constructor;
+import javax.inject.Inject;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -14,32 +21,59 @@ import org.apache.wicket.markup.html.basic.Label;
 public class PageLayout extends WebPage {
 
     public static final String CONTENT_ID = "contentComponent";
+    
+    private final Logger log = Logger.getLogger(PageLayout.class);
+    
     private Component headerPanel;
 //    private Component menuPanel;
     private Component footerPanel;
-
-    /**
-     * It consumes ...
-     */
-    @Override
-    public void onConfigure() {
-        super.onConfigure();
-
-        for (Constructor constructor : this.getClass().getDeclaredConstructors()) {
-            if (constructor.isAnnotationPresent(SecurityConstraint.class)) {
-                SecurityConstraint securityConstraint = (SecurityConstraint) constructor.getAnnotation(SecurityConstraint.class);
-                
-                String roleKey = securityConstraint.allowedRole();
-                checkPermissions(this, roleKey, getPageParameters());
-            }
-        }
-    }
     
+    private final IssueTrackerSession session;
+    
+    @Inject private SecurityService securityService;
+
     public PageLayout() {
+        session = IssueTrackerSession.get();
+
+        Boolean isAuthorized = session.get(getPageClassNameAndPageParams());
+        if (isAuthorized == null) {
+            isAuthorized = isAuthorizedToViewThePageAndCacheResult();
+        }
+        if (!isAuthorized) {
+            setResponsePage(AccessDenied.class);
+        }
+        
         add(new Label("title", "Issue Tracking system"));
         add(headerPanel = new HeaderPanel("headerPanel"));
 //        add(menuPanel = new MenuPanel("menuPanel"));
         add(footerPanel = new FooterPanel("footerPanel"));
+    }
+    
+    private String getPageClassNameAndPageParams() {
+        return this.getClass().getName() + ":" + getPageParameters() + ";";
+    }
+
+    private boolean isAuthorizedToViewThePageAndCacheResult() throws SecurityException {
+        for (Constructor constructor : getClass().getDeclaredConstructors()) {
+            boolean result;
+            if (constructor.isAnnotationPresent(ViewPageConstraint.class)) {
+                ViewPageConstraint securityConstraint = (ViewPageConstraint) constructor.getAnnotation(ViewPageConstraint.class);
+                
+                String allowedAction = securityConstraint.allowedAction();
+                String allowedRole = securityConstraint.allowedRole();
+                
+                if (allowedAction.isEmpty() && !allowedRole.isEmpty()) {
+                    result = KeycloakAuthSession.isUserInRhelmRole(roles.getProperty(allowedRole));
+                } else {
+                    result = securityService.canUserPerformAction(global, 0L, roles.getProperty(allowedAction));
+                }
+            } else {
+                result = true;
+            }
+            session.put(getPageClassNameAndPageParams(), result);
+            return result;
+        }
+        throw new IllegalStateException("This should be never reached! It means constructor is missing.");
     }
 
     //<editor-fold defaultstate="collapsed" desc="getter/setter">

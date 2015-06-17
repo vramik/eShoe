@@ -1,13 +1,11 @@
 package com.issuetracker.pages.component.workflow;
 
-import com.issuetracker.model.PermissionType;
 import com.issuetracker.model.Project;
 import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.component.project.ProjectListView;
 import com.issuetracker.pages.workflow.WorkflowDetail;
 import com.issuetracker.service.api.ProjectService;
 import com.issuetracker.service.api.WorkflowService;
-import static com.issuetracker.web.security.PermissionsUtil.*;
 import java.util.ArrayList;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -29,8 +27,6 @@ public class WorkflowListView<T extends Workflow> extends Panel {
 
     @Inject
     private WorkflowService workflowService;
-    @Inject
-    private ProjectService projectService;
     private List<Workflow> workflows;
     private final ListView listViewWorkflows;
 
@@ -52,7 +48,7 @@ public class WorkflowListView<T extends Workflow> extends Panel {
                 workflowDetailLink.add(new Label("name", workflow.getName()));
                 item.add(workflowDetailLink);
                 
-                List<Project> projects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
+                List<Project> projects = new ArrayList<>();
                 item.add(new ProjectListView<>("projectListView", projects));
                 item.add(new Link("remove") {
                     @Override

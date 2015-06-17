@@ -3,15 +3,19 @@ package com.issuetracker.pages.workflow;
 import com.issuetracker.model.Project;
 import com.issuetracker.pages.layout.PageLayout;
 import com.issuetracker.model.Status;
+import static com.issuetracker.model.TypeId.global;
 import com.issuetracker.model.Workflow;
 import com.issuetracker.pages.component.status.StatusListView;
 import com.issuetracker.pages.component.workflow.WorkflowTransitionsListView;
+import com.issuetracker.pages.permissions.AccessDenied;
 import com.issuetracker.service.api.ProjectService;
+import com.issuetracker.service.api.SecurityService;
 import com.issuetracker.service.api.StatusService;
 import com.issuetracker.service.api.WorkflowService;
 import static com.issuetracker.web.Constants.HOME_PAGE;
-import com.issuetracker.web.quilifiers.SecurityConstraint;
-import static com.issuetracker.web.security.PermissionsUtil.getProjectWithEditPermissions;
+import static com.issuetracker.web.Constants.roles;
+import com.issuetracker.web.quilifiers.ViewPageConstraint;
+import java.util.ArrayList;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -40,9 +44,11 @@ public class WorkflowDetail extends PageLayout {
     private StatusService statusService;
     @Inject
     private ProjectService projectService;
+    @Inject
+    private SecurityService securityService;
     private List<Project> selectedProjects;
     
-    @SecurityConstraint(allowedRole = "workflow")
+    @ViewPageConstraint(allowedAction = "it.workflow")
     public WorkflowDetail(PageParameters parameters) {
         StringValue workflowId = parameters.get("workflow");
         if (workflowId.equals(StringValue.valueOf((String)null))) {
@@ -50,7 +56,8 @@ public class WorkflowDetail extends PageLayout {
         }
         
         workflow = workflowService.getWorkflowById(workflowId.toLong());
-        selectedProjects = getProjectWithEditPermissions(projectService.getProjectsByWorkflow(workflow));
+        
+        selectedProjects = new ArrayList<>();
         
         add(new Label("workflowName", workflow.getName()));
         add(new Link("back") {
@@ -63,6 +70,9 @@ public class WorkflowDetail extends PageLayout {
         Form<Workflow> setWorkflowToProjects = new Form<Workflow>("setWorkflowToProjects") {
             @Override
             protected void onSubmit() {
+                if (!securityService.canUserPerformAction(global, 0L, roles.getProperty("it.workflow"))) {
+                    setResponsePage(AccessDenied.class);
+                }
                 for (Project project : selectedProjects) {
                     project.setWorkflow(workflow);
                     projectService.update(project);
@@ -70,7 +80,7 @@ public class WorkflowDetail extends PageLayout {
             }
         };
         add(setWorkflowToProjects);
-        List<Project> projects = getProjectWithEditPermissions(projectService.getProjects());
+        List<Project> projects = projectService.getProjectsByWorkflow(workflow);
         final ListMultipleChoice<Project> projectMultipleChoise = new ListMultipleChoice<>(
                 "projectMultipleChoise", 
                 new PropertyModel<List<Project>>(this, "selectedProjects"), 

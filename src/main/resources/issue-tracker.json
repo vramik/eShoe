@@ -1,0 +1,533 @@
+[ {
+  "id" : "master",
+  "realm" : "master",
+  "notBefore" : 0,
+  "accessTokenLifespan" : 60,
+  "ssoSessionIdleTimeout" : 300,
+  "ssoSessionMaxLifespan" : 36000,
+  "accessCodeLifespan" : 60,
+  "accessCodeLifespanUserAction" : 300,
+  "enabled" : true,
+  "sslRequired" : "external",
+  "passwordCredentialGrantAllowed" : false,
+  "registrationAllowed" : false,
+  "rememberMe" : false,
+  "verifyEmail" : false,
+  "resetPasswordAllowed" : false,
+  "social" : false,
+  "updateProfileOnInitialSocialLogin" : false,
+  "bruteForceProtected" : false,
+  "maxFailureWaitSeconds" : 900,
+  "minimumQuickLoginWaitSeconds" : 60,
+  "waitIncrementSeconds" : 60,
+  "quickLoginCheckMilliSeconds" : 1000,
+  "maxDeltaTimeSeconds" : 43200,
+  "failureFactor" : 30,
+  "privateKey" : "MIICXAIBAAKBgQCSoKhVJfIIuNvCWVHMH6lMeM2jZxXQ7kMCZd2wsrMmKl5z73b75vwfPs9ZT286Y159uE7oXJE7RxrEscP6SvLXHTA1qfYrr1ONXlOOAM6CDOFMZR1Kr252WdoNbG4hKjrGIVOXfx2VxatkjHbmwsVnxGj0qOjhW7h80tg9yOhCPwIDAQABAoGAD0IwwkukmEvEcsEgxgE1eQPJQovjtU5WItW+8DhodDxMf/wXgbdT3VyH719Yz9avap3XeE7JvkVz/6wQHOfXxWpFyZjMFMj7/Ug3RgHXp5/F3hAtpAq2TuKxkXWCcgNuZbn7mV3bt+HlWvK0aMVmvnQc8Lmwum+PycrfB5v3/AECQQDfMAIPfVDqh/i4+WcIxUHN/Kp/YJzHa8zT0cBSwCubFICMkAcNSv1KYibdks1i3e6+vKYtQ77CFbXeO0CCZr6/AkEAqC8zzoKOAPmXMNFJAqJYcNX/z/oUvlTh8Ot3oF1ZL6QNHJjL/4U0bGAIFB0srPKWy0nt1wegaYFkz1iUXErcgQJBAMzbCekhwzWiHH/cG+CG/kGN2wkTqpO4tMbvzbGmxd+QT/W09WQUIq01rirOZkqLHmpgSb9eYSdQOiCDDlEi8Y0CQEiFCf669sZe2R2YsLWtERueew7P08/6Q+6hadTBS6qqP2kcTaJhaqhshC9AITp15CXGPAMja7zyqWhq1pYxRYECQETsbx00v4GhOjOFw4kSBnvncth9fzU4Zpbdu577Aoi2I2OmpPLzN2ZZiaTt4nOMPDs6FLg/oZsKmkAl+EGClwE=",
+  "publicKey" : "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCSoKhVJfIIuNvCWVHMH6lMeM2jZxXQ7kMCZd2wsrMmKl5z73b75vwfPs9ZT286Y159uE7oXJE7RxrEscP6SvLXHTA1qfYrr1ONXlOOAM6CDOFMZR1Kr252WdoNbG4hKjrGIVOXfx2VxatkjHbmwsVnxGj0qOjhW7h80tg9yOhCPwIDAQAB",
+  "roles" : {
+    "realm" : [ {
+      "id" : "19ef489f-a344-4ec6-b817-d88cf1bc2745",
+      "name" : "create-realm",
+      "composite" : false
+    }, {
+      "id" : "5f7cf6a0-a036-4181-99cb-9a700c9cbfbd",
+      "name" : "admin",
+      "composite" : true,
+      "composites" : {
+        "realm" : [ "create-realm" ],
+        "application" : {
+          "issue-tracker-realm" : [ "view-events", "view-users", "manage-users", "manage-applications", "manage-clients", "view-applications", "manage-realm", "view-clients", "manage-events", "view-realm" ],
+          "master-realm" : [ "manage-realm", "manage-clients", "view-applications", "manage-applications", "view-clients", "view-realm", "manage-users", "manage-events", "view-users", "view-events" ]
+        }
+      }
+    } ],
+    "application" : {
+      "issue-tracker-realm" : [ {
+        "id" : "5dd91eb2-a4af-4cf5-ae3f-bfd2cbad993e",
+        "name" : "manage-clients",
+        "composite" : false
+      }, {
+        "id" : "99a84c75-dc5e-4433-ad55-e0fdf6757640",
+        "name" : "view-applications",
+        "composite" : false
+      }, {
+        "id" : "ec52c317-ca65-440d-b3ed-931af6b3db6a",
+        "name" : "manage-realm",
+        "composite" : false
+      }, {
+        "id" : "5032f4fd-7293-443e-a625-670f8a74494c",
+        "name" : "view-events",
+        "composite" : false
+      }, {
+        "id" : "9f6fa5d3-911f-4569-832d-ab2a45a41d1c",
+        "name" : "view-clients",
+        "composite" : false
+      }, {
+        "id" : "953fd571-569f-4fa7-8130-777c42ebd0a2",
+        "name" : "view-users",
+        "composite" : false
+      }, {
+        "id" : "c4f91299-aa96-4a0d-83d8-56a2ada8f9a2",
+        "name" : "manage-events",
+        "composite" : false
+      }, {
+        "id" : "e37023bf-c91a-43be-879b-661b222db1f5",
+        "name" : "manage-users",
+        "composite" : false
+      }, {
+        "id" : "07ddba73-30ee-4121-8bf8-f82a65547e61",
+        "name" : "view-realm",
+        "composite" : false
+      }, {
+        "id" : "ef7385ba-3440-4f84-8280-a0582ad28fec",
+        "name" : "manage-applications",
+        "composite" : false
+      } ],
+      "security-admin-console" : [ ],
+      "master-realm" : [ {
+        "id" : "27b8d6fe-a528-42f9-b36e-f167dcc4b955",
+        "name" : "manage-clients",
+        "composite" : false
+      }, {
+        "id" : "43ecf241-8992-4f39-9727-62d033cdcba0",
+        "name" : "manage-realm",
+        "composite" : false
+      }, {
+        "id" : "6241c60d-71d8-44aa-bbbe-dca48a5241e4",
+        "name" : "view-realm",
+        "composite" : false
+      }, {
+        "id" : "67fa0ea7-9082-4b1c-b5f5-1f67c1d5b0f1",
+        "name" : "manage-users",
+        "composite" : false
+      }, {
+        "id" : "1a1ee4e8-bc30-415b-b1bc-4d0f6074225d",
+        "name" : "manage-events",
+        "composite" : false
+      }, {
+        "id" : "d0c6a9fa-9624-40b2-b4fd-dcb1278e4656",
+        "name" : "view-applications",
+        "composite" : false
+      }, {
+        "id" : "11161b71-721e-4efa-85a5-3cac18ad778f",
+        "name" : "manage-applications",
+        "composite" : false
+      }, {
+        "id" : "d0b98499-71b9-4818-99f7-281fa75d17db",
+        "name" : "view-users",
+        "composite" : false
+      }, {
+        "id" : "213106b9-3bea-496f-a56b-2abb743009da",
+        "name" : "view-clients",
+        "composite" : false
+      }, {
+        "id" : "02ee5cf4-e605-4f18-843a-4e834c82cf6b",
+        "name" : "view-events",
+        "composite" : false
+      } ],
+      "account" : [ {
+        "id" : "d2417bd4-7ab3-4c3b-a1be-2b68afc944b0",
+        "name" : "view-profile",
+        "composite" : false
+      }, {
+        "id" : "0749f143-9ce5-4245-9f38-656e7f273444",
+        "name" : "manage-account",
+        "composite" : false
+      } ]
+    }
+  },
+  "requiredCredentials" : [ "password" ],
+  "users" : [ {
+    "id" : "320dc887-421a-45d0-9d4a-b57694e5e701",
+    "username" : "admin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "type" : "password",
+      "hashedSaltedValue" : "/wBjJGfycRNAEtFmgI8tXZKHnxzpQiapvm/FjDZ3kNbvzC2WZmC9zle8M/JHN9ihB9+K2IRgGY9vbl9LbmMJUg==",
+      "salt" : "5ZHUAHMHwQoeXOMU1PZU9g==",
+      "hashIterations" : 1,
+      "temporary" : false
+    } ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "admin" ],
+    "applicationRoles" : {
+      "account" : [ "view-profile", "manage-account" ]
+    }
+  } ],
+  "scopeMappings" : [ {
+    "client" : "security-admin-console",
+    "roles" : [ "admin" ]
+  } ],
+  "applications" : [ {
+    "id" : "aba272a4-a738-4227-8a06-4a30552869d8",
+    "name" : "master-realm",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "210e56e5-cb93-4bc1-8d83-6552f9a7515e",
+    "redirectUris" : [ ],
+    "webOrigins" : [ ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : true,
+    "publicClient" : false,
+    "fullScopeAllowed" : true
+  }, {
+    "id" : "d3a01057-97fa-4724-a5c9-939eba78f408",
+    "name" : "account",
+    "baseUrl" : "/auth/realms/master/account",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "6a59bee2-efee-4891-b538-db6ab7a6361c",
+    "defaultRoles" : [ "view-profile", "manage-account" ],
+    "redirectUris" : [ "/auth/realms/master/account/*" ],
+    "webOrigins" : [ ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "publicClient" : false,
+    "fullScopeAllowed" : false
+  }, {
+    "id" : "9115dc5b-a172-4ab0-bed3-e13219401312",
+    "name" : "security-admin-console",
+    "baseUrl" : "/auth/admin/master/console/index.html",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "5a810fcb-4cd2-464d-849e-58ff5c50a2ee",
+    "redirectUris" : [ "/auth/admin/master/console/*" ],
+    "webOrigins" : [ ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "publicClient" : true,
+    "fullScopeAllowed" : false
+  }, {
+    "id" : "946e5eef-26f4-4385-9a45-7addb7e3da0e",
+    "name" : "issue-tracker-realm",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "18136143-615b-4852-8b85-65300827db1f",
+    "redirectUris" : [ ],
+    "webOrigins" : [ ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : true,
+    "publicClient" : false,
+    "fullScopeAllowed" : true
+  } ],
+  "oauthClients" : [ ],
+  "browserSecurityHeaders" : {
+    "contentSecurityPolicy" : "frame-src 'self'",
+    "xFrameOptions" : "SAMEORIGIN"
+  },
+  "socialProviders" : { },
+  "smtpServer" : { },
+  "eventsEnabled" : false,
+  "eventsExpiration" : 0,
+  "eventsListeners" : [ ]
+}, {
+  "id" : "bbcb8552-6558-464e-b9e6-66cf19d7cf0c",
+  "realm" : "issue-tracker",
+  "notBefore" : 1429622090,
+  "accessTokenLifespan" : 300,
+  "ssoSessionIdleTimeout" : 600,
+  "ssoSessionMaxLifespan" : 36000,
+  "accessCodeLifespan" : 60,
+  "accessCodeLifespanUserAction" : 300,
+  "enabled" : true,
+  "sslRequired" : "external",
+  "passwordCredentialGrantAllowed" : false,
+  "registrationAllowed" : true,
+  "rememberMe" : false,
+  "verifyEmail" : false,
+  "resetPasswordAllowed" : false,
+  "social" : false,
+  "updateProfileOnInitialSocialLogin" : false,
+  "bruteForceProtected" : false,
+  "maxFailureWaitSeconds" : 900,
+  "minimumQuickLoginWaitSeconds" : 60,
+  "waitIncrementSeconds" : 60,
+  "quickLoginCheckMilliSeconds" : 1000,
+  "maxDeltaTimeSeconds" : 43200,
+  "failureFactor" : 30,
+  "privateKey" : "MIICWwIBAAKBgQC/bRw1JxRJiXbiY9bm9PJoHwUztIc2xk6wFLKvFEav37ShmhDlYo7gAvD5ft/DCxGkhPvHCG7rO3Q6Cwe2ghEmTJv0H84klTdWqm+WYL/LGOO+ujQlvD7198BHTNrJx/LiTMIGF0ZdegOsNiy0T8Qn2smvxw6pfK7kIdfYLWXTPQIDAQABAoGACm40kkTd2x/tZWqRRCZmqvu9udKFZ5uon/mQvu945o5m9kNB1m3nYRdn8ABUyvjobjF80pyIBrNHov4E3pH5wydJ2V0EDUY5ClJ/BxVbjyVi4gsbW6aplxtNzazNDRQd/FFzS0enlPPnRmT9T8KmYjW1gpDxuuWuKjQH12cheNUCQQDuyxubctHilVnIcyOxWooWk7qgCquvCJYywDsWkz8I8pSKfUbaM9BflWfl77sptd9mSzedtfVTS/DU+7NApLY3AkEAzTg+5eUoz9vx4D2SRa4yY3LTbSYNldVlXmuVBbG4r7oW4sVyiRKB9OvYC3AtRN8fOjs0q4MC6wNTfgj9f4KIKwJAQhH2eINDaVLzfY/F/2tSq76CM4fgStSwYihn8O4a0cn0qYDSGsudSuUW0zsKaRcGUdJb+AoBb+OiJfvic+9e7wJAFZ2iCmcL2HELVhpGKO7DQfRbTrjeX3Tdu4dLaBEjKedI99PiT4vSgnDBDdtf+UwjJugLkTE4gnaUOcdKpD6khwJAOYd+BrIJneRzUVqcHv5PBv6ZoTPs+pfjGUGNMkVEIyVFGmkEm3ot1hrHzAa+nhhf6aODECD0RxBJXoz8CKDs+A==",
+  "publicKey" : "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC/bRw1JxRJiXbiY9bm9PJoHwUztIc2xk6wFLKvFEav37ShmhDlYo7gAvD5ft/DCxGkhPvHCG7rO3Q6Cwe2ghEmTJv0H84klTdWqm+WYL/LGOO+ujQlvD7198BHTNrJx/LiTMIGF0ZdegOsNiy0T8Qn2smvxw6pfK7kIdfYLWXTPQIDAQAB",
+  "roles" : {
+    "realm" : [ {
+      "id" : "d5039533-9a45-4c0e-a839-397a36df97cf",
+      "name" : "ITAdmin",
+      "description" : "mandatory",
+      "composite" : true,
+      "composites" : {
+        "application" : {
+          "issue-tracker" : [ "Admin" ]
+        }
+      }
+    }, {
+      "id" : "cb14ce26-a63a-4e97-a832-5ba640ffdfbf",
+      "name" : "User",
+      "description" : "default role for all users - mandatory",
+      "composite" : true,
+      "composites" : {
+        "application" : {
+          "account" : [ "manage-account", "view-profile" ],
+          "realm-management" : [ "view-events" ]
+        }
+      }
+    } ],
+    "application" : {
+      "issue-tracker" : [ {
+        "id" : "87a81572-c115-4127-a34b-57e511e22fac",
+        "name" : "Admin",
+        "description" : "Admistrator of issue tracket realm",
+        "composite" : true,
+        "composites" : {
+          "application" : {
+            "realm-management" : [ "realm-admin" ]
+          }
+        }
+      } ],
+      "security-admin-console" : [ ],
+      "account" : [ {
+        "id" : "61481431-2a38-4a46-b819-f81b7e90204c",
+        "name" : "manage-account",
+        "composite" : false
+      }, {
+        "id" : "c10bbe78-0208-4d6f-a1bb-841e96d01300",
+        "name" : "view-profile",
+        "composite" : false
+      } ],
+      "realm-management" : [ {
+        "id" : "a779acc9-9064-42f2-b6ab-72ead0d629ca",
+        "name" : "manage-applications",
+        "composite" : false
+      }, {
+        "id" : "2a1d679f-82d7-4862-94ac-39ffcbcc7849",
+        "name" : "view-realm",
+        "composite" : false
+      }, {
+        "id" : "66425c94-f344-4b02-b4db-508a75b3e805",
+        "name" : "manage-realm",
+        "composite" : false
+      }, {
+        "id" : "3ed7e02e-2343-48d9-b68d-dd9de708149c",
+        "name" : "view-clients",
+        "composite" : false
+      }, {
+        "id" : "04e7249c-2629-446d-8f7a-34b0fb4a1f5d",
+        "name" : "view-users",
+        "composite" : false
+      }, {
+        "id" : "65938845-393e-48fc-9121-a9a0101e0d8a",
+        "name" : "manage-clients",
+        "composite" : false
+      }, {
+        "id" : "ec80b129-c8d0-425b-b5a0-3760ec48a368",
+        "name" : "view-applications",
+        "composite" : false
+      }, {
+        "id" : "2f1e5e4e-04cc-4440-b2a9-5c4dcda76203",
+        "name" : "realm-admin",
+        "composite" : true,
+        "composites" : {
+          "application" : {
+            "realm-management" : [ "manage-applications", "view-realm", "manage-realm", "view-clients", "view-users", "manage-clients", "view-applications", "manage-events", "manage-users", "view-events" ]
+          }
+        }
+      }, {
+        "id" : "4ce59729-cc1d-4bb8-8b37-5fa46fa046c4",
+        "name" : "manage-events",
+        "composite" : false
+      }, {
+        "id" : "ac224782-ecf0-42e3-8ac5-56ae4492a48c",
+        "name" : "manage-users",
+        "composite" : false
+      }, {
+        "id" : "db3b0758-2029-46ab-bf89-bb82c7784c93",
+        "name" : "view-events",
+        "composite" : false
+      } ]
+    }
+  },
+  "defaultRoles" : [ "User" ],
+  "requiredCredentials" : [ "password" ],
+  "users" : [ {
+    "id" : "6b545972-9052-4ae7-9873-c55952ac7315",
+    "username" : "ITAdmin",
+    "enabled" : true,
+    "totp" : false,
+    "emailVerified" : false,
+    "credentials" : [ {
+      "type" : "password",
+      "hashedSaltedValue" : "gRHrRLsmM16TxO7z3i4B6xM1FaBi7LCTsEjDe9M11brXZx/DhBpDggPMrVv+0E2+ecDhsmBJS2ppYWBkDqpDGw==",
+      "salt" : "fGPKxOmt/6CZeLPcCIGSSg==",
+      "hashIterations" : 1,
+      "temporary" : false
+    } ],
+    "requiredActions" : [ ],
+    "realmRoles" : [ "ITAdmin", "User" ]
+  } ],
+  "applicationScopeMappings" : {
+    "realm-management" : [ {
+      "client" : "security-admin-console",
+      "roles" : [ "realm-admin" ]
+    } ]
+  },
+  "applications" : [ {
+    "id" : "aa7c1aea-13de-443c-8d06-d880c7776ada",
+    "name" : "realm-management",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "4f19734c-bb97-48d1-b447-827690fc552c",
+    "redirectUris" : [ ],
+    "webOrigins" : [ ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : true,
+    "publicClient" : false,
+    "fullScopeAllowed" : false
+  }, {
+    "id" : "92033df1-f912-4a45-b9f7-059e41dc3e2e",
+    "name" : "account",
+    "baseUrl" : "/auth/realms/issue-tracker/account",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "f875fefa-cec4-41bf-ba61-fa54bdc2e492",
+    "defaultRoles" : [ "view-profile", "manage-account" ],
+    "redirectUris" : [ "/auth/realms/issue-tracker/account/*" ],
+    "webOrigins" : [ ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "publicClient" : false,
+    "fullScopeAllowed" : false
+  }, {
+    "id" : "2b5c3a1e-52cd-46f9-a6ea-12de63413ccd",
+    "name" : "security-admin-console",
+    "baseUrl" : "/auth/admin/issue-tracker/console/index.html",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "bec72af6-60ff-43db-9ef2-d6b75eeaf105",
+    "redirectUris" : [ "/auth/admin/issue-tracker/console/*" ],
+    "webOrigins" : [ ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "publicClient" : true,
+    "fullScopeAllowed" : false
+  }, {
+    "id" : "263661f5-94f1-46b5-883e-c5cd808960af",
+    "name" : "issue-tracker",
+    "adminUrl" : "http://localhost:8080/IssueTracker",
+    "surrogateAuthRequired" : false,
+    "enabled" : true,
+    "secret" : "b366b3fa-5c50-4ad2-b3ad-0eaf32f6e8b1",
+    "redirectUris" : [ "http://localhost:8080/IssueTracker/*" ],
+    "webOrigins" : [ "http://localhost:8080" ],
+    "claims" : {
+      "name" : true,
+      "username" : true,
+      "profile" : true,
+      "picture" : true,
+      "website" : true,
+      "email" : true,
+      "gender" : true,
+      "locale" : true,
+      "address" : true,
+      "phone" : true
+    },
+    "notBefore" : 0,
+    "bearerOnly" : false,
+    "publicClient" : false,
+    "fullScopeAllowed" : true
+  } ],
+  "oauthClients" : [ ],
+  "browserSecurityHeaders" : {
+    "contentSecurityPolicy" : "frame-src 'self'",
+    "xFrameOptions" : "SAMEORIGIN"
+  },
+  "socialProviders" : { },
+  "smtpServer" : { },
+  "eventsEnabled" : false,
+  "eventsExpiration" : 0,
+  "eventsListeners" : [ ]
+} ]

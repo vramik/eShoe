@@ -10,10 +10,13 @@ import com.issuetracker.importer.parser.Parser;
 import com.issuetracker.importer.reader.RestReader;
 import com.issuetracker.model.*;
 import com.issuetracker.service.api.*;
+import com.issuetracker.web.IssueTrackerSession;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import org.apache.commons.lang3.StringUtils;
@@ -146,8 +149,7 @@ public class ImporterServiceBean implements ImporterService, Serializable {
             List<Comment> issuesComments = mapComments(bug, comments);
             issue.setComments(issuesComments);
 
-//            issueService.update(issue);
-            issueService.insertComment(issue);
+            issueService.update(issue);
 
             System.out.println(++importedCounter + " issues imported.");
         }
