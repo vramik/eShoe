@@ -126,3 +126,20 @@ following variables will be available:
 
 To get a full list of environment variables, simply add a line in your
 .openshift/action_hooks/build script that says "export" and push.
+
+Keycloak stuff
+==================
+
+1. Download keycloak-appliance-dist-all-1.1.0.Final from http://keycloak.jboss.org/
+2. navigate to keycloak/bin
+3. bin/standalone.sh -Dkeycloak.migration.action=import
+-Dkeycloak.migration.provider=singleFile -Dkeycloak.migration.file=src/main/resources/issue-tracker.json
+-Dkeycloak.migration.strategy=OVERWRITE_EXISTING
+
+more info can be found in keycloak docs: http://keycloak.github.io/docs/userguide/html/export-import.html
+
+4. build project and deploy into keycloak/standalne/deployments
+
+Note
+------------------
+If you want to deploy project on another container it needs to be used adapter, also additional configuration in realm would be needed. Follow Keycloak documentation for more info. http://keycloak.github.io/docs/userguide/html/index.html
